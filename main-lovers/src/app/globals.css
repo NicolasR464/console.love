@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* SCROLLBAR */
+#myMatches::-webkit-scrollbar, #myMessages::-webkit-scrollbar {
+    width: 5px;
+}
+ 
+#myMatches::-webkit-scrollbar-track, #myMessages::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+ 
+#myMatches::-webkit-scrollbar-thumb, #myMessages::-webkit-scrollbar-thumb {
+  background-color: #ff66c496;
+  border-radius: 10px;
+}
+
+#myMatches, #myMessages {
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+/* END SCROLLBAR */
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  font-family: "Courier New", Courier, monospace !important;
+}
+
+.navbar {
+  z-index: 999 !important;
+}
+
+svg {
+  filter: invert(1);
+}
+
+.modal-action {
+  margin-top: 0 !important;
+}
+
+#drawer_btn {
+  z-index: 999!important;
+  margin-top: -49px!important;
+}
+
+
+@media only screen and (min-width: 500px) {
+  #drawer {
+    z-index: 999!important;
+  }
+}
+
+
+th, td {
+  background-color: unset!important;
+}
+
+
+/* RESPONSIVE MOBILE */
+@media only screen and (max-width: 500px) {
+  h1 {
+    font-size: 35px !important;
+  }
+  h2 {
+    font-size: 20px;
+    text-align: center;
+  }
+  main {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .dropdown {
+    width: 60%;
+  }
+}
+
+/* GITHUB logo  */
+.git-logo {
+  border-radius: 20px;
+  padding: 5px 12px;
+  background: #eeeded;
+  border: 1px solid #cacaca;
+  display: flex;
+  align-items: center;
+}

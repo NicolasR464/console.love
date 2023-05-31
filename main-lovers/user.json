@@ -1,0 +1,33 @@
+{
+  "_id": {
+    "$oid": "646f5cd15713b3abb4d89e5b"
+  },
+  "username": "Terkhaladelete",
+  "firstName": "Arthur",
+  "lastName": "Asselin",
+  "age": 33,
+  "email": "arthurass3@gmail.com",
+  "password": "azertynbvcxw",
+  "adress": "138 Avenue du Général Leclerc, 92330 Sceaux",
+  "city": "Sceaux",
+  "premium": false,
+  "geoloc": [],
+  "languages": ["Python", "JavaScript"],
+  "sex": "Male",
+  "attraction": ["hetero"],
+  "profileStatus": "merge",
+  "profilePicture": "this is my profile pic",
+  "swipe": 20,
+  "timerSwipe": null,
+  "matched": [],
+  "rejected": [],
+  "chatIds": [],
+  "Github_token": {
+    "access_token": "String",
+    "refresh_token": "String",
+    "_id": {
+      "$oid": "646e5a7e6cbf213ab8b3b89d"
+    }
+  },
+  "__v": 0
+}
