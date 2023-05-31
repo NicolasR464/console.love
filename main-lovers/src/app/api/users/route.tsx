@@ -1,4 +1,4 @@
-import connectMongo from "../../utils/connectMongo";
+import connectMongo from "../../utils/mongoose";
 import { NextResponse, NextRequest } from "next/server";
 import users from "../../models/users";
 
