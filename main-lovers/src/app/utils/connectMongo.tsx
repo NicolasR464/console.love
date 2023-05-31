@@ -8,7 +8,7 @@ const uri = process.env.DB_URI;
 const options = {};
 
 let client;
-let connectMongo: Promise<MongoClient>;
+let connectMongo: Promise<any>;
 
 client = new MongoClient(uri, options);
 connectMongo = client.connect();
