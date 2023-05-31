@@ -76,7 +76,7 @@ export default function Quizz() {
                   </span>
                   <input
                     type="radio"
-                    value={false}
+                    value={"false"}
                     onChange={handleAnswerChange}
                     name="radio-10"
                     className="radio checked:bg-red-500 bg-white"
@@ -88,7 +88,7 @@ export default function Quizz() {
                   </span>
                   <input
                     type="radio"
-                    value={true}
+                    value={"true"}
                     onChange={handleAnswerChange}
                     name="radio-10"
                     className="radio checked:bg-green-500 bg-white"
