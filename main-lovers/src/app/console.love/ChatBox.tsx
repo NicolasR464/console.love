@@ -8,12 +8,12 @@ import Quizz from "./Quizz";
 interface IMessage {
   username: string;
   body: string;
-  timestamp: Date;
+  timestamp: any;
 }
 
 export default function ChatBox() {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
+  const [socket, setSocket] = useState<any | null>(null);
   const [newMessage, setNewMessage] = useState<string>("");
   const endOfChatRef = useRef<HTMLDivElement | null>(null);
 
@@ -149,7 +149,12 @@ export default function ChatBox() {
                 onChange={(event) => setNewMessage(event.target.value)}
                 className="self-center input input-bordered input-info w-[80%]"
               />
-              <button type="submit" className="bg-pink-lover rounded-xl ml-3 w-28">Send</button>
+              <button
+                type="submit"
+                className="bg-pink-lover rounded-xl ml-3 w-28"
+              >
+                Send
+              </button>
             </form>
           </div>
         </div>

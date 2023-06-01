@@ -1,4 +1,4 @@
-import Layout from './components/Layout'
+import Layout from "./components/Layout";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import AuthProvider from "./utils/AuthProvider";
@@ -17,16 +17,16 @@ export default function RootLayout({
 }) {
   return (
     <AuthProvider>
-    <html lang="en">
-      <head>
-        <title>Console.love()</title>
-        <meta name="description" content={metadata.description} />
-      </head>
-      <body>
-        <Layout></Layout>
-        {children}
-      </body>
-    </html>
+      <html lang="en">
+        <head>
+          <title>Console.love()</title>
+          <meta name="description" content={metadata.description} />
+        </head>
+        <body>
+          <Layout></Layout>
+          {children}
+        </body>
+      </html>
     </AuthProvider>
   );
 }
