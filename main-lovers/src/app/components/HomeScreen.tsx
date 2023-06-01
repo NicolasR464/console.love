@@ -1,8 +1,16 @@
-import Image from "next/image";
-import Login from "./LoginModal";
-import SignUp from "./SignUpModal";
+"use client"
+import Image from 'next/image';
+import React from 'react';
+import Login from './LoginModal';
+import SignUp from './SignUpModal';
+import Swiper from './Swiper';
+import RealSwiper from './RealSwiper';
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import axios from 'axios';
 
-export default function HomeScreen() {
+export default async function HomeScreen() {
+
   return (
     <div
       className="hero min-h-screen"

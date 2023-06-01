@@ -56,10 +56,10 @@ export default function Quizz() {
 
   return (
     <>
-      <div className="absolute hero-overlay bg-opacity-60 pt-20 rounded-2xl">
-        <div className="card w-[80%] h-[80%] m-auto mb-10 bg-base-100 shadow-xl bg-blue-lover">
+      <div className="absolute hero-overlay bg-opacity-60 py-20 rounded-2xl">
+        <div className="card w-[80%] h-auto m-auto mb-10 shadow-xl bg-black-lover">
           <div className="card-body items-center text-center text-white justify-between">
-            <h2 className="card-title m-4 text-3xl font-bold">QUIZZ !!!</h2>
+            <h2 className="card-title my-8 text-3xl font-bold">QUIZZ</h2>
 
             <div className="text-xl my-2 bg-black-lover">
               {question?.question}
@@ -76,7 +76,7 @@ export default function Quizz() {
                   </span>
                   <input
                     type="radio"
-                    value={"false"}
+                    value={false}
                     onChange={handleAnswerChange}
                     name="radio-10"
                     className="radio checked:bg-red-500 bg-white"
@@ -88,7 +88,7 @@ export default function Quizz() {
                   </span>
                   <input
                     type="radio"
-                    value={"true"}
+                    value={true}
                     onChange={handleAnswerChange}
                     name="radio-10"
                     className="radio checked:bg-green-500 bg-white"

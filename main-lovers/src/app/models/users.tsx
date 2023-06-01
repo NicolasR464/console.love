@@ -6,6 +6,7 @@ import mongoose from "../utils/mongoose";
 const userSchema = new Schema({
   name: {
     type: String,
+   
   },
   firstName: {
     type: String,
@@ -14,15 +15,18 @@ const userSchema = new Schema({
     type: String,
   },
   age: {
-    type: Number,
+    type: String,
   },
   email: {
     type: String,
+    required: true,
+    unique: true,
+
   },
   password: {
     type: String,
   },
-  adress: {
+  address: {
     type: String,
   },
   city: {
@@ -31,8 +35,8 @@ const userSchema = new Schema({
   premium: {
     type: Boolean,
   },
-  geoloc: {
-    type: [String],
+   geoloc: {
+    type: [Number],
   },
   lukqhdsngvkfq: {
     type: Boolean,
@@ -52,6 +56,9 @@ const userSchema = new Schema({
   },
   profilePicture: {
     type: String,
+  },
+  pictures: {
+    type: [String],
   },
   swipe: {
     type: Number,

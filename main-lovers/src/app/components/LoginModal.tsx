@@ -20,7 +20,7 @@ export default function LoginModal() {
     };
     sessionHandler();
   }, []);
-
+  
   const handleGitSign = () => {
     if (session) {
       toast.error("Please log out first !", {

@@ -2,11 +2,17 @@ import connectMongo from "../../utils/mongoose";
 import { NextResponse, NextRequest } from "next/server";
 import users from "../../models/users";
 
-export async function GET() {
+export async function GET(req: NextRequest, { params }: { params: { query: string }; }) {
   await connectMongo();
+  const email = req.nextUrl.searchParams.get("query");
 
-  const data = await users.find();
-  return NextResponse.json({ data });
+  if (email) {
+    const user = await users.findOne({ email: email }, { _id: 1 });
+    return NextResponse.json({ data: user });
+  } else {
+    const data = await users.find();
+    return NextResponse.json({ data });
+  }
 }
 
 export async function POST(req: Request) {

@@ -1,4 +1,4 @@
-import connectMongo from "../../utils/mongoose";
+import connectMongo from "../../utils/connectMongo";
 import Quizz from "../../models/quizz";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,16 +9,16 @@ export async function GET() {
   console.log(`Count of documents in quizzquestions: ${count}`);
 
   const data = await Quizz.find();
-  console.log(data);
+  console.log(data)
 
-  return NextResponse.json({ data });
+  return NextResponse.json({  data });
 }
 
 // export async function GET(req: NextRequest) {
 //   await connectMongo();
 
 //   const language = req.query.language;
-
+  
 //   if (!language) {
 //     return NextResponse.json({ error: 'Language query parameter is required' }, { status: 400 });
 //   }

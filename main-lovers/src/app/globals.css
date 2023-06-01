@@ -2,24 +2,205 @@
 @tailwind components;
 @tailwind utilities;
 
-/* SCROLLBAR */
-#myMatches::-webkit-scrollbar, #myMessages::-webkit-scrollbar {
-    width: 5px;
+.swiper {
+  width: 240px;
+  height: 320px;
 }
- 
-#myMatches::-webkit-scrollbar-track, #myMessages::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
 }
- 
-#myMatches::-webkit-scrollbar-thumb, #myMessages::-webkit-scrollbar-thumb {
+
+.swiper-slide:nth-child(1n) {
+  background-color: rgb(206, 17, 17);
+}
+
+.swiper-slide:nth-child(2n) {
+  background-color: rgb(0, 140, 255);
+}
+
+.swiper-slide:nth-child(3n) {
+  background-color: rgb(10, 184, 111);
+}
+
+.swiper-slide:nth-child(4n) {
+  background-color: rgb(211, 122, 7);
+}
+
+.swiper-slide:nth-child(5n) {
+  background-color: rgb(118, 163, 12);
+}
+
+.swiper-slide:nth-child(6n) {
+  background-color: rgb(180, 10, 47);
+}
+
+.swiper-slide:nth-child(7n) {
+  background-color: rgb(35, 99, 19);
+}
+
+.swiper-slide:nth-child(8n) {
+  background-color: rgb(0, 68, 255);
+}
+
+.swiper-slide:nth-child(9n) {
+  background-color: rgb(218, 12, 218);
+}
+
+.swiper-slide:nth-child(10n) {
+  background-color: rgb(54, 94, 77);
+}
+
+
+
+
+/* SCROLLBARS */
+#myMatches::-webkit-scrollbar,
+#myMessages::-webkit-scrollbar {
+  width: 5px;
+}
+
+#myMatches::-webkit-scrollbar-track,
+#myMessages::-webkit-scrollbar-track,
+#languagesSelect::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+#myMatches::-webkit-scrollbar-thumb,
+#myMessages::-webkit-scrollbar-thumb,
+#languagesSelect::-webkit-scrollbar-thumb {
   background-color: #ff66c496;
   border-radius: 10px;
 }
 
-#myMatches, #myMessages {
-    overflow-x: hidden; /* Hide horizontal scrollbar */
+#myMatches,
+#myMessages,
+#languagesSelect {
+  overflow-x: hidden;
+  /* Hide horizontal scrollbar */
 }
-/* END SCROLLBAR */
+
+/* END SCROLLBARS */
+
+
+
+/* START SWIPER */
+.swipe {
+  position: absolute;
+}
+
+.cardContainer {
+  width: 90vw;
+  max-width: 260px;
+  height: 300px;
+}
+
+.card {
+  position: relative;
+  background-color: #fff;
+  width: 300px;
+  max-width: 300px;
+  height: 500px;
+  background-size: cover;
+  margin-top: -60px;
+  background-position: center;
+}
+
+#undo_button {
+  z-index: 999;
+  position: relative;
+  margin-left: -203px;
+}
+
+.infoText {
+  width: 100%;
+  height: 28px;
+  justify-content: center;
+  display: flex;
+  color: #fff;
+  animation-name: popup;
+  animation-duration: 800ms;
+}
+
+.buttons {
+  margin: 5px;
+}
+
+.buttons button {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  transition: 200ms;
+  font-weight: bolder;
+}
+
+.buttons button:hover {
+  transform: scale(1.05);
+}
+
+@keyframes popup {
+  0% {
+    transform: scale(1, 1);
+  }
+
+  10% {
+    transform: scale(1.1, 1.1);
+  }
+
+  30% {
+    transform: scale(0.9, 0.9);
+  }
+
+  50% {
+    transform: scale(1, 1);
+  }
+
+  57% {
+    transform: scale(1, 1);
+  }
+
+  64% {
+    transform: scale(1, 1);
+  }
+
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+/* END SWIPER */
+
+
+/* CALENDAR */
+
+input[type="date"] {
+  background-color: #FF66C4;
+  padding: 15px;
+
+  font-family: "Roboto Mono", monospace;
+  color: #ffffff;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
+
+::-webkit-calendar-picker-indicator {
+  background-color: #BD93F9;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+/* END CALENDAR */
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -37,12 +218,9 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
   font-family: "Courier New", Courier, monospace !important;
 }
 
@@ -59,20 +237,21 @@ svg {
 }
 
 #drawer_btn {
-  z-index: 999!important;
-  margin-top: -49px!important;
+  z-index: 999 !important;
+  margin-top: -49px !important;
 }
 
 
 @media only screen and (min-width: 500px) {
   #drawer {
-    z-index: 999!important;
+    z-index: 999 !important;
   }
 }
 
 
-th, td {
-  background-color: unset!important;
+th,
+td {
+  background-color: unset !important;
 }
 
 
@@ -81,14 +260,17 @@ th, td {
   h1 {
     font-size: 35px !important;
   }
+
   h2 {
     font-size: 20px;
     text-align: center;
   }
+
   main {
     display: flex;
     flex-direction: column-reverse;
   }
+
   .dropdown {
     width: 60%;
   }

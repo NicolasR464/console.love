@@ -7,7 +7,7 @@ export default function AdminIndex() {
     <>
     <div className="mt-32 mx-40">
       <CrudUser />
-      <Dashboard />
+      {/* <Dashboard /> */}
     </div>
     </>
   )
