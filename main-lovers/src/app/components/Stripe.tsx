@@ -1,8 +1,8 @@
 "use client";
-import { loadStripe } from "@stripe/stripe-js";
+// import { loadStripe } from "@stripe/stripe-js";
 
 export default function Stripe() {
-  console.log(process.env.STRIPE_KEY);
+  // console.log(process.env.STRIPE_KEY);
 
   //   const stripe = await loadStripe(process.env.STRIPE_KEY);
 
