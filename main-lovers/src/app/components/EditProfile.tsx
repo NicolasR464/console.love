@@ -1,28 +1,29 @@
-"use client"
-import React, { useState } from 'react';
-import Image from 'next/image';
-import ModalEdit from '../components/Complete_profile';
+"use client";
+import React, { useState } from "react";
+import Image from "next/image";
+import ModalEdit from "../components/Complete_profile";
 
-export default function EditProfile({ userID }) {
+export default function EditProfile({ userID }: any) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleModalToggle = () => {
     setModalVisible(!modalVisible);
   };
 
-
-
   return (
     <>
-      <label htmlFor="my-modal-editprofile" className="btn btn-outline bg-blue-lover w-28 mr-5" onClick={handleModalToggle}>
+      <label
+        htmlFor="my-modal-editprofile"
+        className="btn btn-outline bg-blue-lover w-28 mr-5"
+        onClick={handleModalToggle}
+      >
         Edit
       </label>
-      {modalVisible && 
+      {modalVisible && (
         <div id={`my-modal-${userID}`}>
-          
-          <ModalEdit userID={userID} onClose={handleModalToggle}/>
+          <ModalEdit userID={userID} onClose={handleModalToggle} />
         </div>
-      }
+      )}
     </>
   );
 }
