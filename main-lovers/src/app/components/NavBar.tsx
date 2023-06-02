@@ -6,12 +6,12 @@ import { signOut } from "next-auth/react";
 import LogOut from "./LogOut";
 import Link from "next/link";
 
-export default function NavBar() {
-  // const session = await getServerSession(authOptions);
-  // // si session existe l'utilisateur est connecté
-  // console.log({ session });
-  // console.log(session?.user?.name);
-  // console.log(session?.user?.email);
+export default async function NavBar() {
+  const session = await getServerSession(authOptions);
+  // si session existe l'utilisateur est connecté
+  console.log({ session });
+  console.log(session?.user?.name);
+  console.log(session?.user?.email);
 
   return (
     <div className="navbar fixed top-0 z-999 bg-black-lover">
@@ -72,7 +72,7 @@ export default function NavBar() {
             <span className="badge badge-xs badge-primary indicator-item"></span>
           </div>
         </button>
-        {/* {session && <LogOut />} */}
+        {session && <LogOut />}
       </div>
     </div>
   );

@@ -84,13 +84,12 @@ useEffect(() => {
         await countSwipe();
       }
 
-      // GET the data to create the User's Stack filtering the data to exclude the user's profile
-      // Excluding all profiles already Matched and Rejected as well
-      const response = await axios.get(`/api/users/`);
-      const userData = response.data.data;
-      const filteredData = userData.filter((user: any) => user._id !== userId && !userMatchedData.includes(user._id) && !userRejectedData.includes(user._id));
+      // CALL the route in /api/users/[id]/matches to create the stack for the connected user
+      const response = await axios.get(`/api/users/${userId}/matches`);
+      const userData = response.data.users;
+      // const filteredData = userData.filter((user: any) => user._id !== userId && !userMatchedData.includes(user._id) && !userRejectedData.includes(user._id));
       // CREATION OF THE USER'S STACK
-      setCharacters(filteredData);
+      setCharacters(userData);
     } catch (error) {
       console.log("Error fetching user data:", error);
     }
@@ -347,7 +346,7 @@ const populateRejected = async (idToDelete: string) => {
             >
               <div className="flex-col bg-white w-full h-20 absolute bottom-0 rounded-br-2xl rounded-bl-2xl px-4">
                 <div className="flex justify-between">
-                  <h3 className="font-bold text-lg">{character.name}</h3>
+                  <h3 className="font-bold text-lg">{character.email}</h3>
                   {/* <h3 className="font-bold text-lg">{character.age}</h3> */}
                 </div>
                 <div className="flex-col">
