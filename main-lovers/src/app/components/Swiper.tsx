@@ -6,6 +6,7 @@ import BackImage from '../../../public/arriere.png';
 import { withCoalescedInvoke } from "next/dist/lib/coalesced-function";
 import connectMongo  from '../utils/mongoose';
 import axios from 'axios';
+import calculateDistance from './CalculateDistance';
 
 
 interface Character {
@@ -13,6 +14,9 @@ interface Character {
   name: string,
   email: string;
   languages: string[];
+  profilePicture: string;
+  city: string;
+  distance: boolean;
 }
 
 const rejected: string[] = [];
@@ -25,19 +29,17 @@ function ConsoleSwiper({userId}: any) {
   const [undoData, setUndoData] = useState('');
   const [timerSwipe, setTimerSwipe] = useState(null);
   const [counterSwipe, setCounterSwipe] = useState(Number)
-
   
 useEffect(() => {
-    
+
   // Fetching Users from MongoDB to get data to create the User's Stack
   const fetchUserStack = async () => {
     try {
       const userDataForStack = await axios.get(`/api/users/${userId}`);
-      const responseForStack = userDataForStack.data.data;
-      const userMatchedData = responseForStack.matched;
-      const userRejectedData = responseForStack.rejected;
-      const countSwipe = responseForStack?.swipe;
-      const checkTimerSwipe = responseForStack?.timerSwipe;
+      const userMatchedData = userDataForStack.data.data.matched;
+      const userRejectedData = userDataForStack.data.data.rejected;
+      const countSwipe = userDataForStack?.data.data.swipe;
+      const checkTimerSwipe = userDataForStack?.data.data.timerSwipe;
       setCounterSwipe(countSwipe)
 
       console.log("MATCHEDuser => ", userMatchedData)
@@ -87,6 +89,7 @@ useEffect(() => {
       // CALL the route in /api/users/[id]/matches to create the stack for the connected user
       const response = await axios.get(`/api/users/${userId}/matches`);
       const userData = response.data.users;
+
       // CREATION OF THE USER'S STACK
       setCharacters(userData);
     } catch (error) {
@@ -201,10 +204,6 @@ const populateRejected = async (idToDelete: string) => {
       
       // Call the populateRejected function to update the user
       populateRejected(idToDelete);
-      // console.log("CHARACTERS => ", characters)
-      // const filteredCharacters = characters.filter((character) => character.Github_token._id !== idToDelete );
-      // console.log("FILTERED", filteredCharacters)
-      // setCharacters(filteredCharacters);
       
       setUndoAvailable(true);
       
@@ -221,7 +220,6 @@ const populateRejected = async (idToDelete: string) => {
           };
       
           const updateOtherUser = await axios.put(`/api/users/${idToDelete}`, newRejectedDataOtherUser);
-          // console.log(updateResponse);
         } catch (error) {
           console.log("Error updating user data:", error);
         }
@@ -321,7 +319,6 @@ const populateRejected = async (idToDelete: string) => {
   // };
 
   
-  
   return (
     <>
     <div className="flex flex-col items-center">
@@ -337,13 +334,14 @@ const populateRejected = async (idToDelete: string) => {
           preventSwipe={['up', 'down']}
           >
             <div
-              // style={{ backgroundImage: "url(" + character.profilePicture + ")" }}
+              style={{ backgroundImage: "url(" + character.profilePicture + ")" }}
               className="card"
             >
               <div className="flex-col bg-white w-full h-20 absolute bottom-0 rounded-br-2xl rounded-bl-2xl px-4">
                 <div className="flex justify-between">
                   <h3 className="font-bold text-lg">{character.name}</h3>
                   {/* <h3 className="font-bold text-lg">{character.age}</h3> */}
+                  <div>{character.distance} km</div>
                 </div>
                 <div className="flex-col">
                   {character.languages.map((language, index) => (

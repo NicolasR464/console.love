@@ -49,11 +49,11 @@ export default async function MyProfile() {
     try {
       const response = await axios.get(`${process.env.HOSTNAME}/api/users/${user}`);
       userData = response.data.data;
+      console.log(userData); 
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
     
-    console.log(userData); 
       return (
         <main className="flex max-h-screen flex-col items-center justify-between absolute w-p70 right-12 mt-10">
             <div className="flex-col mt-10">
