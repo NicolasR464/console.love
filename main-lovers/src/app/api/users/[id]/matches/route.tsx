@@ -156,9 +156,12 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           user.geoloc[1],
           user.geoloc[0])
         );
+
+        const age = calculateAge(user.age);
+
         return {
           ...user.toJSON(),
-          distance
+          age, distance
         };
       });
 
@@ -171,4 +174,22 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   } catch (error) {
     return NextResponse.json({ message: "User not found" }, { status: 404 });
   }
+}
+
+function calculateAge(dateString: string): number | null {
+  const today = new Date();
+  const birthDate = new Date(dateString);
+
+  if (isNaN(birthDate.getTime())) {
+    return null;
+  }
+
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+
+  return age;
 }
