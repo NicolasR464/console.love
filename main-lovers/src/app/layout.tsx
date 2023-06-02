@@ -21,6 +21,7 @@ export default function RootLayout({
         <head>
           <title>Console.love()</title>
           <meta name="description" content={metadata.description} />
+          <script async src="https://js.stripe.com/v3/buy-button.js"></script>
         </head>
         <body>
           <Layout></Layout>
