@@ -6,7 +6,6 @@ import mongoose from "../utils/mongoose";
 const userSchema = new Schema({
   name: {
     type: String,
-   
   },
   firstName: {
     type: String,
@@ -21,7 +20,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-
   },
   password: {
     type: String,
@@ -35,7 +33,7 @@ const userSchema = new Schema({
   premium: {
     type: Boolean,
   },
-   geoloc: {
+  geoloc: {
     type: [Number],
   },
   lukqhdsngvkfq: {
@@ -74,12 +72,6 @@ const userSchema = new Schema({
   },
   chatIds: {
     type: [String],
-  },
-  Github_token: {
-    type: {
-      access_token: String,
-      refresh_token: String,
-    },
   },
 });
 
