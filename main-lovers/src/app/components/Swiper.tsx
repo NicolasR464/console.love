@@ -152,12 +152,6 @@ const populateRejected = async (idToDelete: string) => {
     [characters.length]
   );
 
-  // console.log("DB => ",db)
-  // console.log("TABLE", characters)
-  // console.log("STACK =>", userDb)
-  // console.log("Matched =>", matched)
-  // console.log("Rejected =>", rejected)
-
 
   // useEffect(() => {
   //   console.log("UNDO Data =>", undoData)
@@ -175,13 +169,16 @@ const populateRejected = async (idToDelete: string) => {
 
   
   const swipe = (dir: any) => {
-    const cardsLeft = characters
-      .filter((person) => !rejected.includes(person._id));
-    
+    if (counterSwipe === 0) {
+      return; // Exit the function and disable swipe when counterSwipe is 0
+    }
+  
+    const cardsLeft = characters.filter((person) => !rejected.includes(person._id));
+  
     if (cardsLeft.length) {
       const toBeRemoved = cardsLeft[cardsLeft.length - 1]._id; // Find the card object to be removed
       const index = characters.map((person) => person._id).indexOf(toBeRemoved); // Find the index of which to make the reference to
-      // rejected.push(toBeRemoved); // Make sure the next card gets removed next time if this card do not have time to exit the screen
+      // rejected.push(toBeRemoved); // Make sure the next card gets removed next time if this card does not have time to exit the screen
       childRefs[index].current.swipe(dir); // Swipe the card!
     }
   };
@@ -345,7 +342,7 @@ const populateRejected = async (idToDelete: string) => {
             >
               <div className="flex-col bg-white w-full h-20 absolute bottom-0 rounded-br-2xl rounded-bl-2xl px-4">
                 <div className="flex justify-between">
-                  <h3 className="font-bold text-lg">{character.email}</h3>
+                  <h3 className="font-bold text-lg">{character.name}</h3>
                   {/* <h3 className="font-bold text-lg">{character.age}</h3> */}
                 </div>
                 <div className="flex-col">

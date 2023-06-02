@@ -114,13 +114,13 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   try {
     const firstUser = await users.findOne({ _id: userId });
     if (firstUser) {
-      const { geoloc, languages } = firstUser; // Extract the 'geoloc' and 'languages' properties from the first user
+      const { geoloc, languages, matched, rejected } = firstUser; // Extract the 'geoloc', 'languages', 'matched', and 'rejected' properties from the first user
 
-      // Find users within a 30km radius of the geolocation, with matching languages, excluding the user with the specified '_id'
+      // Find users within a 30km radius of the geolocation, with matching languages, excluding the user with the specified '_id', matched, and rejected users
       const matchingUsers = await users.find({
         $and: [
           {
-            _id: { $ne: userId } // Exclude the user with the specified '_id'
+            _id: { $ne: userId, $nin: [...matched, ...rejected] } // Exclude the user with the specified '_id', matched, and rejected users
           },
           {
             geoloc: {
