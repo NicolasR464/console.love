@@ -32,6 +32,7 @@ const userSchema = new Schema({
   },
   premium: {
     type: Boolean,
+    default: false,
   },
   geoloc: {
     type: [Number],

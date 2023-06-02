@@ -7,7 +7,20 @@ import axios from "axios";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
 // stripeLoad();
-export default function Subscription() {
+export default function Subscription(params: any) {
+  // console.log(params.searchParams.session_id);
+
+  if (params.searchParams.session_id) {
+    axios
+      .post("/api/stripe_check", {
+        sessionId: params.searchParams.session_id,
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  }
+
   const createCheckOutSession = async () => {
     const stripe: any = await stripePromise;
     const checkoutSession = await axios.post("/api/checkout_sessions");

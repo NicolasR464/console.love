@@ -10,9 +10,9 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  console.log({ session });
-  console.log(session?.user?.name);
-  console.log(session?.user?.email);
+  // console.log({ session });
+  // console.log(session?.user?.name);
+  // console.log(session?.user?.email);
 
   const email = session?.user.email;
   const response = await axios.get(
