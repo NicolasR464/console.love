@@ -87,7 +87,6 @@ useEffect(() => {
       // CALL the route in /api/users/[id]/matches to create the stack for the connected user
       const response = await axios.get(`/api/users/${userId}/matches`);
       const userData = response.data.users;
-      // const filteredData = userData.filter((user: any) => user._id !== userId && !userMatchedData.includes(user._id) && !userRejectedData.includes(user._id));
       // CREATION OF THE USER'S STACK
       setCharacters(userData);
     } catch (error) {
