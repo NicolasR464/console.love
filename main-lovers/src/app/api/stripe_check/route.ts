@@ -36,12 +36,12 @@ export async function POST(req: NextRequest) {
       const filter = { _id: session?.user?.sub };
       const update = { premium: true };
 
-      const updateUserSub = await users.findByIdAndUpdate(filter, update, {
+      const updatedUserSub = await users.findByIdAndUpdate(filter, update, {
         new: true,
       });
-      console.log(updateUserSub);
-      if (updateUserSub) {
-        return NextResponse.json({ message: "update successful" });
+      console.log(updatedUserSub);
+      if (updatedUserSub) {
+        return NextResponse.json({ message: "update successful", status: 204 });
       }
     } else {
       return NextResponse.json({ message: "invalid session id" });

@@ -11,6 +11,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/free-regular-svg-icons": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@mapbox/node-pre-gyp": "^1.0.10",
     "@next-auth/mongodb-adapter": "^1.1.3",
     "@react-spring/web": "^9.5.5",
@@ -49,6 +52,7 @@
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-chartjs-2": "^5.2.0",
+    "react-confetti": "^6.1.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.44.2",
     "react-router-dom": "^6.11.2",
