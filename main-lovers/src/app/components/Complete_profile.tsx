@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import ConstImg from "../../../public/infinity.png";
 import MergeImg from "../../../public/usb.png";
 import axios from "axios";
-import Stripe from "./Stripe";
 import { useEffect, useState, useRef } from "react";
 
 interface SignUpModalProps {
@@ -399,7 +398,6 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
 
       <div className="modal">
         <div className="modal-box p-10 bg-black-lover">
-          <Stripe />
           {currentPath === "/complete_profile" ? (
             <h3 className="font-bold text-lg text-center mb-4 text-pink-lover">
               Welcome to console.love dear friend! {userIDprop}
