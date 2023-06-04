@@ -59,6 +59,7 @@ export default function MyMessages() {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [newMessageCounts, setNewMessageCounts] = useState<{ [key: string]: number }>({});
   const [chatUsers, setChatUsers] = useState<{ [key: string]: User }>({});
+  const [currentRoomId, setCurrentRoomId] = useState<string | null>(null);
 
   //console.log('DRAWER MOUNTING')
   const fetchUserData = useCallback(async (username: any) => {
@@ -162,11 +163,13 @@ export default function MyMessages() {
       socket?.off("connect");
       socket?.off("chat rooms");
       socket?.off("new chat room");
-      socket?.off("chat message");
+      socket?.off("chat list");
       socket?.off("new message");  // Don't forget to disconnect the new event listener
 
     };
   }, [socket, session, fetchUserData]);
+
+  console.log("Chat rooms:", chatRooms);
 
   if (loading || !session) {
     return <p><span className='loading loading-spinner text-secondary'></span></p>
@@ -175,8 +178,26 @@ export default function MyMessages() {
   const sortedChatRooms = [...chatRooms].sort((a, b) => {
     const lastMessageA = a.discussion[a.discussion.length - 1];
     const lastMessageB = b.discussion[b.discussion.length - 1];
-    return new Date(lastMessageB?.timestamp).getTime() - new Date(lastMessageA?.timestamp).getTime();
-  });  //console.log('Sorted chat rooms:', sortedChatRooms);
+  
+    // If one or both timestamps are undefined, handle those cases
+    if (!lastMessageA?.timestamp && !lastMessageB?.timestamp) {
+      // Neither chat room has a last message timestamp - consider them equal for sorting purposes
+      return 0;
+    } else if (!lastMessageA?.timestamp) {
+      // Only chat room A is missing a last message timestamp - consider B greater
+      return 1;
+    } else if (!lastMessageB?.timestamp) {
+      // Only chat room B is missing a last message timestamp - consider A greater
+      return -1;
+    }
+  
+    // Both chat rooms have a last message timestamp - compare them normally
+    const comparison = new Date(lastMessageB.timestamp).getTime() - new Date(lastMessageA.timestamp).getTime();
+    console.log(`Comparing last message in ${a._id} (${lastMessageA.timestamp}) vs last message in ${b._id} (${lastMessageB.timestamp}): comparison = ${comparison}`);
+    return comparison;
+  });
+  
+  console.log("Sorted chat rooms:", sortedChatRooms);  
   return (
     <div id="myMessages" className="flex-col overflow-scroll h-[90%] mx text-white w-full">
       {sortedChatRooms.map((chatRoom, index) => {
