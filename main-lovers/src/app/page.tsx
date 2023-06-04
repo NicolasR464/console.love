@@ -8,6 +8,8 @@ import Link from "next/link";
 import Swiper from "./components/Swiper";
 import axios from "axios";
 import { redirect } from "next/navigation";
+import Drawer from "./components/Drawer"
+
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -51,6 +53,8 @@ export default async function Home() {
           }}
         >
           <div className="hero-overlay bg-opacity-60"></div>
+          
+          <Drawer />
           <Swiper userId={user} />
         </div>
       ) : (

@@ -6,6 +6,7 @@ import BackImage from '../../../public/arriere.png';
 import { withCoalescedInvoke } from "next/dist/lib/coalesced-function";
 import connectMongo  from '../utils/mongoose';
 import axios from 'axios';
+import io from 'socket.io-client';
 
 
 interface Character {
@@ -25,6 +26,20 @@ function ConsoleSwiper({userId}: any) {
   const [undoData, setUndoData] = useState('');
   const [timerSwipe, setTimerSwipe] = useState(null);
   const [counterSwipe, setCounterSwipe] = useState(Number)
+
+
+  const socket = useMemo(() => io('http://localhost:3001'), []);
+
+  useEffect(() => {
+    socket.on('room-created', (roomId) => {
+      console.log('Room created with id:', roomId);
+      // perform actions based on the new roomId
+    });
+
+    return () => {
+      socket.off('room-created');
+    };
+  }, []);
 
   
 useEffect(() => {
@@ -108,20 +123,76 @@ const populateMatched = async (idToDelete: string) => {
   try {
     const response = await axios.get(`/api/users/${userId}`);
     const existingUser = response.data.data;
-    
+    const responseOther = await axios.get(`/api/users/${idToDelete}`);
+    const existingOtherUser = responseOther.data.data;
+
+
     const newMatchedArray = [...existingUser.matched, idToDelete];
-    
-    const newMatchedData = {
+        const newMatchedData = {
       matched: newMatchedArray,
     };
+    const updateResponse = await axios.put(`/api/users/${userId}`, newMatchedData); 
+    console.log('je vais créer ma room')
+     // ROOM CREATION WHEN MATCH -------------------------------------------
+     const chatData = {
+      chatters: [
+        {
+          chatId: existingUser._id,
+          status: "pending"
+        },
+        {
+          chatId: idToDelete,
+          status: "pending"
+        }
+      ]
+    };
+console.log('MON CUR USER',userId )
+console.log('MON OTHER USER',idToDelete )
+    let roomId;
 
-    const updateResponse = await axios.put(`/api/users/${userId}`, newMatchedData);
-    console.log(updateResponse);
+// Handle 'chat room created' event
+socket.once('chat room created', async (id) => {
+  roomId = id;
+
+  // Fetch most recent user data
+  const responseUpdated = await axios.get(`/api/users/${userId}`);
+  const existingUserUpdated = responseUpdated.data.data;
+  const responseOtherUpdated = await axios.get(`/api/users/${idToDelete}`);
+  const existingOtherUserUpdated = responseOtherUpdated.data.data;
+
+  // Update the rest of your data inside this callback
+  // Because roomId is available only after the socket receives the 'chat room created' event
+  const updateChatIds = {
+    chatIds: [...existingUserUpdated.chatIds, roomId]
+  };
+  const updateOtherChatIds = {
+    chatIds: [...existingOtherUserUpdated.chatIds, roomId]
+  };
+
+ 
+  console.log("HOW DOES MY ROOM ID LOOK", roomId)
+  console.log('jajoute ma room')
+// MATCHED DATA DON'T TOUCH
+  const updateUserChatIds = await axios.put(`/api/users/${userId}`, updateChatIds);
+  const updateOtherUserChatIds = await axios.put(`/api/users/${idToDelete}`, updateOtherChatIds);
+   // Fetch chat rooms after a new chat room is created
+  socket.emit('fetch chat rooms', userId);
+  console.log(updateResponse);
+  console.log('room created', roomId)
+  console.log('room added', updateUserChatIds)
+  console.log('room added to other', updateOtherUserChatIds)
+});
+
+    socket.emit('create-room', chatData);
+
+
+
+
   } catch (error) {
-    console.log("Error updating user data:", error);
+    console.log("Error updating main user data:", error);
   }
 };
-  
+ 
 // Call put route to populate the Connected User's Rejected Array
 const populateRejected = async (idToDelete: string) => {
   try {
@@ -292,7 +363,7 @@ const populateRejected = async (idToDelete: string) => {
       try {
         const response = await axios.get(`/api/users/${idToDelete}`);
         const otherUserId = response.data.data;
-        console.log("OTHERUSER", otherUserId)
+        console.log("OTHERUSER RIGHT", otherUserId)
         
         const newMatchedArrayOtherUser = [...otherUserId.matched, userId];
         
@@ -303,7 +374,7 @@ const populateRejected = async (idToDelete: string) => {
         const updateOtherUser = await axios.put(`/api/users/${idToDelete}`, newMatchedDataOtherUser);
         // console.log(updateResponse);
       } catch (error) {
-        console.log("Error updating user data:", error);
+        console.log("Error updating Other user data:", error);
       }
     };
     populateOtherMatched({userId});
@@ -346,8 +417,10 @@ const populateRejected = async (idToDelete: string) => {
               className="card"
             >
               <div className="flex-col bg-white w-full h-20 absolute bottom-0 rounded-br-2xl rounded-bl-2xl px-4">
+              <h3 className="font-bold text-lg">{character._id}</h3>
                 <div className="flex justify-between">
                   <h3 className="font-bold text-lg">{character.name}</h3>
+              
                   {/* <h3 className="font-bold text-lg">{character.age}</h3> */}
                 </div>
                 <div className="flex-col">
