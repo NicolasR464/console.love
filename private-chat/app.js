@@ -48,7 +48,7 @@ io.on("connection", (socket) => {
 
       // Emit the 'new chat room' event to all connected clients
       io.emit("new chat room", savedChat);
-      console.log("response from savechat", savedChat);
+      // console.log("response from savechat", savedChat);
     } catch (err) {
       console.error(err);
     }
@@ -58,8 +58,8 @@ io.on("connection", (socket) => {
     try {
       const chatRooms = await Chat.find({ "chatters.chatId": userId });
       socket.emit("chat rooms", chatRooms);
-      console.log("room fetch", chatRooms);
-      console.log("room fetch userID", userId);
+      // console.log("room fetch", chatRooms);
+      // console.log("room fetch userID", userId);
     } catch (err) {
       console.error(err);
     }
@@ -74,7 +74,19 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("join-room", (roomId) => {
+    console.log(`Socket ${socket.id} joining room ${roomId}`);
+    socket.join(roomId);
+  });
+
+  socket.on("leave-room", (roomId) => {
+    console.log(`Socket ${socket.id} leaving room ${roomId}`);
+    socket.leave(roomId);
+  });
+
   socket.on("chat message", async (message, roomId) => {
+    console.log("new message", message);
+    console.log("in room", roomId);
     try {
       // Save the message in the chat room in the database
       const chatRoom = await Chat.findById(roomId);
@@ -88,8 +100,9 @@ io.on("connection", (socket) => {
       chatRoom.discussion.push(message);
       await chatRoom.save();
 
-      // Emit the 'chat message' event to all connected clients
-      io.emit("chat message", message);
+      // Emit the 'chat message' event to all clients in the same room
+      socket.to(roomId).emit("chat message", message);
+      io.emit("chat list", message, roomId);
     } catch (err) {
       console.error(err);
     }

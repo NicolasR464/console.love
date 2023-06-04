@@ -10,6 +10,7 @@ interface IMessage {
   username: string;
   body: string;
   timestamp: any;
+  
 }
 interface Session {
   user: {
@@ -27,6 +28,7 @@ export default function ChatBox({ roomId }: any) {
   const [userNames, setUserNames] = useState<Map<string, string>>(new Map());
   const [userProfilePics, setUserProfilePics] = useState<Map<string, string>>(new Map());
   const [isLoading, setIsLoading] = useState(true); 
+  const [roomDataId, setroomDataId] = useState<string>("");
 
 
 
@@ -38,9 +40,9 @@ export default function ChatBox({ roomId }: any) {
     };
     sessionHandler();
   }, []);
-  console.log('MY ROOM CHAT SESSION',session)
+  // console.log('MY ROOM CHAT SESSION',session)
 
-  console.log('MY ROOM CHAT DISPLAY',roomId)
+  // console.log('MY ROOM CHAT DISPLAY',roomId)
   // Connect to the WebSocket when the component mounts
   useEffect(() => {
     const newSocket = io("http://localhost:3001");
@@ -51,16 +53,19 @@ export default function ChatBox({ roomId }: any) {
     };
   }, []);
 
-  // Fetch existing messages when the component mounts
+  // FETCH MESSAGE HISTORY------------
   useEffect(() => {
     socket?.emit("fetch-room", roomId);
   }, [roomId, socket]);
 
+// DISPLAY USER DATA--------------
   useEffect(() => {
     if (socket == null) return;
+    
     setIsLoading(true);  
     socket.on("room-data", async (room: any) => {
       setMessages(room.discussion);
+      setroomDataId(room._id)
   
       let usersNameMap = new Map<string, string>();
       let usersPicMap = new Map<string, string>();
@@ -84,44 +89,64 @@ export default function ChatBox({ roomId }: any) {
     };
   }, [socket]);
   
+// END DISPLAY----------------
+// ROOM JOINING AND LEAVING
+useEffect(() => {
+  if (socket == null) return;
+  
+  // Join the room
+  socket.emit("join-room", roomId);
 
-  // Listen for incoming messages
-  useEffect(() => {
-    if (socket == null) return;
+  // Return a cleanup function that leaves the room when the component unmounts or roomId changes
+  return () => {
+    // Leave the room
+    socket.emit("leave-room", roomId);
+  };
+}, [socket, roomId]);
 
-    socket.on("chat message", (message: IMessage) => {
-      setMessages((msgs) => [...msgs, message]);
-    });
+    // CHATBOX DISPLAY MESSAGES
+    useEffect(() => {
+      if (socket == null) return;
+  
+      socket.on("chat message", (message: IMessage) => {
+        console.log(`Received message: ${JSON.stringify(message)}`);
+        setMessages((msgs) => [...msgs, message]);
+      });
+  
+      return () => {
+        socket.off("chat message");
+      };
+    }, [socket, roomId]); 
+// END CHATBOX DISPLAY MESSAGE ----------
 
-    return () => {
-      socket.off("chat message");
-    };
-  }, [socket]);
 
+//  SCROLL MESSAGE
   useEffect(() => {
     endOfChatRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const sendMessage = (event: React.FormEvent) => {
     event.preventDefault();
-
+  
     if (newMessage.trim() === "" || !session?.user?.sub) return;
-
+  
     const timestamp = new Date();
-
+  
     const message: IMessage = {
       username: session?.user?.sub,
       body: newMessage,
       timestamp: timestamp,
     };
-
-    // Send the message and the room ID to the server over the WebSocket
-    console.log('MY ROOM CHAT',roomId)
-    socket?.emit("chat message", message, roomId);
-
+  
+    // Update local state with the new message, so it's displayed instantly for the sender
+    setMessages((currentMessages) => [...currentMessages, message]);
+  
+    // Clear input after sending message
     setNewMessage("");
+  
+    // Then emit the event to the server
+    socket.emit("chat message", message, roomId);
   };
-
   
 
   function formatDate(dateStr: string) {
@@ -154,7 +179,8 @@ export default function ChatBox({ roomId }: any) {
               </div>
             </div>
       ) : (
-          messages.map((message, i) => (
+          messages
+          .map((message, i) => (
             <div
               className={`chat ${
                 message.username === session?.user?.sub

@@ -1,3 +1,4 @@
+"use client"
 import Image from 'next/image';
 import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from 'react';
@@ -12,7 +13,6 @@ interface Message {
   body: string;
   _id: string;
   timestamp: string;
-  chatroomId: string;
 }
 
 interface ChatRoom {
@@ -60,7 +60,7 @@ export default function MyMessages() {
   const [newMessageCounts, setNewMessageCounts] = useState<{ [key: string]: number }>({});
   const [chatUsers, setChatUsers] = useState<{ [key: string]: User }>({});
 
-  console.log('DRAWER MOUNTING')
+  //console.log('DRAWER MOUNTING')
   const fetchUserData = useCallback(async (username: any) => {
     if (!chatUsers.hasOwnProperty(username)) {
       try {
@@ -75,7 +75,10 @@ export default function MyMessages() {
     }
   }, [chatUsers]);
 
+
+  
   useEffect(() => {
+    console.log('useEffect executed2');
     if(!session) return; // Don't attempt socket connection if session is not yet available
     const newSocket = io("http://localhost:3001");
     setSocket(newSocket);
@@ -86,19 +89,21 @@ export default function MyMessages() {
   }, [session]); // Add session as dependency
 
   useEffect(() => {
-    console.log("socket",socket)
-    console.log("session",session)
+    //console.log("socket",socket)
+    //console.log("session",session)
+    console.log('useEffect executed');
 
     if(!socket || !session) return; // Ensure both socket and session are available
-
+      
     socket?.on('connect', () => {
+      console.log('drawer connected on socket', socket)
       // Emit the 'fetch chat rooms' event after the component has rendered and socket connected
       socket.emit('fetch chat rooms', session?.user.sub);
     });
 
     socket?.on('chat rooms', async (rooms) => {
       setChatRooms(rooms);
-      console.log('LOOKING CHAT ROOM', rooms)
+      //console.log('LOOKING CHAT ROOM', rooms)
       const otherChatters = new Set<string>();
       rooms.forEach((room: any) => {
         room.chatters.forEach((chatter: any) => {
@@ -111,9 +116,15 @@ export default function MyMessages() {
       await Promise.all(Array.from(otherChatters).map(fetchUserData));
       setLoading(false);
     });
+      // Listen for the new 'new message' event
+      socket?.on("new message", () => {
+        // Fetch updated chat rooms when a new message is sent
+        socket.emit('fetch chat rooms', session?.user.sub);
+      });
+
 
     socket?.on("new chat room", (newChatRoom: any) => {
-      console.log('LOOKING NEW CHAT ROOM', newChatRoom)
+      //console.log('LOOKING NEW CHAT ROOM', newChatRoom)
       setChatRooms(prevChatRooms => [newChatRoom, ...prevChatRooms]);
       newChatRoom.chatters.forEach((chatter: any) => {
         if (chatter.chatId !== session?.user.sub) {
@@ -121,33 +132,39 @@ export default function MyMessages() {
         }
       });
     });
-    socket?.on("chat message", (message: Message) => {
+    socket?.on("chat list", (message: Message, roomId: string) => {
       setChatRooms(prevChatRooms => {
         let updatedRooms = prevChatRooms.map(room => {
-          if (room._id === message.chatroomId) {
+          if (room._id === roomId) {
             return { ...room, discussion: [...room.discussion, message] };
           } else {
             return room;
           }
         });
-    
+        
         // Sort updatedRooms by the timestamp of the last message (the most recent one) in each chat room
         updatedRooms.sort((a, b) => new Date(b.discussion[b.discussion.length - 1]?.timestamp).getTime() - new Date(a.discussion[a.discussion.length - 1]?.timestamp).getTime());
-    
+        //console.log('Updated chat room list:', updatedRooms); // Added //console.log
+
         return updatedRooms;
       });
     
-      setNewMessageCounts(prevCounts => ({
-        ...prevCounts,
-        [message.chatroomId]: (prevCounts[message.chatroomId] || 0) + 1,
-      }));
+      if (message.username !== session?.user.sub) {
+        setNewMessageCounts(prevCounts => ({
+          ...prevCounts,
+          [roomId]: (prevCounts[roomId] || 0) + 1,
+        }));
+      }
     });
+    
 
     return () => {
       socket?.off("connect");
       socket?.off("chat rooms");
       socket?.off("new chat room");
       socket?.off("chat message");
+      socket?.off("new message");  // Don't forget to disconnect the new event listener
+
     };
   }, [socket, session, fetchUserData]);
 
@@ -159,7 +176,7 @@ export default function MyMessages() {
     const lastMessageA = a.discussion[a.discussion.length - 1];
     const lastMessageB = b.discussion[b.discussion.length - 1];
     return new Date(lastMessageB?.timestamp).getTime() - new Date(lastMessageA?.timestamp).getTime();
-  });  console.log('Sorted chat rooms:', sortedChatRooms);
+  });  //console.log('Sorted chat rooms:', sortedChatRooms);
   return (
     <div id="myMessages" className="flex-col overflow-scroll h-[90%] mx text-white w-full">
       {sortedChatRooms.map((chatRoom, index) => {
