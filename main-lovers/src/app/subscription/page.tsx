@@ -13,6 +13,7 @@ import {
 import { log } from "console";
 import Image from "next/image";
 import Confetti from "react-confetti";
+import { spawn } from "child_process";
 
 // // import "../node_modules/@fortawesome/fontawesome-svg-core/styles.css";
 // import "@fortawesome/fontawesome-svg-core/styles.css";
@@ -23,9 +24,10 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 // stripeLoad();
 export default function Subscription(params: any) {
   // console.log(params.searchParams.session_id);
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isSubscribed, setIsSubscribed] = useState("waiting");
 
   if (params.searchParams.session_id) {
+    setIsSubscribed("pending");
     axios
       .post("/api/stripe_check", {
         sessionId: params.searchParams.session_id,
@@ -33,7 +35,7 @@ export default function Subscription(params: any) {
       .then((res) => {
         console.log(res.data);
         if (res.data.status == 204) {
-          setIsSubscribed(true);
+          setIsSubscribed("confirmed");
         }
       })
       .catch((err) => console.log(err));
@@ -56,7 +58,7 @@ export default function Subscription(params: any) {
     <main className="flex max-h-screen flex-col items-center justify-between absolute">
       <div className="flex ">
         <div className="border-solid  w-screen h-screen translate-y-20">
-          {isSubscribed ? (
+          {isSubscribed == "confirmed" && (
             <div>
               <Confetti opacity={0.6} colors={["#5271FF", "#FF66C4"]} />
               <h1 className="text-2xl text-center mt-10 font-bold text-6xl flex items-center justify-center animate-text bg-gradient-to-r from-pink-lover via-blue-lover to-pink-lover bg-clip-text text-transparent text-5xl font-black">
@@ -71,7 +73,9 @@ export default function Subscription(params: any) {
                 ></Image>
               </div>
             </div>
-          ) : (
+          )}
+          {isSubscribed == "pending" && <span>loading...</span>}
+          {isSubscribed == "waiting" && (
             <>
               {" "}
               <div className="w-screen flex justify-center mt-4  ">

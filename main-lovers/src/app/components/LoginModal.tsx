@@ -6,6 +6,7 @@ import githubSvg from "../../../public/github.svg";
 import { getSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Link from "next/link";
 
 export default function LoginModal() {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ export default function LoginModal() {
     };
     sessionHandler();
   }, []);
-  
+
   const handleGitSign = () => {
     if (session) {
       toast.error("Please log out first !", {
@@ -92,7 +93,7 @@ export default function LoginModal() {
           </button>
           <span className="text-center">OR</span>
           <div className="carousel w-full">
-            <form className="flex flex-col mx-auto w-96 mb-5">
+            <form className="flex flex-col mx-auto w-96 ">
               <input
                 onChange={(e) => setEmail(e.target.value)}
                 type="text"
@@ -107,7 +108,9 @@ export default function LoginModal() {
               />
             </form>
           </div>
-
+          <Link href="/reset-pwd" className="link  mb-3 ml-8">
+            Forgot your password?
+          </Link>
           <div className="flex justify-evenly modal-action">
             <label
               htmlFor="my-modal-login"
