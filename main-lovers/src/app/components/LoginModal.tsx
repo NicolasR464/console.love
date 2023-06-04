@@ -102,7 +102,7 @@ export default function LoginModal() {
               />
               <input
                 onChange={(e) => setPassword(e.target.value)}
-                type="text"
+                type="password"
                 placeholder="Password"
                 className="input input-bordered input-info w-full my-2"
               />

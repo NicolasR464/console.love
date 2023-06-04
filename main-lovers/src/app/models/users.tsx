@@ -74,6 +74,9 @@ const userSchema = new Schema({
   chatIds: {
     type: [String],
   },
+  resetPwdToken: {
+    type: String,
+  },
 });
 
 const User = models.User || model("User", userSchema);

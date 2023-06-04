@@ -13,17 +13,10 @@ import {
 import { log } from "console";
 import Image from "next/image";
 import Confetti from "react-confetti";
-import { spawn } from "child_process";
-
-// // import "../node_modules/@fortawesome/fontawesome-svg-core/styles.css";
-// import "@fortawesome/fontawesome-svg-core/styles.css";
-// config.autoAddCss = false;
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
-// stripeLoad();
 export default function Subscription(params: any) {
-  // console.log(params.searchParams.session_id);
   const [isSubscribed, setIsSubscribed] = useState("waiting");
 
   if (params.searchParams.session_id) {

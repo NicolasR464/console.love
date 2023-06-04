@@ -6,7 +6,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import axios from "axios";
 import { redirect } from "next/navigation";
-import Stripe from "../components/Stripe";
 
 export default async function MyProfile() {
   const session = await getServerSession(authOptions);
@@ -155,7 +154,6 @@ export default async function MyProfile() {
           <EditProfile userID={user} />
         </div>
         <UserPictures arrayPicturesUser={userData.pictures} />
-        <Stripe />
       </div>
     </main>
   );

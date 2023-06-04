@@ -1,21 +1,33 @@
 import mail from "@sendgrid/mail";
+import { NextResponse, NextRequest } from "next/server";
+
 mail.setApiKey(process.env.SENDGRID_KEY!);
 
-export async function GET() {
-  console.log("MAIL");
+export async function GET(req: NextRequest, res: NextResponse) {
+  return NextResponse.json({ message: "GET EMAIL API" });
+}
 
-  console.log(mail);
+export async function POST(req: Request, res: NextResponse) {
+  // resetPwdToken
+
+  console.log("POST EMAIL 💥");
+
+  const parsed = await req.json();
+
+  console.log(parsed);
 
   const msg = {
-    to: "nicolas.rocagel@gmail.com",
-    from: "nicolas.rocagel@gmail.com",
-    subject: "Sending with Twilio SendGrid is Fun",
-    text: "and easy to do anywhere, even with Node.js",
-    html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+    to: parsed.body.email,
+    from: process.env.NICO_EMAIL!,
+    subject: "Password reset",
+    text: "click on <a>this link</a>  to reset your password",
+    html: `click on 👉 <a href=http://localhost:3000/reset-pwd/${parsed.body.hash}> this link to reset your password</a>`,
   };
 
   mail.send(msg).then(
-    () => {},
+    () => {
+      console.log("email sent! 🚀");
+    },
     (error) => {
       console.error(error);
 
@@ -25,15 +37,5 @@ export async function GET() {
     }
   );
 
-  //   (async () => {
-  //     try {
-  //       await mail.send(msg);
-  //     } catch (error: any) {
-  //       console.error(error);
-
-  //       if (error.response) {
-  //         console.error(error.response.body);
-  //       }
-  //     }
-  //   })();
+  return NextResponse.json({ data: "POST EMAIL API" });
 }

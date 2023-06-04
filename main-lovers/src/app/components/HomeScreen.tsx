@@ -1,12 +1,9 @@
-"use client";
+// "use client";
 import Image from "next/image";
 import React from "react";
 import Login from "./LoginModal";
 import SignUp from "./SignUpModal";
 import Swiper from "./Swiper";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
-import axios from "axios";
 
 export default function HomeScreen() {
   return (
