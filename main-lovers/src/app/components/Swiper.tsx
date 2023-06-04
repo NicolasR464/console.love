@@ -1,11 +1,18 @@
 "use client"
 import React, { useState, useMemo, useEffect, createRef } from "react";
 // import TinderCard from "./react-tinder-card";
+import InnerCarousel from './InnerCarousel';
+
+import Image from "next/image";
+import HeartImage from "../../../public/coeur.png";
+import CloseImage from "../../../public/close.png";
+import BackImage from "../../../public/retour.png";
+
 import TinderCard from './react-tinder-card/'
-import BackImage from '../../../public/arriere.png';
 import { withCoalescedInvoke } from "next/dist/lib/coalesced-function";
 import connectMongo  from '../utils/mongoose';
 import axios from 'axios';
+import { arrayOutputType } from "zod";
 
 
 interface Character {
@@ -17,11 +24,10 @@ interface Character {
   city: string;
   distance: boolean;
   age: number;
+  profileStatus: string;
+  pictures: string[];
 }
 
-interface CustomTinderCardProps {
-  style: React.CSSProperties;
-}
 
 const rejected: string[] = [];
 const matched: string[] = [];
@@ -94,9 +100,11 @@ useEffect(() => {
       // CALL the route in /api/users/[id]/matches to create the stack for the connected user
       const response = await axios.get(`/api/users/${userId}/matches`);
       const userData = response.data.users;
+      console.log("my stack", userData)
 
       // CREATION OF THE USER'S STACK
       setCharacters(userData);
+      console.log(userData)
     } catch (error) {
       console.log("Error fetching user data:", error);
     }
@@ -348,34 +356,43 @@ const populateRejected = async (idToDelete: string) => {
           onSwipe={(dir: any) => swiped(dir, character._id)}
           preventSwipe={['up', 'down', 'right']}
           >
-            <div
-              style={{ backgroundImage: "url(" + character.profilePicture + ")" }}
-              className="card"
-            >
-              <div className="flex-col bg-white w-full h-20 absolute bottom-0 rounded-br-2xl rounded-bl-2xl px-4">
-                <div className="flex justify-between">
-                  <h3 className="font-bold text-lg">{character.name}</h3>
-                  <h3 className="font-bold text-lg">{character.age}</h3>
-                  <div>{character.distance} km</div>
-                </div>
-                <div className="flex-col">
-                  {character.languages.map((language, index) => (
-                    <p key={index} className="text-md">{language}</p>
-                  ))}
-
-                </div>
+          <div
+            style={{ backgroundImage: "url(" + character.profilePicture + ")" }}
+            className="card"
+          >
+            <div className="flex-col w-full h-auto absolute mb-[100px] bottom-0 rounded-br-2xl rounded-bl-2xl px-4 text-white">
+              <div className="flex">
+                <h3 className="text-3xl font-bold">{character.name}</h3>
+                <h3 className="text-3xl ml-3">{character.age}</h3>
+              </div>
+              <div className="flex justify-between">
+                <div className="badge badge-ghost font-bold text-white glass">{character.profileStatus}</div>
+                <div className="font-bold">{character.distance} km</div>
+              </div>
+              <div className="flex-col">
+                {character.languages.map((language, index) => (
+                  <p key={index} className="text-lg -mb-3">{language}</p>
+                ))}
               </div>
             </div>
-          </TinderCard>
+          </div>
+        </TinderCard>
         ))}
         
         {/* BUTTON TO CANCEL LAST UNLIKE */}
-        <div className="flex justify-between -mt-40">
-          <button className="btn" onClick={() => swipe('left')}>Swipe left!</button>
-          {/* <button onClick={undo} id="undo_button" disabled={!undoAvailable}>
-            <img src="arriere.png" style={{ width: "40px" }} alt="" />
-          </button> */}
-          <button className="btn" onClick={() => swipe('right')}>Swipe right!</button>
+        <div className="swipe_buttons_div absolute flex justify-evenly -mt-40 w-[300px]">
+          <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel"
+            // onClick={undo} id="undo_button" disabled={!undoAvailable}
+          >
+            <Image src={BackImage} style={{ width: "55px", margin: "auto" }} alt=""></Image>
+          </button>
+          <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel" onClick={() => swipe('left')}>
+            <Image src={CloseImage} style={{ width: "25px", margin: "auto" }} alt=""></Image>
+          </button>
+          <button className="btn-circle btn-outline btn-success border-solid border-2 border-swipeLike" onClick={() => swipe('right')}>
+            <Image src={HeartImage} style={{ width: "25px", margin: "auto" }} alt=""></Image>
+          </button>
+          <button className="btn-circle btn-outline btn-info border-solid border-2 border-info btn-sm self-center">i</button>
         </div>
       </div>
     ) : (
@@ -384,39 +401,44 @@ const populateRejected = async (idToDelete: string) => {
           <TinderCard
           ref={childRefs[index]}
           // stack={true}
-          className="swipe"
+          className="swipe pressable"
           key={character._id}
           onSwipe={(dir: any) => swiped(dir, character._id)}
           preventSwipe={['up', 'down']}
           >
-            <div
-              style={{ backgroundImage: "url(" + character.profilePicture + ")" }}
-              className="card"
-            >
-              <div className="flex-col bg-white w-full h-20 absolute bottom-0 rounded-br-2xl rounded-bl-2xl px-4">
-                <div className="flex justify-between">
-                  <h3 className="font-bold text-lg">{character.name}</h3>
-                  <h3 className="font-bold text-lg">{character.age}</h3>
-                  <div>{character.distance} km</div>
-                </div>
-                <div className="flex-col">
-                  {character.languages.map((language, index) => (
-                    <p key={index} className="text-md">{language}</p>
+            <InnerCarousel pictures={character.pictures} userId={character._id} userIndex={index}/>
+            <div className="flex-col w-full h-auto absolute mb-[100px] bottom-0 rounded-br-2xl rounded-bl-2xl px-4 text-white">
+              <div className="flex">
+                <h3 className="text-3xl font-bold">{character.name}</h3>
+                <h3 className="text-3xl ml-3">{character.age}</h3>
+              </div>
+              <div className="flex justify-between">
+                <div className="badge badge-ghost font-bold text-white glass">{character.profileStatus}</div>
+                <div className="font-bold">{character.distance} km</div>
+              </div>
+              <div className="flex-col">
+                {character.languages.map((language, index) => (
+                  <p key={index} className="text-lg -mb-3">{language}</p>
                   ))}
-
-                </div>
               </div>
             </div>
           </TinderCard>
         ))}
         
         {/* BUTTON TO CANCEL LAST UNLIKE */}
-        <div className="flex justify-between -mt-40">
-          <button className="btn" onClick={() => swipe('left')}>Swipe left!</button>
-          {/* <button onClick={undo} id="undo_button" disabled={!undoAvailable}>
-            <img src="arriere.png" style={{ width: "40px" }} alt="" />
-          </button> */}
-          <button className="btn" onClick={() => swipe('right')}>Swipe right!</button>
+        <div className="swipe_buttons_div absolute flex justify-evenly -mt-40 w-[300px]">
+          <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel btn-sm self-center"
+            // onClick={undo} id="undo_button" disabled={!undoAvailable}
+          >
+            <Image src={BackImage} style={{ width: "55px", margin: "auto" }} alt=""></Image>
+          </button>
+          <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel" onClick={() => swipe('left')}>
+            <Image src={CloseImage} style={{ width: "25px", margin: "auto" }} alt=""></Image>
+          </button>
+          <button className="btn-circle btn-outline btn-success border-solid border-2 border-swipeLike" onClick={() => swipe('right')}>
+            <Image src={HeartImage} style={{ width: "25px", margin: "auto" }} alt=""></Image>
+          </button>
+          <button className="btn-circle btn-outline btn-info border-solid border-2 border-info btn-sm self-center">i</button>
         </div>
       </div>
     )}

@@ -17,6 +17,8 @@ module.exports = {
         'pink-lover': '#FF66C4',
         'purple-lover': '#BD93F9',
         'black-lover': '#031926',
+        'swipeCancel': '#ff4054',
+        'swipeLike': '#4debca',
       },
       spacing: {
         'h-chat': '580px',
