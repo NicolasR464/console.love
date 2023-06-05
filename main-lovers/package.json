@@ -2,6 +2,9 @@
   "name": "main-lovers",
   "version": "0.1.0",
   "private": true,
+  "react": "next",
+  "react-dom": "next",
+  "next": "canary",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

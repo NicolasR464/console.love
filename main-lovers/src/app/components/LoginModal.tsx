@@ -18,15 +18,13 @@ export default function LoginModal() {
 
   useEffect(() => {
     const search = searchParams.get("reset");
-    console.log(!search);
-    console.log(typeof !search);
 
     if (search === "true") {
       toast.success("Password reset! You may now log in.");
     } else if (search === "false") {
       toast.error("Something went wrong, please try again.");
     }
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     const sessionHandler = async () => {
