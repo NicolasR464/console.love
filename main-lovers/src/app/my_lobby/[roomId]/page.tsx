@@ -2,6 +2,7 @@ import Image from 'next/image'
 import ChatBox from './ChatBox';
 import UserProfile from './UserProfile';
 import Drawer from '../../components/Drawer';
+import { SocketProvider } from '../../context/SocketContext';
 
 
 
@@ -24,11 +25,13 @@ console.log('MY ROOM ID', roomId)
           }}
         >
           <div className="hero-overlay bg-opacity-60"></div>
-     
+          <SocketProvider >
+
           <Drawer />
           <ChatBox roomId={ roomId } />
          {/* <UserProfile /> */}
-    
+         </SocketProvider>
+
         </div>
           
     

@@ -9,6 +9,7 @@ import Swiper from "./components/Swiper";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import Drawer from "./components/Drawer"
+import { SocketProvider } from "./context/SocketContext";
 
 
 export default async function Home() {
@@ -53,9 +54,10 @@ export default async function Home() {
           }}
         >
           <div className="hero-overlay bg-opacity-60"></div>
-          
+          <SocketProvider >
           <Drawer />
           <Swiper userId={user} />
+          </SocketProvider>
         </div>
       ) : (
         <HomeScreen />

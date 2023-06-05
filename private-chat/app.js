@@ -35,7 +35,7 @@ const io = new Server(httpServer, {
 
 // New socket.io connection handling
 io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
+  console.log(`User Connected: ${socket.id} : ${new Date()}`);
 
   socket.on("create-room", async (chatData) => {
     try {
@@ -65,6 +65,30 @@ io.on("connection", (socket) => {
     }
   });
 
+  socket.on("update-chat-status", async ({ roomId, status }) => {
+    try {
+      const chatRoom = await Chat.findById(roomId);
+
+      if (!chatRoom) {
+        console.log(`Chat room not found for roomId: ${roomId}`);
+        return;
+      }
+
+      //YOU ARE HERE, MUST GET USERID (from Session pass it as prop if necessary)
+      // console.log("chatRoom", chatRoom);
+      // chatRoom.chatters.forEach((chatter) => {
+      //   chatter.status = status;
+      // });
+
+      // await chatRoom.save();
+
+      // Emit the updated chat room data to all clients in the room
+      io.to(roomId).emit("room-data", chatRoom);
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
   socket.on("fetch-room", async (roomId) => {
     try {
       const room = await Chat.findById(roomId);
@@ -88,7 +112,7 @@ io.on("connection", (socket) => {
     console.log("new message", message);
     console.log("in room", roomId);
     try {
-      // Save the message in the chat room in the database
+      // Fetch the chat room from the database
       const chatRoom = await Chat.findById(roomId);
 
       // Check if the chat room exists
@@ -97,12 +121,55 @@ io.on("connection", (socket) => {
         return;
       }
 
+      // Fetch the status of both the chatters
+      const chatterStatuses = chatRoom.chatters.map(
+        (chatter) => chatter.status
+      );
+
+      // If both users' status are not "accepted", they cannot chat
+      if (chatterStatuses.some((status) => status !== "accepted")) {
+        socket.emit("chat error", "Waiting for quiz completion");
+        return;
+      }
+
+      // Append the message to the discussion
       chatRoom.discussion.push(message);
       await chatRoom.save();
 
       // Emit the 'chat message' event to all clients in the same room
       socket.to(roomId).emit("chat message", message);
       io.emit("chat list", message, roomId);
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  socket.on("update-chat-status", async ({ roomId, status }, session) => {
+    try {
+      console.log("USER RESPONSE", roomId, status, session);
+      const chatRoom = await Chat.findById(roomId);
+
+      if (!chatRoom) {
+        console.log(`Chat room not found for roomId: ${roomId}`);
+        return;
+      }
+
+      // Find the chatter whose chatId matches the current user's session ID
+      const currentUserChatter = chatRoom.chatters.find(
+        (chatter) => chatter.chatId.toString() === session
+      );
+
+      if (!currentUserChatter) {
+        console.log(`Current user chatter not found for roomId: ${roomId}`);
+        return;
+      }
+      console.log("Chatroom before update", chatRoom.chatters);
+      currentUserChatter.status = status;
+      console.log("Chatroom after update", chatRoom.chatters);
+      await chatRoom.save();
+
+      // Emit the updated chat room data to the current user
+      io.to(roomId).emit("room-data", chatRoom);
     } catch (err) {
       console.error(err);
     }

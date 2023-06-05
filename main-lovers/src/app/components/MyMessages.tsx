@@ -6,6 +6,7 @@ import axios from 'axios';
 import { io, Socket } from "socket.io-client";
 import Link from 'next/link';
 import { useCallback } from 'react';
+import { useSocket } from '../context/SocketContext';
 
 
 interface Message {
@@ -56,10 +57,11 @@ export default function MyMessages() {
   const { data: session } = useSession();
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [loading, setLoading] = useState(true);
-  const [socket, setSocket] = useState<Socket | null>(null);
+  // const [socket, setSocket] = useState<Socket | null>(null);
   const [newMessageCounts, setNewMessageCounts] = useState<{ [key: string]: number }>({});
   const [chatUsers, setChatUsers] = useState<{ [key: string]: User }>({});
   const [currentRoomId, setCurrentRoomId] = useState<string | null>(null);
+  const socket = useSocket().socket;
 
   //console.log('DRAWER MOUNTING')
   const fetchUserData = useCallback(async (username: any) => {
@@ -78,27 +80,25 @@ export default function MyMessages() {
 
 
   
-  useEffect(() => {
-    console.log('useEffect executed2');
-    if(!session) return; // Don't attempt socket connection if session is not yet available
-    const newSocket = io("http://localhost:3001");
-    setSocket(newSocket);
+  // useEffect(() => {
+  //   console.log('useEffect executed2', socket);
+  //   if(!session || socket === null) return;
+  //   const newSocket = io("http://localhost:3001");
+  //   // setSocket(newSocket);
 
-    return () => {
-      newSocket.disconnect();
-    };
-  }, [session]); // Add session as dependency
+  //   return () => {
+  //     newSocket.disconnect();
+  //   };
+  // }, [session]); 
 
   useEffect(() => {
     //console.log("socket",socket)
     //console.log("session",session)
     console.log('useEffect executed');
-
-    if(!socket || !session) return; // Ensure both socket and session are available
+    if(socket === null || !session) return; 
       
     socket?.on('connect', () => {
       console.log('drawer connected on socket', socket)
-      // Emit the 'fetch chat rooms' event after the component has rendered and socket connected
       socket.emit('fetch chat rooms', session?.user.sub);
     });
 
@@ -117,9 +117,7 @@ export default function MyMessages() {
       await Promise.all(Array.from(otherChatters).map(fetchUserData));
       setLoading(false);
     });
-      // Listen for the new 'new message' event
       socket?.on("new message", () => {
-        // Fetch updated chat rooms when a new message is sent
         socket.emit('fetch chat rooms', session?.user.sub);
       });
 
@@ -143,7 +141,6 @@ export default function MyMessages() {
           }
         });
         
-        // Sort updatedRooms by the timestamp of the last message (the most recent one) in each chat room
         updatedRooms.sort((a, b) => new Date(b.discussion[b.discussion.length - 1]?.timestamp).getTime() - new Date(a.discussion[a.discussion.length - 1]?.timestamp).getTime());
         //console.log('Updated chat room list:', updatedRooms); // Added //console.log
 
@@ -164,8 +161,7 @@ export default function MyMessages() {
       socket?.off("chat rooms");
       socket?.off("new chat room");
       socket?.off("chat list");
-      socket?.off("new message");  // Don't forget to disconnect the new event listener
-
+      socket?.off("new message");  
     };
   }, [socket, session, fetchUserData]);
 
@@ -179,19 +175,14 @@ export default function MyMessages() {
     const lastMessageA = a.discussion[a.discussion.length - 1];
     const lastMessageB = b.discussion[b.discussion.length - 1];
   
-    // If one or both timestamps are undefined, handle those cases
     if (!lastMessageA?.timestamp && !lastMessageB?.timestamp) {
-      // Neither chat room has a last message timestamp - consider them equal for sorting purposes
       return 0;
     } else if (!lastMessageA?.timestamp) {
-      // Only chat room A is missing a last message timestamp - consider B greater
       return 1;
     } else if (!lastMessageB?.timestamp) {
-      // Only chat room B is missing a last message timestamp - consider A greater
       return -1;
     }
   
-    // Both chat rooms have a last message timestamp - compare them normally
     const comparison = new Date(lastMessageB.timestamp).getTime() - new Date(lastMessageA.timestamp).getTime();
     console.log(`Comparing last message in ${a._id} (${lastMessageA.timestamp}) vs last message in ${b._id} (${lastMessageB.timestamp}): comparison = ${comparison}`);
     return comparison;
