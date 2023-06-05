@@ -5,10 +5,12 @@ import mail from "@sendgrid/mail";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
+import { redirect } from "next/navigation";
 
 export default async function ResetForm({ params }: any) {
   await connectMongo();
   console.log("RESET PAGE");
+  // redirect("/");
 
   const userCheck = await user.findOne({ resetPwdToken: params.id });
   console.log(userCheck);
@@ -49,7 +51,12 @@ export default async function ResetForm({ params }: any) {
         $unset: { resetPwdToken: "" },
       });
       console.log(deletedToken);
+      redirect("/?reset=true");
+    } else {
+      redirect("/?reset=false");
     }
+
+    //redirection
   }
 
   return (

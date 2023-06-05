@@ -7,11 +7,26 @@ import { getSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [session, setSession] = useState<{} | null>();
+
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const search = searchParams.get("reset");
+    console.log(!search);
+    console.log(typeof !search);
+
+    if (search === "true") {
+      toast.success("Password reset! You may now log in.");
+    } else if (search === "false") {
+      toast.error("Something went wrong, please try again.");
+    }
+  }, []);
 
   useEffect(() => {
     const sessionHandler = async () => {
