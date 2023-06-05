@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useMemo, useEffect, createRef } from "react";
+import React, { useState, useMemo, useEffect, createRef, useInsertionEffect } from "react";
 // import TinderCard from "./react-tinder-card";
 import InnerCarousel from './InnerCarousel';
 
@@ -18,6 +18,7 @@ import { arrayOutputType } from "zod";
 interface Character {
   _id: string;
   name: string,
+  firstName: string,
   email: string;
   languages: string[];
   profilePicture: string;
@@ -53,10 +54,10 @@ useEffect(() => {
 
       // Sets countSwipe from the swipe field in the Connected User Data
       setCounterSwipe(countSwipe)
-      console.log("CHECKTIMER", checkTimerSwipe)
+      // console.log("CHECKTIMER", checkTimerSwipe)
 
-      console.log("MATCHEDuser => ", userMatchedData)
-      console.log("REJECTEDuser => ", userRejectedData)
+      // console.log("MATCHEDuser => ", userMatchedData)
+      // console.log("REJECTEDuser => ", userRejectedData)
 
       // // Check if checkTimerSwipe is empty and is 24 hours or more in the past
       // if (
@@ -104,7 +105,7 @@ useEffect(() => {
 
       // CREATION OF THE USER'S STACK
       setCharacters(userData);
-      console.log(userData)
+      // console.log(userData)
     } catch (error) {
       console.log("Error fetching user data:", error);
     }
@@ -114,7 +115,7 @@ useEffect(() => {
 
 // CONSOLE => Counter Swipe
 useEffect(() => {
-  console.log("CountSwipe after set => ", counterSwipe)
+  // console.log("CountSwipe after set => ", counterSwipe)
 })
 
 // Call put route to populate the Connected User's Matched Array
@@ -149,7 +150,7 @@ const populateRejected = async (idToDelete: string) => {
     };
 
     const updateResponse = await axios.put(`/api/users/${userId}`, newRejectedData);
-    console.log(updateResponse);
+    // console.log(updateResponse);
   } catch (error) {
     console.log("Error updating user data:", error);
   }
@@ -176,13 +177,14 @@ const populateRejected = async (idToDelete: string) => {
   // }, [undoData, undoAvailable])
 
 
-  // const fetchUserData = (userId: string) => {
-  //   // Find the user data from the db array using the ID
-  //   const user = userDb.find((person) => person.Github_token._id === userId);
-  //   console.log('User Data:', user);
-  //   // userDb.unshift(user)
-  //   return user
-  // };
+  const fetchUserData = (userId: string) => {
+    // Find the user data from the db array using the ID
+    const response = axios.get(`/api/users/${userId}`);
+    const userData = response;
+    console.log('User Data:', userData);
+    // userDb.unshift(user)
+    return userData
+  };
 
   
   const swipe = (dir: any) => {
@@ -214,9 +216,9 @@ const populateRejected = async (idToDelete: string) => {
       });
       rejected.push(idToDelete);
       characters.pop();
-      console.log("REJECTED => ", rejected)
-      console.log("CHARACTERS : ", characters);
-
+      // console.log("REJECTED => ", rejected)
+      // console.log("CHARACTERS : ", characters);
+      
       
       // Call the populateRejected function to update the user
       populateRejected(idToDelete);
@@ -227,7 +229,7 @@ const populateRejected = async (idToDelete: string) => {
         try {
           const response = await axios.get(`/api/users/${idToDelete}`);
           const otherUserId = response.data.data;
-          console.log("OTHERUSER", otherUserId)
+          // console.log("OTHERUSER", otherUserId)
           
           const newRejectedArrayOtherUser = [...otherUserId.rejected, userId];
           
@@ -256,6 +258,7 @@ const populateRejected = async (idToDelete: string) => {
     
           // Sets the undoData (Swiped profileId) to empty on right swipe
           setUndoData('');
+
           // Sets UndoAvailable to false to disable the undo on right swipe
           setUndoAvailable(false);
     
@@ -322,80 +325,51 @@ const populateRejected = async (idToDelete: string) => {
     }
 
 
-    
+
+    useEffect(() => {
+      console.log("UNDODATA => ", undoData)
+    })
 
   // UNDO FUNCTION :: BE CAREFUL : NEEDS TO FETCH THE DATA OF LAST UNLIKED PROFILE ID TO PUSH IT INTO THE ARRAY
-  // const undo = () => {
-  //   if (undoAvailable && undoData) {
-  //     const userData = fetchUserData(undoData);
-  //     rejected.pop();
-  //     setUndoAvailable(false);
-  //     setUndoData('');
-  //     // console.log("userData, ", userData, characters)
-  //     setCharacters([...characters, userData]);
-  //   }
-  //   console.log("Already liked: ", matched);
-  //   console.log("Already unliked: ", rejected);
-  //   // console.log("BASE DB", db);
-  //   console.log("DB:", userDb);
-  // };
+  const undo = async () => {
+    if (undoAvailable && undoData) {
+      try {
+        // Fetch profile to undo
+        const profileToUndo = await axios.get(`/api/users/${undoData}`);
+        const undoReady = profileToUndo.data.data;
+  
+        console.log("Profile to undo => ", undoReady);
+  
+        // Add the response at the end of the characters array
+        setCharacters([...characters, undoReady]);
+  
+        // Remove undoData from the rejected array using a PUT request
+        await axios.put(`/api/users/${userId}`, {
+          rejected: rejected.filter((userId) => userId !== undoData),
+        });
+  
+        // Remove userId from the rejected array of undoData using a PUT request
+        await axios.put(`/api/users/${undoData}`, {
+          rejected: undoReady.rejected.filter((userId: any) => userId !== userId),
+        });
+  
+        setUndoAvailable(false);
+        setUndoData('');
+        console.log("STACK AFTER UNDO => ", characters);
+      } catch (error) {
+        console.error("Error occurred during undo: ", error);
+      }
+    }
+  
+    console.log("Already liked: ", matched);
+    console.log("Already unliked: ", rejected);
+  };
+  
 
   
   return (
     <>
     <div className="flex flex-col items-center">
-
-    {counterSwipe < 1 ? (
-      <div className="cardContainer">
-        {characters.map((character: Character, index: number) => (
-          <TinderCard
-          ref={childRefs[index]}
-          // stack={true}
-          className="swipe"
-          key={character._id}
-          onSwipe={(dir: any) => swiped(dir, character._id)}
-          preventSwipe={['up', 'down', 'right']}
-          >
-          <div
-            style={{ backgroundImage: "url(" + character.profilePicture + ")" }}
-            className="card"
-          >
-            <div className="flex-col w-full h-auto absolute mb-[100px] bottom-0 rounded-br-2xl rounded-bl-2xl px-4 text-white">
-              <div className="flex">
-                <h3 className="text-3xl font-bold">{character.name}</h3>
-                <h3 className="text-3xl ml-3">{character.age}</h3>
-              </div>
-              <div className="flex justify-between">
-                <div className="badge badge-ghost font-bold text-white glass">{character.profileStatus}</div>
-                <div className="font-bold">{character.distance} km</div>
-              </div>
-              <div className="flex-col">
-                {character.languages.map((language, index) => (
-                  <p key={index} className="text-lg -mb-3">{language}</p>
-                ))}
-              </div>
-            </div>
-          </div>
-        </TinderCard>
-        ))}
-        
-        {/* BUTTON TO CANCEL LAST UNLIKE */}
-        <div className="swipe_buttons_div absolute flex justify-evenly -mt-40 w-[300px]">
-          <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel"
-            // onClick={undo} id="undo_button" disabled={!undoAvailable}
-          >
-            <Image src={BackImage} style={{ width: "55px", margin: "auto" }} alt=""></Image>
-          </button>
-          <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel" onClick={() => swipe('left')}>
-            <Image src={CloseImage} style={{ width: "25px", margin: "auto" }} alt=""></Image>
-          </button>
-          <button className="btn-circle btn-outline btn-success border-solid border-2 border-swipeLike" onClick={() => swipe('right')}>
-            <Image src={HeartImage} style={{ width: "25px", margin: "auto" }} alt=""></Image>
-          </button>
-          <button className="btn-circle btn-outline btn-info border-solid border-2 border-info btn-sm self-center">i</button>
-        </div>
-      </div>
-    ) : (
       <div className="cardContainer">
         {characters.map((character: Character, index: number) => (
           <TinderCard
@@ -404,12 +378,12 @@ const populateRejected = async (idToDelete: string) => {
           className="swipe pressable"
           key={character._id}
           onSwipe={(dir: any) => swiped(dir, character._id)}
-          preventSwipe={['up', 'down']}
+          preventSwipe={counterSwipe < 1 ? ['up', 'down', 'right'] : ['up', 'down']}   
           >
             <InnerCarousel pictures={character.pictures} userId={character._id} userIndex={index} />
             <div className="flex-col w-full h-auto absolute mb-[100px] bottom-0 rounded-br-2xl rounded-bl-2xl px-4 text-white">
               <div className="flex">
-                <h3 className="text-3xl font-bold">{character.name}</h3>
+                <h3 className="text-3xl font-bold mw-[200px] overflow-hidden">{character.firstName}</h3>
                 <h3 className="text-3xl ml-3">{character.age}</h3>
               </div>
               <div className="flex justify-between">
@@ -426,10 +400,9 @@ const populateRejected = async (idToDelete: string) => {
         ))}
         
         {/* BUTTON TO CANCEL LAST UNLIKE */}
-        <div className="swipe_buttons_div absolute flex justify-evenly -mt-40 w-[300px]">
+        <div className="swipe_buttons_div absolute flex justify-evenly mt-[430px] w-[300px]">
           <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel btn-sm self-center"
-            // onClick={undo} id="undo_button" disabled={!undoAvailable}
-          >
+            onClick={undo} id="undo_button" disabled={!undoAvailable} >
             <Image src={BackImage} style={{ width: "55px", margin: "auto" }} alt=""></Image>
           </button>
           <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel" onClick={() => swipe('left')}>
@@ -438,10 +411,8 @@ const populateRejected = async (idToDelete: string) => {
           <button className="btn-circle btn-outline btn-success border-solid border-2 border-swipeLike" onClick={() => swipe('right')}>
             <Image src={HeartImage} style={{ width: "25px", margin: "auto" }} alt=""></Image>
           </button>
-          <button className="btn-circle btn-outline btn-info border-solid border-2 border-info btn-sm self-center">i</button>
         </div>
       </div>
-    )}
     </div>
   </>
   );

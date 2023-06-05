@@ -36,9 +36,9 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           { // The response is including all profiles where 'sex' is in common with 'attraction' array of the connected user
             sex: { $in: attraction }
           },
-          // {
-          //   profileStatus: { $in  : profileStatus }
-          // }
+          {
+            profileStatus: { $in  : profileStatus }
+          }
         ]
       }).exec();
 

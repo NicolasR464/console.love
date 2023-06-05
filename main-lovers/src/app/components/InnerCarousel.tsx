@@ -10,16 +10,12 @@ function InnerCarousel({ pictures, userId, userIndex }: any) {
   }, [pictures]);
 
   const goToPreviousSlide = (userId: any) => {
-    console.log(userId)
-    console.log(userIndex)
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? picturesLength - 1 : prevIndex - 1
     );
   };
 
   const goToNextSlide = (userId: any) => {
-    console.log(userId)
-    console.log(userIndex)
     setCurrentIndex((prevIndex) =>
       prevIndex === picturesLength - 1 ? 0 : prevIndex + 1
     );
@@ -39,11 +35,8 @@ function InnerCarousel({ pictures, userId, userIndex }: any) {
               style={{ backgroundImage: `url(${picture})` }}
               className="card"
             />
-            <div className="buttons absolute">
-              <a onClick={() => {
-                console.log('je clique', userId);
-                goToPreviousSlide(userId);
-              }} href={`#slide${userId+(index-1)}`} className="btn btn-circle">❮</a>
+            <div className="buttons_inner">
+              <a onClick={() => { goToPreviousSlide(userId) }} href={`#slide${userId+(index-1)}`} className="btn btn-circle">❮</a>
               <a onClick={() => goToNextSlide(userId)} href={`#slide${userId+(index+1)}`} className="btn btn-circle">❯</a>
             </div>
           </div>

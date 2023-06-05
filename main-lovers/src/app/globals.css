@@ -112,14 +112,14 @@
   background-position: center;
 }
 
-#undo_button {
+/* #undo_button {
   z-index: 999;
   position: relative;
   margin-left: -203px;
 }
 .swipe_buttons_div {
   bottom: 130px!important;
-}
+} */
 
 .infoText {
   width: 100%;
@@ -131,8 +131,20 @@
   animation-duration: 800ms;
 }
 
-.buttons {
-  margin: 5px;
+/* .buttons {
+  margin: 215px 0px 0px 14px;
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+} */
+
+.buttons_inner {
+  position: absolute;
+  margin-top: 220px!important;
+  display: flex;
+  width: 270px;
+  justify-content: space-between;
+  margin-left: 15px;
 }
 
 .buttons button {
