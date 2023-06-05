@@ -78,7 +78,7 @@ export default async function NavBar() {
                 className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <a>Item 1</a>
+                  <Link href="/myprofile">My Profile</Link>
                 </li>
                 <li>
                   <LogOut />
