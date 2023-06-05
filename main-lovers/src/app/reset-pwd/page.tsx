@@ -1,19 +1,22 @@
 import connectMongo from "../utils/mongoose";
 import user from "../models/users";
 import Link from "next/link";
-import mail from "@sendgrid/mail";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import bcrypt from "bcrypt";
-// import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import { redirect } from "next/navigation";
-import { log } from "console";
+// import { experimental_useFormStatus as useFormStatus } from "react-dom";
 
-export default async function ResetPwd() {
+export default async function ResetPwd(params: any) {
   await connectMongo();
   // const { pending } = useFormStatus();
-  // let message = "nothing";
 
+  console.log(params.searchParams.valid_email);
+
+  let isEmailValid = true;
+
+  if (params.searchParams.valid_email == "false") {
+    isEmailValid = false;
+  }
   async function checkEmail(data: FormData) {
     "use server";
     const emailInput = data.get("email");
@@ -21,8 +24,6 @@ export default async function ResetPwd() {
     if (emailInput == "") return;
 
     const userCheck = await user.findOne({ email: emailInput });
-
-    let isSent = false;
 
     if (userCheck) {
       console.log("USER FOUND");
@@ -42,21 +43,9 @@ export default async function ResetPwd() {
         email: emailInput,
       };
 
-      // const postRes = await axios.post(
-      //   `${process.env.HOSTNAME}/api/mail`,
-
-      //   { body: sendBody },
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
-      // console.log({ postRes });
-
       try {
         const postRes = await axios.post(
-          `/api/mail`,
+          `${process.env.HOSTNAME}/api/mail`,
           {
             body: sendBody,
           },
@@ -66,20 +55,19 @@ export default async function ResetPwd() {
             },
           }
         );
-        console.log("↴✉️");
 
         console.log(postRes.data);
-        isSent = true;
 
         // if (postRes)
       } catch (err) {
         console.log(err);
       }
+      redirect(`/reset-pwd/sent`);
     } else {
-      console.log("no user found by that email");
+      redirect(`/reset-pwd?valid_email=false`);
+      // console.log("no user found by that email");
     }
 
-    redirect(`/reset-pwd/sent?sent=${isSent}`);
     // console.log(userCheck);
   }
 
@@ -89,7 +77,11 @@ export default async function ResetPwd() {
         Go Back
       </Link>
 
-      <h1 className="text-center">Let&#39;s reset your password</h1>
+      <h1 className="text-center">
+        {!isEmailValid
+          ? "Please enter a REGISTERED email"
+          : "Let's reset your password"}
+      </h1>
       <form
         className="translate-y-10 w-full flex direction-col justify-center"
         action={checkEmail}
@@ -97,13 +89,22 @@ export default async function ResetPwd() {
         <input
           type="text"
           name="email"
-          placeholder="Enter your email here"
-          className="input input-bordered input-info w-full max-w-xs"
-          // disabled={pending}
-          // formAction={changeUI}
+          placeholder={"Enter your email here"}
+          className={
+            !isEmailValid
+              ? "input input-bordered input-error w-full max-w-xs"
+              : "input input-bordered input-info w-full max-w-xs"
+          }
         />
-        <button className="btn btn-info btn-outline ml-2" type="submit">
-          SEND
+        <button
+          className={
+            !isEmailValid
+              ? "btn btn-error btn-outline ml-2"
+              : "btn btn-info btn-outline ml-2"
+          }
+          type="submit"
+        >
+          {!isEmailValid ? "TRY AGAIN" : "SEND"}
         </button>
       </form>
     </div>
