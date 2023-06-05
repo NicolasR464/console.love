@@ -33,9 +33,19 @@ const io = new Server(httpServer, {
   },
 });
 
+let userIdToSocketId = {};
+
 // New socket.io connection handling
 io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id} : ${new Date()}`);
+  const userId = socket.handshake.auth.session;
+  socket.userId = userId;
+  userIdToSocketId[userId] = socket.id;
+
+  console.log(
+    `User Connected: SocketID = ${
+      socket.id
+    }, UserID = ${userId} : ${new Date()}`
+  );
 
   socket.on("create-room", async (chatData) => {
     try {
@@ -54,101 +64,14 @@ io.on("connection", (socket) => {
     }
   });
 
+  // FETCH ROOM CONTROL
+
   socket.on("fetch chat rooms", async (userId) => {
     try {
       const chatRooms = await Chat.find({ "chatters.chatId": userId });
       socket.emit("chat rooms", chatRooms);
       // console.log("room fetch", chatRooms);
       // console.log("room fetch userID", userId);
-    } catch (err) {
-      console.error(err);
-    }
-  });
-
-  socket.on("fetch match", async (userId) => {
-    try {
-      console.log(`Fetching matches for userId: ${userId}`);
-
-      const initialMatches = await Chat.find({
-        chatters: { $elemMatch: { chatId: userId } },
-      });
-
-      // console.log(
-      //   `Initial matches (including non-accepted): ${initialMatches.map(
-      //     (match) => match._id
-      //   )}`
-      // );
-
-      const finalMatches = initialMatches.filter((match) =>
-        match.chatters.every((chatter) => chatter.status === "accepted")
-      );
-
-      // console.log(
-      //   `Final matches (all chatters accepted): ${finalMatches.map(
-      //     (match) => match._id
-      //   )}`
-      // );
-
-      socket.emit("matches", finalMatches);
-    } catch (err) {
-      console.error(`An error occurred: ${err}`);
-    }
-  });
-
-  socket.on("update-chat-status", async ({ roomId, userId, status }) => {
-    try {
-      // Update the status for the current user
-      await Chat.updateOne(
-        { _id: roomId, "chatters.chatId": userId },
-        { $set: { "chatters.$.status": status } }
-      );
-
-      // Fetch the updated chat room from the database
-      let chatRoom = await Chat.findById(roomId);
-
-      if (!chatRoom) {
-        console.log(`Chat room not found for roomId: ${roomId}`);
-        return;
-      }
-
-      // Emit the updated chat room data to all clients in the room
-      io.to(roomId).emit("room-data", chatRoom);
-
-      // Log each chatter's chatId and status
-      chatRoom.chatters.forEach((chatter, index) => {
-        console.log(`User ${index + 1} Status: ${chatter.status}`);
-      });
-
-      // Check if all chatters are "accepted"
-      const allChattersAccepted = chatRoom.chatters.every(
-        (chatter) => chatter.status === "accepted"
-      );
-
-      if (allChattersAccepted) {
-        // Fetch all matches for this user where all chat members have status "accepted"
-        const initialMatches = await Chat.find({
-          chatters: { $elemMatch: { chatId: userId } },
-        });
-
-        console.log(
-          `Initial matches (including non-accepted): ${initialMatches.map(
-            (match) => match._id
-          )}`
-        );
-
-        const finalMatches = initialMatches.filter((match) =>
-          match.chatters.every((chatter) => chatter.status === "accepted")
-        );
-
-        console.log(
-          `Final matches (all chatters accepted): ${finalMatches.map(
-            (match) => match._id
-          )}`
-        );
-
-        // Emit the updated matches data to this client
-        socket.emit("matches", finalMatches);
-      }
     } catch (err) {
       console.error(err);
     }
@@ -172,6 +95,8 @@ io.on("connection", (socket) => {
     console.log(`Socket ${socket.id} leaving room ${roomId}`);
     socket.leave(roomId);
   });
+
+  // CHAT MESSAGE CONTROL
 
   socket.on("chat message", async (message, roomId) => {
     console.log("new message", message);
@@ -209,6 +134,25 @@ io.on("connection", (socket) => {
     }
   });
 
+  // MATCH CONTROL
+  socket.on("fetch match", async (userId) => {
+    try {
+      console.log(`Fetching matches for userId: ${userId}`);
+
+      const initialMatches = await Chat.find({
+        chatters: { $elemMatch: { chatId: userId } },
+      });
+
+      const finalMatches = initialMatches.filter((match) =>
+        match.chatters.every((chatter) => chatter.status === "accepted")
+      );
+
+      socket.emit("matches", finalMatches);
+    } catch (err) {
+      console.error(`An error occurred: ${err}`);
+    }
+  });
+
   socket.on("update-chat-status", async ({ roomId, status }, session) => {
     try {
       console.log("USER RESPONSE", roomId, status, session);
@@ -228,10 +172,22 @@ io.on("connection", (socket) => {
         console.log(`Current user chatter not found for roomId: ${roomId}`);
         return;
       }
-      // console.log("Chatroom before update", chatRoom.chatters);
+
       currentUserChatter.status = status;
-      // console.log("Chatroom after update", chatRoom.chatters);
       await chatRoom.save();
+
+      // After saving the status update, check if both chatters have accepted the match
+      if (chatRoom.chatters.every((chatter) => chatter.status === "accepted")) {
+        console.log("Both users accepted the match!");
+
+        // For each chatter involved in the match, get their socket ID and emit the "new match" event to them
+        chatRoom.chatters.forEach((chatter) => {
+          let targetSocketId = userIdToSocketId[chatter.chatId];
+          if (targetSocketId) {
+            io.to(targetSocketId).emit("new match", chatRoom);
+          }
+        });
+      }
 
       // Emit the updated chat room data to the current user
       io.to(roomId).emit("room-data", chatRoom);
@@ -239,6 +195,43 @@ io.on("connection", (socket) => {
       console.error(err);
     }
   });
+
+  // // NEW MATCH
+  // socket.on("new match", async ({ roomId }) => {
+  //   try {
+  //     let chatRoom = await Chat.findById(roomId);
+
+  //     if (!chatRoom) {
+  //       console.log(`Chat room not found for roomId: ${roomId}`);
+  //       return;
+  //     }
+
+  //     // Log each chatter's chatId and status
+  //     chatRoom.chatters.forEach((chatter, index) => {
+  //       console.log(
+  //         `Chatter ${index + 1} ChatID: ${chatter.chatId}, Status: ${
+  //           chatter.status
+  //         }`
+  //       );
+  //     });
+
+  //     const allChattersAccepted = chatRoom.chatters.every(
+  //       (chatter) => chatter.status === "accepted"
+  //     );
+
+  //     console.log(`All chatters accepted: ${allChattersAccepted}`);
+
+  //     if (allChattersAccepted) {
+  //       // Emit new match event to the involved users
+  //       chatRoom.chatters.forEach((chatter) => {
+  //         console.log(`Emitting new match event to ChatID: ${chatter.chatId}`);
+  //         io.to(chatter.chatId).emit("new match", chatRoom);
+  //       });
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // });
 });
 
 httpServer.listen(port, () => {

@@ -17,23 +17,22 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const { data: session } = useSession();
 
   useEffect(() => {
-    console.log("SOCKET CONTEXT YOUHOU")
-  }, [])
-
-  useEffect(() => {
-    console.log("SOCKET CONTEXT")
     if (!session) return;
-
-    const newSocket = io("http://localhost:3001");
+  
+    const newSocket = io("http://localhost:3001", {
+      auth: { session: session.user.sub },
+    });
+  
     newSocket.on("connect", () => {
       console.log("SOCKET CONNECTED")
     })
+  
     setSocket(newSocket);
-
+  
     return () => {
       newSocket.disconnect();
     };
-  }, [session]); // socket connection depends on session
+  }, [session]);
 
   console.log("SOCKET => ", socket)
   if (socket === null ) {
