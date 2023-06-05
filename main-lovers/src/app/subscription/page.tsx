@@ -2,7 +2,7 @@
 // import Stripe from "../components/Stripe";
 import stripeLoad from "../utils/StripeCheckout";
 import { loadStripe } from "@stripe/stripe-js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
@@ -17,22 +17,27 @@ import Confetti from "react-confetti";
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
 export default function Subscription(params: any) {
-  const [isSubscribed, setIsSubscribed] = useState("waiting");
+  const [isSubscribed, setIsSubscribed] = useState("pending");
 
-  if (params.searchParams.session_id) {
-    setIsSubscribed("pending");
-    axios
-      .post("/api/stripe_check", {
-        sessionId: params.searchParams.session_id,
-      })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.status == 204) {
-          setIsSubscribed("confirmed");
-        }
-      })
-      .catch((err) => console.log(err));
-  }
+  useEffect(() => {
+    if (params.searchParams.session_id) {
+      setIsSubscribed("pending");
+
+      axios
+        .post("/api/stripe_check", {
+          sessionId: params.searchParams.session_id,
+        })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.status == 204) {
+            setIsSubscribed("confirmed");
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      setIsSubscribed("waiting");
+    }
+  }, [params.searchParams.session_id]);
 
   const createCheckOutSession = async () => {
     const stripe: any = await stripePromise;
@@ -57,17 +62,29 @@ export default function Subscription(params: any) {
               <h1 className="text-2xl text-center mt-10 font-bold text-6xl flex items-center justify-center animate-text bg-gradient-to-r from-pink-lover via-blue-lover to-pink-lover bg-clip-text text-transparent text-5xl font-black">
                 Congratulation, <br /> you are now a premium member!🔥
               </h1>
+
               <div className="flex w-full justify-center mt-10">
                 <Image
                   src="/star.png"
                   width={150}
                   height={150}
-                  alt="Picture of the author"
+                  alt="star logo"
                 ></Image>
               </div>
             </div>
           )}
-          {isSubscribed == "pending" && <span>loading...</span>}
+          {isSubscribed == "pending" && (
+            <div className="translate-y-20 h-2/4 w-full flex justify-center items-center">
+              <div
+                className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-pink-lover motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                role="status"
+              >
+                <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                  Loading...
+                </span>
+              </div>
+            </div>
+          )}
           {isSubscribed == "waiting" && (
             <>
               {" "}
@@ -96,7 +113,7 @@ export default function Subscription(params: any) {
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
                         <span className="text-xl">
-                          Go back to the profiles you nexted
+                          Can go back to the profiles you nexted
                         </span>
                         <FontAwesomeIcon
                           className="ml-1"
@@ -146,7 +163,7 @@ export default function Subscription(params: any) {
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
                         <span className="text-xl">
-                          Go back to the profiles you nexted
+                          Can go back to the profiles you nexted
                         </span>
                         <FontAwesomeIcon
                           style={{ fontSize: "20px", color: "#7400f8" }}
