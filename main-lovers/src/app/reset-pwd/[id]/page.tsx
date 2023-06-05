@@ -7,12 +7,30 @@ import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 
-export default async function ResetForm({ params }: any) {
+export default async function ResetForm(params: any) {
   await connectMongo();
   console.log("RESET PAGE");
   // redirect("/");
+  let isEmailValid = true;
+  let doPwdMatch = true;
 
-  const userCheck = await user.findOne({ resetPwdToken: params.id });
+  // console.log("PARAMS 👉 ", params.params.id);
+
+  const token = params.params.id;
+
+  // if (params.id) process.env.RESET_TOKEN = params.id;
+  // const resetToken = process.env.RESET_TOKEN;
+
+  if (params.searchParams.valid_email == "false") {
+    isEmailValid = false;
+  }
+
+  if (params.searchParams.pwds_match == "false") {
+    doPwdMatch = false;
+    // isEmailValid = false;
+  }
+
+  const userCheck = await user.findOne({ resetPwdToken: token });
   console.log(userCheck);
 
   async function newPwdHandle(data: FormData) {
@@ -21,15 +39,21 @@ export default async function ResetForm({ params }: any) {
     const passwordInput: any = data.get("password");
     const confirm_password = data.get("confirm_password");
 
+    const emailCheck = await user.findOne({ email: emailInput });
+
+    if (!emailCheck) redirect(`/reset-pwd/${token}?valid_email=false`);
+
     if (passwordInput !== confirm_password) {
       console.log("passwords don't match");
-      return;
+
+      redirect(`/reset-pwd/${token}?pwds_match=false`);
+      // return;
     }
     const hashedPassword = bcrypt.hashSync(passwordInput, 10);
 
     const filter = {
       email: emailInput,
-      resetPwdToken: params.id,
+      resetPwdToken: token,
     };
 
     const update = {
@@ -43,7 +67,7 @@ export default async function ResetForm({ params }: any) {
     console.log(userUpdate);
 
     if (userUpdate) {
-      console.log("USER FOUND 🔥");
+      console.log("USER FOUND AND UPDATED 🔥");
       // {$unset:{resetPwdToken}}
 
       // delete token
@@ -64,23 +88,38 @@ export default async function ResetForm({ params }: any) {
       {userCheck && (
         <div className=" absolute top-40 w-full">
           {" "}
-          <h1 className="text-center">Reset your password</h1>
+          <h1 className="text-center">
+            {!doPwdMatch
+              ? "Passwords don't match! Try again"
+              : "Reset your password"}
+          </h1>
           <form
             className=" items-center  w-full flex flex-col  justify-center"
             action={newPwdHandle}
           >
             <input
-              type="email"
+              type="text"
               name="email"
-              placeholder="Enter your email here"
-              className="input input-bordered input-info w-full max-w-xs"
-              required
+              placeholder={
+                !isEmailValid
+                  ? "⚠️ Enter a valid email"
+                  : "Enter your email here"
+              }
+              className={
+                !isEmailValid
+                  ? "input input-bordered input-error w-full max-w-xs"
+                  : "input input-bordered input-info w-full max-w-xs"
+              }
             />
             <input
               type="password"
               name="password"
               placeholder="Enter your password here"
-              className="input input-bordered input-info w-full max-w-xs mt-2"
+              className={
+                !doPwdMatch
+                  ? "input input-bordered input-error w-full max-w-xs mt-2"
+                  : "input input-bordered input-info w-full max-w-xs mt-2"
+              }
               minLength={6}
               required
             />
@@ -88,15 +127,23 @@ export default async function ResetForm({ params }: any) {
               type="password"
               name="confirm_password"
               placeholder="Confirm your password here"
-              className="input input-bordered input-info w-full max-w-xs mt-2"
+              className={
+                !doPwdMatch
+                  ? "input input-bordered input-error w-full max-w-xs mt-2"
+                  : "input input-bordered input-info w-full max-w-xs mt-2"
+              }
               minLength={6}
               required
             />
             <button
-              className="btn btn-info btn-outline ml-2 mt-2"
+              className={
+                !isEmailValid || !doPwdMatch
+                  ? "btn btn-error btn-outline ml-2 mt-2"
+                  : "btn btn-info btn-outline ml-2 mt-2"
+              }
               type="submit"
             >
-              reset password
+              {!isEmailValid ? "TRY AGAIN" : "RESET PASSWORD"}
             </button>
           </form>
         </div>
