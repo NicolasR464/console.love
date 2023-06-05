@@ -14,7 +14,7 @@ export default async function NavBar() {
   console.log(session?.user?.email);
 
   return (
-    <div className="navbar fixed top-0 z-999 bg-black-lover">
+    <div className="navbar top-0 h-[10vh] bg-black-lover">
       <div className="navbar-start">
        
       </div>

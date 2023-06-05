@@ -430,7 +430,11 @@ const submitSlide5 = (event: any) => {
 };
   return (
     //min-h-screen
-     <div className="hero  w-full" style={{ backgroundImage: `url(" ")` }}>
+     <div  className="hero h-[90vh] w-full"
+     style={{
+       backgroundImage: `url("https://cdn.shopify.com/s/files/1/0295/8036/1827/articles/BLOG_1_fabc8a00-f5a9-41c4-903f-69a7cc2bdeb9.jpg?v=1602242282")`,
+     }}>
+      
     <input type="checkbox"      defaultChecked={true} id="my-modal-signup" className="modal-toggle" />
     
         <div className="modal">

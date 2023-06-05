@@ -37,7 +37,8 @@ const Drawer: React.FC = () => {
   }, []);
 
   return (
-    <div className="mt-36 h-full">
+    <div className="h-screen">
+      <div className="">
       <button
         onClick={handleDrawerToggle}
         className={`btn ${!showDrawer ? 'btn-circle' : ''} mt-2 fixed z-50 transition-all duration-500 ease-in-out ${showDrawer ? 'bg-blue-lover' : 'bg-pink-lover'}`}
@@ -47,23 +48,28 @@ const Drawer: React.FC = () => {
       </button>
       
       <div
-        tabIndex={0}   style={{ maxHeight: "780px", overflow: "auto" }}
+        tabIndex={0}   
 
-        className={`absolute left-0 -ml-2 p-2 shadow bg-black-lover w-52 h-full w-96 z-40 transition-transform duration-500 ease-in-out ${showDrawer ? 'transform translate-x-0' : 'transform -translate-x-full'}`}
+        className={`absolute left-0 -ml-2 p-2 shadow bg-black-lover w-52 h-[90vh] w-96 z-40 transition-transform duration-500 ease-in-out ${showDrawer ? 'transform translate-x-0' : 'transform -translate-x-full'}`}
       >
         <div className="flex text-pink-lover w-full justify-evenly mb-4">
-          {/* VISIBLE TRUE DEFAULT */}
-          {/* <li>
-            <button onClick={handleMatchesClick}>My Matches</button>
-          </li> */}
-          {/* ONCLICK: MATCHES VISIBLE FALSE && MESSAGES VISIBILE TRUE */}
-       
-            <button onClick={handleMessagesClick}>My Messages</button>
-         
+        
+            <button className="btn" onClick={handleMatchesClick}>My Matches</button>
+   
+         <div className="text-pink-lover">|</div>
+   
+            <button className="btn" onClick={handleMessagesClick}>My Messages</button>
+          
         </div>
-        {/* {showMatches && <MyMatches />} */}
-        {showMessages && <MyMessages />}
+        <div id='myMessages' style={{ display: showMatches ? "block" : "none" }} className="flex-col overflow-scroll h-[90%] mx text-white w-full">
+          <MyMatches />
+        </div>
+        <div id='myMessages' style={{ display: showMessages ? "block" : "none" }} className="flex-col overflow-scroll h-[90%] mx text-white w-full">
+  <MyMessages />
+</div>
+
       </div>
+    </div>
     </div>
   );
 };

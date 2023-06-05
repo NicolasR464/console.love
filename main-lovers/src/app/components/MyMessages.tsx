@@ -190,7 +190,7 @@ export default function MyMessages() {
   
   console.log("Sorted chat rooms:", sortedChatRooms);  
   return (
-    <div id="myMessages" className="flex-col overflow-scroll h-[90%] mx text-white w-full">
+<>
       {sortedChatRooms.map((chatRoom, index) => {
         const otherChatter = chatRoom.chatters.find(chatter => session && chatter.chatId !== session.user.sub);
 
@@ -216,19 +216,24 @@ export default function MyMessages() {
               <div className="avatar online p-2">
                 <div className="w-14 h-14 rounded-full">
                   <Image
-                    width={25} height={25} alt="users" src={chatUser?.data.profilePicture}
-                    className={`rounded-full border-2 ${chatUser?.data.sex === 'Male' ? 'border-blue-lover' : 'border-pink-lover'}`}
+                    width={25} height={25} alt="users" src={chatUser?.data?.profilePicture}
+                    className={`rounded-full border-2 ${chatUser?.data?.sex === 'Male' ? 'border-blue-lover' : 'border-pink-lover'}`}
                   />
                 </div>
               </div>
               <div className="ml-2">
-                <h2 className="font-bold text-lg">{chatUser?.data.name}</h2>
-                <p className="text-gray-500">{sortedDiscussion[0]?.body}</p>
+                <h2 className="font-bold text-lg">{chatUser?.data?.name}</h2>
+             
+                {sortedDiscussion.length > 0 ? (
+          <p className="text-gray-500">{sortedDiscussion[0]?.body}</p>
+        ) : (
+          <p className="text-gray-500">No message yet</p>
+        )}
               </div>
             </div>
           </Link>
         );
       })}
-    </div>
+</>
   );
 }
