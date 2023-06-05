@@ -406,7 +406,7 @@ const populateRejected = async (idToDelete: string) => {
           onSwipe={(dir: any) => swiped(dir, character._id)}
           preventSwipe={['up', 'down']}
           >
-            <InnerCarousel pictures={character.pictures} userId={character._id} userIndex={index}/>
+            <InnerCarousel pictures={character.pictures} userId={character._id} userIndex={index} />
             <div className="flex-col w-full h-auto absolute mb-[100px] bottom-0 rounded-br-2xl rounded-bl-2xl px-4 text-white">
               <div className="flex">
                 <h3 className="text-3xl font-bold">{character.name}</h3>
