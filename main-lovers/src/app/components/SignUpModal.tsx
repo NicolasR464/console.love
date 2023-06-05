@@ -50,17 +50,7 @@ export default function SignUpModal() {
       });
 
       return;
-    } else {
-      // do something
-      emailCheck.data;
     }
-
-    console.log(emailCheck);
-
-    // e.preventDefault();
-    // // const form = new FormData(e.target as HTMLFormElement);
-    // console.log(form.get("email"));
-    // console.log(form.get("password"));
 
     if (session) {
       toast.error("Please log out first !", {
