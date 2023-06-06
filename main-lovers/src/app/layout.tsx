@@ -21,6 +21,11 @@ export default function RootLayout({
         <head>
           <title>Console.love()</title>
           <meta name="description" content={metadata.description} />
+          <script
+            defer
+            src="https://kit.fontawesome.com/766e633129.js"
+            crossOrigin="anonymous"
+          ></script>
         </head>
         <body>
           <Layout></Layout>

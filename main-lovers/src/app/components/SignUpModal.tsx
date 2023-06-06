@@ -9,6 +9,9 @@ import { getSession } from "next-auth/react";
 // import { authOptions } from "../api/auth/[...nextauth]/route";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { z } from "zod";
+
+const emailSchema = z.string().email();
 
 export default function SignUpModal() {
   const [email, setEmail] = useState("");
@@ -32,11 +35,22 @@ export default function SignUpModal() {
   }, []);
 
   async function handleSubmit(e: any) {
-    console.log("handleSubmit ⤵️");
-    // e.preventDefault();
-    // // const form = new FormData(e.target as HTMLFormElement);
-    // console.log(form.get("email"));
-    // console.log(form.get("password"));
+    console.log("handleSubmitt ⤵️");
+
+    // const emailCheck = emailSchema.parse(email);
+    // z.string().email({ message: "Invalid email address" });
+    console.log("email check");
+    const emailCheck = emailSchema.safeParse(email);
+
+    if (!emailCheck.success) {
+      // handle error then return
+      emailCheck.error;
+      toast.error("Invalid email!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+
+      return;
+    }
 
     if (session) {
       toast.error("Please log out first !", {
