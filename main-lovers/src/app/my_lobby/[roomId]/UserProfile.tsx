@@ -20,7 +20,7 @@ export default function UserProfile() {
 
   // Connect to the WebSocket when the component mounts
   useEffect(() => {
-    const newSocket = io("http://localhost:3001");
+    const newSocket = io(process.env.NEXT_PUBLIC_CHAT_ROOT!);
     setSocket(newSocket);
 
     return () => {
@@ -32,7 +32,7 @@ export default function UserProfile() {
   useEffect(() => {
     const fetchMessages = async () => {
       const response = await axios.get(
-        `http://localhost:3001/chats/${chatroomId}/messages`
+        `${process.env.NEXT_PUBLIC_CHAT_ROOT}/chats/${chatroomId}/messages`
       );
       setMessages(response.data);
     };

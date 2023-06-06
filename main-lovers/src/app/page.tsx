@@ -1,21 +1,14 @@
-import Image from "next/image";
-import NavBar from "./components/NavBar";
 import HomeScreen from "./components/HomeScreen";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
-import Link from "next/link";
 import Swiper from "./components/Swiper";
 import axios from "axios";
 import { redirect } from "next/navigation";
-import Drawer from "./components/Drawer"
+import Drawer from "./components/Drawer";
 import { SocketProvider } from "./context/SocketContext";
-
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  // console.log({ session });
-  // console.log(session?.user?.name);
-  // console.log(session?.user?.email);
 
   const email = session?.user.email;
   const response = await axios.get(
@@ -24,7 +17,6 @@ export default async function Home() {
   const user = response.data.data?._id;
 
   if (!session || !session.user || !session.user.email) {
-    console.log("coucou");
   } else {
     const email = session.user.email;
     const response = await axios.get(
@@ -52,10 +44,9 @@ export default async function Home() {
             backgroundImage: `url("https://cdn.shopify.com/s/files/1/0295/8036/1827/articles/BLOG_1_fabc8a00-f5a9-41c4-903f-69a7cc2bdeb9.jpg?v=1602242282")`,
           }}
         >
-       
-          <SocketProvider >
-          <Drawer />
-          <Swiper userId={user} />
+          <SocketProvider>
+            <Drawer />
+            <Swiper userId={user} />
           </SocketProvider>
         </div>
       ) : (

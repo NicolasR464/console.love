@@ -1,16 +1,13 @@
 "use client";
-// import Stripe from "../components/Stripe";
 import stripeLoad from "../utils/StripeCheckout";
 import { loadStripe } from "@stripe/stripe-js";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import {
   faCircleCheck,
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { log } from "console";
 import Image from "next/image";
 import Confetti from "react-confetti";
 
