@@ -108,6 +108,7 @@
   max-width: 300px;
   flex-direction: row;
   height: 500px;
+  border-radius: 10px!important;
   background-size: cover;
   background-position: center;
 }
