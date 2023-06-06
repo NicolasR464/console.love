@@ -1,5 +1,7 @@
 import React from "react";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function UserRowAdmin({ user }: any) {
   const [isDeleted, setIsDeleted] = useState(false);
@@ -12,6 +14,18 @@ export default function UserRowAdmin({ user }: any) {
     isAdmin == false || isAdmin == undefined ? (admin = true) : (admin = false);
     console.log(admin);
     setIsAdmin(admin);
+
+    if (admin) {
+      toast.success(
+        user.name ? user.name + " is now admin!" : "This user is now admin!"
+      );
+    } else {
+      toast.info(
+        user.name
+          ? user.name + " is no longer admin"
+          : "This user is no longer admin"
+      );
+    }
 
     // isAdmin == true || isAdmin != undefined
     //   ? (admin = "false")
@@ -45,6 +59,7 @@ export default function UserRowAdmin({ user }: any) {
   }
   return (
     <tr>
+      <ToastContainer />
       <td>{user.profileStatus ? user.profileStatus : "no data"}</td>
       <td>{user.username ? user.username : "no data"}</td>
       <td>{user.firstName ? user.firstName : "no data"}</td>
@@ -74,7 +89,7 @@ export default function UserRowAdmin({ user }: any) {
       </td>
 
       <td>{isAdmin === true ? "Yes" : "No"}</td>
-      <div className="form-control">
+      <div className="form-control m-3">
         <label className="cursor-pointer label">
           <input
             onClick={() => handleAdminToggle(user._id, isAdmin)}

@@ -28,17 +28,24 @@ export async function PUT(
 
   //// ADMIN RIGHTS UPDATE
   const param = req.nextUrl.searchParams;
+  if (param.has("mod")) {
+    console.log(param);
+    const filter = { _id: params.id };
+    const update = { lukqhdsngvkfq: param.get("mod") };
 
-  console.log(param);
-  const filter = { _id: params.id };
-  const update = { lukqhdsngvkfq: param.get("mod") };
+    try {
+      const res = await users.findOneAndUpdate(filter, update, { new: true });
+      console.log(res);
+      return NextResponse.json(
+        { message: "User admin status updated" },
+        { status: 200 }
+      );
+    } catch (err) {
+      console.log(err);
+      return NextResponse.json({ error: "User not found" }, { status: 500 });
+    }
+  }
 
-  const res = await users.findOneAndUpdate(filter, update, { new: true });
-  console.log("🔥");
-
-  console.log(res);
-
-  // return;
   //// PROFILE UPDATE
   const data = await users.findOne({ _id: userId });
   console.log("JUPDATE USER ID => ", userId);
