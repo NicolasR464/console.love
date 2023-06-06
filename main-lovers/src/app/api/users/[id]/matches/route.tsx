@@ -13,7 +13,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     const firstUser = await users.findOne({ _id: userId });
     if (firstUser) {
       // Define multiple Datas which will be used in filtering profiles to create the Stack
-      const { geoloc, languages, matched, rejected, attraction, profileStatus } = firstUser;
+      const { geoloc, languages, matched, rejected, attraction, profileStatus, sex } = firstUser;
 
       // Get the mathing users in the DB using all the defined datas
       const matchingUsers = await users.find({
@@ -26,7 +26,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           {
             geoloc: {
               $geoWithin: {
-                $centerSphere: [geoloc, 30 / 6371] // Radius in radians (30km / Earth's radius in km)
+                $centerSphere: [geoloc, 50 / 6371] // Radius in radians (30km / Earth's radius in km)
               }
             }
           },
@@ -35,10 +35,15 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           },
           { // The response is including all profiles where 'sex' is in common with 'attraction' array of the connected user
             sex: { $in: attraction }
-          },
-          {
-            profileStatus: { $in  : profileStatus }
           }
+          // ,
+          // {
+          //   profileStatus: { $in  : profileStatus }
+          // }
+          // ,
+          // {
+          //   attraction: { $in : sex }
+          // }
         ]
       }).exec();
 
@@ -49,7 +54,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           geoloc[0],
           user.geoloc[1],
           user.geoloc[0])
-        );
+        )/1000;
 
         const age = calculateAge(user.age);
 

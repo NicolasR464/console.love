@@ -57,7 +57,7 @@ export default async function MyProfile() {
 
   console.log(userData);
   return (
-    <main className="flex max-h-screen flex-col items-center justify-between absolute w-p70 right-12 mt-10">
+    <main className="flex max-h-screen flex-col items-center justify-between mt-10">
       <div className="flex-col mt-10">
         <div className="hero rounded-3xl">
           <div className="hero-content flex-col lg:flex-row">
@@ -75,7 +75,7 @@ export default async function MyProfile() {
               <h1 className="text-4xl font-bold text-pink-lover">My Profile</h1>
 
               <div className="flex">
-                <div className="flex-col w-96 mr-4">
+                <div className="flex-col mr-4">
                   <input
                     readOnly
                     type="text"
@@ -109,7 +109,7 @@ export default async function MyProfile() {
                 </div>
               </div>
               <div className="flex">
-                <div className="flex-col w-96 mr-4">
+                <div className="flex-col mr-4">
                   <input
                     readOnly
                     type="text"

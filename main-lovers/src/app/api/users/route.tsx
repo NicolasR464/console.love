@@ -2,7 +2,7 @@ import connectMongo from "../../utils/mongoose";
 import { NextResponse, NextRequest } from "next/server";
 import users from "../../models/users";
 
-// // This is the route to reset the users DB without modifying the first 41 users
+// This is the route to reset the users DB without modifying the first 45 users
 
 // export async function GET(req: NextRequest, { params }: { params: { query: string }; }) {
 //   await connectMongo();
@@ -13,7 +13,7 @@ import users from "../../models/users";
 //     return NextResponse.json({ data: [user] }); // Wrap user object in an array
 //   } else {
 //     const data = await users.find()
-//     const modifiedData = data.filter((_, index) => index <= 3500); // Filter out objects where the index is greater than 41
+//     const modifiedData = data.filter((_, index) => index <= 44); // Filter out objects where the index is greater than 41
     
 //     // Delete all users from the database
 //     await users.deleteMany({});

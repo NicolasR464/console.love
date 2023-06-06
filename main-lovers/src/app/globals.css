@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .swiper-slide:nth-child(1n) {
   background-color: rgb(206, 17, 17);
 }
@@ -285,4 +284,18 @@ td {
   border: 1px solid #cacaca;
   display: flex;
   align-items: center;
+}
+
+/* console.love() LOGO */
+/* Styles for desktop screens */
+@media (max-width: 767px) {
+  .desktop-image {
+    display: none;
+  }
+}
+/* Styles for mobile screens */
+@media (min-width: 768px) {
+  .mobile-image {
+    display: none;
+  }
 }
