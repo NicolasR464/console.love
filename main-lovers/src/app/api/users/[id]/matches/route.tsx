@@ -50,11 +50,11 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       // Calculate the distance for each matching user
       const usersWithDistance = matchingUsers.map((user) => {
         const distance = Math.round(calculateDistance(
-          geoloc[1],
           geoloc[0],
-          user.geoloc[1],
-          user.geoloc[0]
-        ) / 1000);
+          geoloc[1],
+          user.geoloc[0],
+          user.geoloc[1]
+        )/1000);
 
         const age = calculateAge(user.age);
 
