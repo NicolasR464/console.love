@@ -38,3 +38,24 @@ export async function POST(req: Request) {
     return NextResponse.json({ error }, { status: 500 });
   }
 }
+
+export async function PUT(req: NextRequest) {
+  await connectMongo();
+
+  try {
+    // Resetting matched, rejected and chatIds for all users
+    await users.updateMany({}, {
+      $set: {
+        "matched": [],
+        "rejected": [],
+        "chatIds": []
+      }
+    });
+    return NextResponse.json(
+      { message: "All users' attributes have been reset" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json({ error }, { status: 500 });
+  }
+}
