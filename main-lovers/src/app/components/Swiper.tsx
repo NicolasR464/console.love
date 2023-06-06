@@ -1,6 +1,5 @@
 "use client"
 import React, { useState, useMemo, useEffect, createRef, useInsertionEffect } from "react";
-// import TinderCard from "./react-tinder-card";
 import InnerCarousel from './InnerCarousel';
 
 import Image from "next/image";

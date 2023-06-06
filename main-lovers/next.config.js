@@ -20,7 +20,7 @@ const nextConfig = {
       },
     ],
 
-    domains: ["res.cloudinary.com"],
+    domains: ["res.cloudinary.com", "randomuser.me"],
   },
   webpack(config) {
     config.experiments = { ...config.experiments, topLevelAwait: true };
