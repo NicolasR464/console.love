@@ -26,7 +26,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           {
             geoloc: {
               $geoWithin: {
-                $centerSphere: [geoloc, 50 / 6371] // Radius in radians (30km / Earth's radius in km)
+                $centerSphere: [geoloc, 30] // Radius in radians (30km)
               }
             }
           },
@@ -36,14 +36,14 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           { // The response is including all profiles where 'sex' is in common with 'attraction' array of the connected user
             sex: { $in: attraction }
           }
-          // ,
-          // {
-          //   profileStatus: { $in  : profileStatus }
-          // }
-          // ,
-          // {
-          //   attraction: { $in : sex }
-          // }
+          ,
+          {
+            profileStatus: { $in  : profileStatus }
+          }
+          ,
+          {
+            attraction: { $in : sex }
+          }
         ]
       }).exec();
 
@@ -53,8 +53,8 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           geoloc[1],
           geoloc[0],
           user.geoloc[1],
-          user.geoloc[0])
-        )/1000;
+          user.geoloc[0]
+        ) / 1000);
 
         const age = calculateAge(user.age);
 
