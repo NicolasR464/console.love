@@ -1,12 +1,10 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { useSocket } from '../context/SocketContext';
 import axios from 'axios';
 import { getSession, useSession } from 'next-auth/react';
-import { useCallback } from 'react';
 import Link from 'next/link';
-import NewMatchModal from './NewMatchModal';
 
 interface Message {
   username: string;
@@ -52,19 +50,20 @@ interface User {
   };
 }
 
-export default function MyMatches() {
+export default function MyMatches(props: any) {
   const { data: session } = useSession();
   const [chatUsers, setChatUsers] = useState<{ [key: string]: User }>({});
   const [Matches, setMatches] = useState<ChatRoom[]>([]);
   const [newMatches, setNewMatches] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const socket = useSocket().socket;
 
   const fetchUserData = useCallback(async (username: any) => {
+    let userDataResponse: any = null;
     if (!chatUsers.hasOwnProperty(username)) {
       try {
-        const userDataResponse = await axios.get(`http://localhost:3000/api/users/${username}`);
+        userDataResponse = await axios.get(`http://localhost:3000/api/users/${username}`);
+        console.log(`User data response for user ${username}:`, userDataResponse.data);
         setChatUsers((prevUsers) => ({
           ...prevUsers,
           [username]: userDataResponse.data,
@@ -72,8 +71,11 @@ export default function MyMatches() {
       } catch (error) {
         console.error(`Error fetching user data for user ${username}:`, error);
       }
+    } else {
+      userDataResponse = {data: chatUsers[username]}
     }
-  }, [chatUsers]);
+    return userDataResponse.data;
+}, [chatUsers]);
 
   useEffect(() => {
     if (socket === null || !session) return;
@@ -101,16 +103,18 @@ export default function MyMatches() {
       await Promise.all(Array.from(otherChatters).map(fetchUserData));
     });
 
-    socket.on('new match', (newMatch) => {
+    socket.on('new match', async (newMatch) => {
       setMatches((prevMatches) => [...prevMatches, newMatch]);
       setNewMatches((prevNewMatches) => [...prevNewMatches, newMatch._id]);
+    
       const otherChatter = newMatch.chatters.find(
         (chatter: any) => chatter.chatId !== session?.user.sub
       );
-      fetchUserData(otherChatter?.chatId);
-      setIsModalOpen(true);
+    
+      const chatUser = await fetchUserData(otherChatter?.chatId);
+      console.log('Sending username to modal:', chatUser?.data?.name || '');
+      props.handleModalOpen(chatUser?.data?.name || '');
     });
-
     return () => {
       socket.off('connect');
       socket.off('matches');
@@ -135,13 +139,17 @@ export default function MyMatches() {
             <Link key={match._id} href={`/my_lobby/${match._id}`}>
               <div className="avatar ">
                 <div className="w-16 h-16 rounded-full overflow-hidden">
-                  <Image
+                <Image
                     width={100}
                     height={100}
                     alt="users"
                     src={chatUser?.data?.profilePicture || '/placeholder.png'}
                     className={`rounded-full border-2 ${
-                      chatUser?.data?.sex === 'Male' ? 'border-blue-lover' : 'border-pink-lover'
+                      chatUser?.data?.sex === 'Male'
+                        ? 'border-blue-lover'
+                        : chatUser?.data?.sex === 'Female'
+                        ? 'border-pink-lover'
+                        : 'border-purple-lover'
                     }`}
                   />
                   {newMatches.includes(match._id) && (
@@ -167,7 +175,6 @@ export default function MyMatches() {
         })
       )}
 
-<NewMatchModal isOpen={isModalOpen} userName={chatUsers[session?.user.sub]?.data?.name || ''} onClose={() => setIsModalOpen(false)} />      <div id="modal-root"></div>
     </>
   );
 }

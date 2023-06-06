@@ -213,13 +213,19 @@ export default function MyMessages() {
               {newMessageCount > 0 && (
                 <span className="absolute top-0 right-0 bg-red-500 text-white h-6 w-6 rounded-full flex items-center justify-center text-sm">{newMessageCount}</span>
               )}
-              <div className="avatar online p-2">
-                <div className="w-14 h-14 rounded-full">
-                  <Image
-                    width={25} height={25} alt="users" src={chatUser?.data?.profilePicture}
-                    className={`rounded-full border-2 ${chatUser?.data?.sex === 'Male' ? 'border-blue-lover' : 'border-pink-lover'}`}
-                  />
-                </div>
+              <div className="avatar p-2">
+              <div className="w-14 h-14 rounded-full">
+                <Image
+                  width={25} height={25} alt="users" src={chatUser?.data?.profilePicture}
+                  className={`rounded-full border-2 ${
+                    chatUser?.data?.sex === 'Male'
+                      ? 'border-blue-lover'
+                      : chatUser?.data?.sex === 'Female'
+                      ? 'border-pink-lover'
+                      : 'border-purple-lover'
+                  }`}
+                />
+              </div>
               </div>
               <div className="ml-2">
                 <h2 className="font-bold text-lg">{chatUser?.data?.name}</h2>
