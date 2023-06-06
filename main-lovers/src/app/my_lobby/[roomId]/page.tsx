@@ -3,6 +3,7 @@ import ChatBox from './ChatBox';
 import UserProfile from './UserProfile';
 import Drawer from '../../components/Drawer';
 import { SocketProvider } from '../../context/SocketContext';
+import DrawerProfile from '../../components/Drawer_profile';
 
 
 
@@ -28,7 +29,7 @@ console.log('MY ROOM ID', roomId)
 
           <Drawer />
           <ChatBox roomId={ roomId } />
-         {/* <UserProfile /> */}
+          <DrawerProfile />
          </SocketProvider>
 
         </div>

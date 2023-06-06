@@ -249,7 +249,8 @@ console.log('MY COMMON LANGUAGE => ', usersCommonLanguage)
 
   return (
     
-  <>
+  <div className="prout">
+  
    <div className="card card-compact w-full bg-base-100 shadow-xl mx-auto h-h-inner-chat overflow-y-auto mb-6 relative">
     {chattersStatuses.find(status => status.username === session?.user?.sub)?.status === "pending" && (
       <div className="quiz-box absolute top-0 left-0 bg-black-lover rounded-md min-w-[300px] text-white z-10">
@@ -334,7 +335,7 @@ console.log('MY COMMON LANGUAGE => ', usersCommonLanguage)
       </div>
     </div>
   
-  </>
+  </div>
 );
   
 }

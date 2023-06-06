@@ -6,7 +6,7 @@ import BackImage from '../../../public/arriere.png';
 import { withCoalescedInvoke } from "next/dist/lib/coalesced-function";
 import connectMongo  from '../utils/mongoose';
 import axios from 'axios';
-import io from 'socket.io-client';
+import { useSocket } from '../context/SocketContext';
 
 
 interface Character {
@@ -26,11 +26,11 @@ function ConsoleSwiper({userId}: any) {
   const [undoData, setUndoData] = useState('');
   const [timerSwipe, setTimerSwipe] = useState(null);
   const [counterSwipe, setCounterSwipe] = useState(Number)
+  const socket = useSocket().socket;
 
-
-  const socket = useMemo(() => io('http://localhost:3001'), []);
 
   useEffect(() => {
+    if (socket === null ) return;
     socket.on('room-created', (roomId) => {
       console.log('Room created with id:', roomId);
       // perform actions based on the new roomId
@@ -39,7 +39,7 @@ function ConsoleSwiper({userId}: any) {
     return () => {
       socket.off('room-created');
     };
-  }, []);
+  }, [socket]);
 
   
 useEffect(() => {
@@ -149,6 +149,8 @@ const populateMatched = async (idToDelete: string) => {
 console.log('MON CUR USER',userId )
 console.log('MON OTHER USER',idToDelete )
     let roomId;
+    console.log("MY SOCKET SWIPE", socket)
+    if (socket === null) return;
 
 // Handle 'chat room created' event
 socket.once('chat room created', async (id) => {
