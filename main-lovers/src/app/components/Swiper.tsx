@@ -442,7 +442,7 @@ const populateRejected = async (idToDelete: string) => {
   return (
     <>
     {/* <div className="flex flex-col items-center"> */}
-      <div className="cardContainer mw-[260px] h-[300px] -mt-[100px]">
+      <div className="cardContainer">
         {characters.map((character: Character, index: number) => (
           <TinderCard
           ref={childRefs[index]}
