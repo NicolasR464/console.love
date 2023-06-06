@@ -11,23 +11,17 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
 
   const email = session?.user.email;
-  const response = await axios.get(
-    `${process.env.HOSTNAME}/api/users?query=${email}`
-  );
+  const response = await axios.get(`/api/users?query=${email}`);
   const user = response.data.data?._id;
 
   if (!session || !session.user || !session.user.email) {
   } else {
     const email = session.user.email;
-    const response = await axios.get(
-      `${process.env.HOSTNAME}/api/users?query=${email}`
-    );
+    const response = await axios.get(`/api/users?query=${email}`);
     const user = response.data.data?._id;
 
     if (user) {
-      const resFirstime = await axios.get(
-        `${process.env.HOSTNAME}/api/users/${user}`
-      );
+      const resFirstime = await axios.get(`/api/users/${user}`);
       const userFirstime = resFirstime.data.data.address;
       if (!userFirstime) {
         redirect("/complete_profile");

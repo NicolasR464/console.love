@@ -15,15 +15,11 @@ export default async function MyProfile() {
     redirect("/");
   } else {
     const email = session.user.email;
-    const response = await axios.get(
-      `${process.env.HOSTNAME}/api/users?query=${email}`
-    );
+    const response = await axios.get(`/api/users?query=${email}`);
     const user = response.data.data?._id;
 
     if (user) {
-      const resFirstime = await axios.get(
-        `${process.env.HOSTNAME}/api/users/${user}`
-      );
+      const resFirstime = await axios.get(`/api/users/${user}`);
       const userFirstime = resFirstime.data.data.address;
       if (!userFirstime) {
         redirect("/complete_profile");
@@ -35,9 +31,7 @@ export default async function MyProfile() {
   let user = null;
 
   try {
-    const response = await axios.get(
-      `${process.env.HOSTNAME}/api/users?query=${email}`
-    );
+    const response = await axios.get(`/api/users?query=${email}`);
     user = response.data.data._id.toString();
   } catch (error) {
     console.error("Error fetching user ID:", error);
@@ -47,9 +41,7 @@ export default async function MyProfile() {
   let userData = null;
 
   try {
-    const response = await axios.get(
-      `${process.env.HOSTNAME}/api/users/${user}`
-    );
+    const response = await axios.get(`/api/users/${user}`);
     userData = response.data.data;
   } catch (error) {
     console.error("Error fetching user data:", error);
