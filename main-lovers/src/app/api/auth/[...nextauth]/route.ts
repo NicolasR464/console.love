@@ -53,22 +53,22 @@ export const authOptions: NextAuthOptions = {
       // LOGIN CHECK
       async authorize(credentials, req) {
         // const { name, password } = credentials as any;
-        console.log("authorize 🔥");
-        console.log(req?.body?.email);
-        console.log(req?.body?.password);
+        // // console.log("authorize 🔥");
+        // console.log(req?.body?.email);
+        // console.log(req?.body?.password);
 
         const email = req?.body?.email;
 
-        console.log(credentials);
+        // console.log(credentials);
 
         // const { email, password } = loginUserSchema.parse(credentials);
 
         const user = await User.findOne({ email });
-        console.log({ user });
+        // console.log({ user });
 
-        console.log("PASSWORDs ⤵️");
-        console.log(user.password);
-        console.log(req?.body?.password);
+        // console.log("PASSWORDs ⤵️");
+        // console.log(user.password);
+        // console.log(req?.body?.password);
 
         if (!user) return null;
 
@@ -76,9 +76,6 @@ export const authOptions: NextAuthOptions = {
           user.password,
           req?.body?.password
         );
-        console.log({ isPwdValid });
-
-        // if (!isPwdValid) return null;
 
         return user;
       },
@@ -93,7 +90,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     session({ session, token }) {
       // console.log("JWT SESSION");
-      console.log({ token });
+      // console.log({ token });
       session.user.sub = token.sub;
       // console.log({ session });
 
@@ -101,9 +98,9 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     jwt({ token, account, user }) {
-      console.log("JWT CALLBACK");
+      // console.log("JWT CALLBACK");
 
-      console.log({ token });
+      // console.log({ token });
       // console.log({ account });
       if (account) {
         token.accessToken = account.access_token;

@@ -20,11 +20,26 @@ export async function GET(
 
 // update specific user with ID
 export async function PUT(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const userId = params.id;
   await connectMongo();
+
+  //// ADMIN RIGHTS UPDATE
+  const param = req.nextUrl.searchParams;
+
+  console.log(param);
+  const filter = { _id: params.id };
+  const update = { lukqhdsngvkfq: param.get("mod") };
+
+  const res = await users.findOneAndUpdate(filter, update, { new: true });
+  console.log("🔥");
+
+  console.log(res);
+
+  // return;
+  //// PROFILE UPDATE
   const data = await users.findOne({ _id: userId });
   console.log("JUPDATE USER ID => ", userId);
   const body = await req.json();

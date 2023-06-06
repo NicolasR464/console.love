@@ -12,15 +12,14 @@ let session: object | null;
 
 export default async function NavBar() {
   session = await getServerSession(authOptions);
-  console.log("🤩");
+
   // console.log({ session });
   // console.log(session?.user?.name);
   // console.log(session?.user?.email);
   if (session) {
     // Signed in
-    console.log("SIGNED IN");
-
-    console.log("Session", JSON.stringify(session, null, 2));
+    // console.log("SIGNED IN");
+    // console.log("Session", JSON.stringify(session, null, 2));
   } else {
     // Not Signed in
     console.log("NOT SIGNED IN");
