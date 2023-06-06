@@ -76,6 +76,7 @@
   "devDependencies": {
     "@playwright/test": "^1.34.3",
     "@types/bcrypt": "^5.0.0",
+    "@types/uuid": "^9.0.1",
     "use-debounce": "^9.0.4",
     "zod": "^3.21.4"
   }

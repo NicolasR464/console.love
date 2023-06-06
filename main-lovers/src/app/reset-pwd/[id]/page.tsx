@@ -1,25 +1,14 @@
 import connectMongo from "../../utils/mongoose";
 import user from "../../models/users";
-import Link from "next/link";
-import mail from "@sendgrid/mail";
-import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
 import { redirect } from "next/navigation";
 
 export default async function ResetForm(params: any) {
   await connectMongo();
-  console.log("RESET PAGE");
-  // redirect("/");
   let isEmailValid = true;
   let doPwdMatch = true;
 
-  // console.log("PARAMS 👉 ", params.params.id);
-
   const token = params.params.id;
-
-  // if (params.id) process.env.RESET_TOKEN = params.id;
-  // const resetToken = process.env.RESET_TOKEN;
 
   if (params.searchParams.valid_email == "false") {
     isEmailValid = false;
@@ -27,7 +16,6 @@ export default async function ResetForm(params: any) {
 
   if (params.searchParams.pwds_match == "false") {
     doPwdMatch = false;
-    // isEmailValid = false;
   }
 
   const userCheck = await user.findOne({ resetPwdToken: token });
@@ -47,7 +35,6 @@ export default async function ResetForm(params: any) {
       console.log("passwords don't match");
 
       redirect(`/reset-pwd/${token}?pwds_match=false`);
-      // return;
     }
     const hashedPassword = bcrypt.hashSync(passwordInput, 10);
 
@@ -64,23 +51,15 @@ export default async function ResetForm(params: any) {
       new: true,
     });
 
-    console.log(userUpdate);
-
     if (userUpdate) {
-      console.log("USER FOUND AND UPDATED 🔥");
-      // {$unset:{resetPwdToken}}
-
-      // delete token
       const deletedToken = await user.findByIdAndUpdate(userUpdate._id, {
         $unset: { resetPwdToken: "" },
       });
-      console.log(deletedToken);
+
       redirect("/?reset=true");
     } else {
       redirect("/?reset=false");
     }
-
-    //redirection
   }
 
   return (

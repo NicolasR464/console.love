@@ -4,13 +4,9 @@ import Link from "next/link";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
-// import { experimental_useFormStatus as useFormStatus } from "react-dom";
 
 export default async function ResetPwd(params: any) {
   await connectMongo();
-  // const { pending } = useFormStatus();
-
-  console.log(params.searchParams.valid_email);
 
   let isEmailValid = true;
 
@@ -26,7 +22,6 @@ export default async function ResetPwd(params: any) {
     const userCheck = await user.findOne({ email: emailInput });
 
     if (userCheck) {
-      console.log("USER FOUND");
       const uuid = uuidv4();
 
       const filter = { email: emailInput };
@@ -35,8 +30,6 @@ export default async function ResetPwd(params: any) {
       const userUpdate = await user.findOneAndUpdate(filter, update, {
         new: true,
       });
-
-      console.log(userUpdate);
 
       const sendBody = {
         hash: uuid,
@@ -55,20 +48,13 @@ export default async function ResetPwd(params: any) {
             },
           }
         );
-
-        console.log(postRes.data);
-
-        // if (postRes)
       } catch (err) {
         console.log(err);
       }
       redirect(`/reset-pwd/sent`);
     } else {
       redirect(`/reset-pwd?valid_email=false`);
-      // console.log("no user found by that email");
     }
-
-    // console.log(userCheck);
   }
 
   return (
