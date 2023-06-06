@@ -22,7 +22,7 @@ function InnerCarousel({ pictures, userId, userIndex }: any) {
   };
 
   return (
-    <div className="carousel-container">
+    // <div className="carousel-container">
       <div id={userId} className="carousel w-[300px] card h-full">
         {pictures.map((picture: any, index: number) => (
           <div
@@ -42,7 +42,7 @@ function InnerCarousel({ pictures, userId, userIndex }: any) {
           </div>
         ))}
       </div>
-    </div>
+    // </div>
   );
 }
 

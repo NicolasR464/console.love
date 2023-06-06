@@ -12,6 +12,7 @@ import { withCoalescedInvoke } from "next/dist/lib/coalesced-function";
 import connectMongo  from '../utils/mongoose';
 import axios from 'axios';
 import { arrayOutputType } from "zod";
+import { useSocket } from '../context/SocketContext';
 
 // COUCOU MERGE
 
@@ -39,8 +40,21 @@ function ConsoleSwiper({userId}: any) {
   const [undoAvailable, setUndoAvailable] = useState(false);
   const [undoData, setUndoData] = useState('');
   const [timerSwipe, setTimerSwipe] = useState(null);
-  const [counterSwipe, setCounterSwipe] = useState(Number)
+  const [counterSwipe, setCounterSwipe] = useState(Number);
+  const socket = useSocket().socket;
   
+  useEffect(() => {
+    if (socket === null ) return;
+    socket.on('room-created', (roomId) => {
+      console.log('Room created with id:', roomId);
+      // perform actions based on the new roomId
+    });
+
+    return () => {
+      socket.off('room-created');
+    };
+  }, [socket]);
+
 useEffect(() => {
 
   // Fetching Users from MongoDB to get data to create the User's Stack
@@ -123,17 +137,75 @@ const populateMatched = async (idToDelete: string) => {
   try {
     const response = await axios.get(`/api/users/${userId}`);
     const existingUser = response.data.data;
-    
+    const responseOther = await axios.get(`/api/users/${idToDelete}`);
+    const existingOtherUser = responseOther.data.data;
+
+
     const newMatchedArray = [...existingUser.matched, idToDelete];
-    
-    const newMatchedData = {
+        const newMatchedData = {
       matched: newMatchedArray,
     };
+    const updateResponse = await axios.put(`/api/users/${userId}`, newMatchedData); 
+    console.log('je vais créer ma room')
+     // ROOM CREATION WHEN MATCH -------------------------------------------
+     const chatData = {
+      chatters: [
+        {
+          chatId: existingUser._id,
+          status: "pending"
+        },
+        {
+          chatId: idToDelete,
+          status: "pending"
+        }
+      ]
+    };
+console.log('MON CUR USER',userId )
+console.log('MON OTHER USER',idToDelete )
+    let roomId;
+    console.log("MY SOCKET SWIPE", socket)
+    if (socket === null) return;
 
-    const updateResponse = await axios.put(`/api/users/${userId}`, newMatchedData);
-    console.log(updateResponse);
+// Handle 'chat room created' event
+socket.once('chat room created', async (id) => {
+  roomId = id;
+
+  // Fetch most recent user data
+  const responseUpdated = await axios.get(`/api/users/${userId}`);
+  const existingUserUpdated = responseUpdated.data.data;
+  const responseOtherUpdated = await axios.get(`/api/users/${idToDelete}`);
+  const existingOtherUserUpdated = responseOtherUpdated.data.data;
+
+  // Update the rest of your data inside this callback
+  // Because roomId is available only after the socket receives the 'chat room created' event
+  const updateChatIds = {
+    chatIds: [...existingUserUpdated.chatIds, roomId]
+  };
+  const updateOtherChatIds = {
+    chatIds: [...existingOtherUserUpdated.chatIds, roomId]
+  };
+
+ 
+  console.log("HOW DOES MY ROOM ID LOOK", roomId)
+  console.log('jajoute ma room')
+// MATCHED DATA DON'T TOUCH
+  const updateUserChatIds = await axios.put(`/api/users/${userId}`, updateChatIds);
+  const updateOtherUserChatIds = await axios.put(`/api/users/${idToDelete}`, updateOtherChatIds);
+   // Fetch chat rooms after a new chat room is created
+  socket.emit('fetch chat rooms', userId);
+  console.log(updateResponse);
+  console.log('room created', roomId)
+  console.log('room added', updateUserChatIds)
+  console.log('room added to other', updateOtherUserChatIds)
+});
+
+    socket.emit('create-room', chatData);
+
+
+
+
   } catch (error) {
-    console.log("Error updating user data:", error);
+    console.log("Error updating main user data:", error);
   }
 };
   
@@ -369,8 +441,8 @@ const populateRejected = async (idToDelete: string) => {
   
   return (
     <>
-    <div className="flex flex-col items-center">
-      <div className="cardContainer">
+    {/* <div className="flex flex-col items-center"> */}
+      <div className="cardContainer mw-[260px] h-[300px] -mt-[100px]">
         {characters.map((character: Character, index: number) => (
           <TinderCard
           ref={childRefs[index]}
@@ -413,7 +485,7 @@ const populateRejected = async (idToDelete: string) => {
           </button>
         </div>
       </div>
-    </div>
+    {/* </div> */}
   </>
   );
 }
