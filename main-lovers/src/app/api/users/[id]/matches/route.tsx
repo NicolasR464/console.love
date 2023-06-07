@@ -25,15 +25,14 @@ export async function GET(
           {
             _id: { $ne: userId, $nin: [...matched, ...rejected] } // Exclude the user with the specified '_id', matched, and rejected users
           },
-          // The response is including all profiles where geoloc data is contained in a 30km radius around the connected user position
+          // Include all profiles within a 30km radius from the specified geolocation
           {
             geoloc: {
               $geoWithin: {
-                $centerSphere: [geoloc, 30 / 6371] // Radius in radians (30km / Earth's radius in km)
+                $centerSphere: [geoloc, 30 / 6371] // 30km converted to radians (6371 is the approximate radius of the Earth in km)
               }
             }
-          }
-          ,
+          },
           { // The response is including all profiles where at least one language is in common with the 'languages' array of the connected user
             languages: { $in: languages }
           }
@@ -43,7 +42,10 @@ export async function GET(
           },
           {
             profileStatus: { $in  : profileStatus }
-          }
+          },
+          {
+            attraction: { $in : sex }
+          },
         ]
       }).exec(); // Execute the query and retrieve the results
 
