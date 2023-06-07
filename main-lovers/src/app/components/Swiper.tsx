@@ -68,49 +68,6 @@ useEffect(() => {
 
       // Sets countSwipe from the swipe field in the Connected User Data
       setCounterSwipe(countSwipe)
-      // console.log("CHECKTIMER", checkTimerSwipe)
-
-      // console.log("MATCHEDuser => ", userMatchedData)
-      // console.log("REJECTEDuser => ", userRejectedData)
-
-      // // Check if checkTimerSwipe is empty and is 24 hours or more in the past
-      // if (
-      //   checkTimerSwipe !== '' &&
-      //   new Date(checkTimerSwipe) <= new Date(Date.now() - 24 * 60 * 60 * 1000)
-      // ) {
-      //   const countSwipe = async () => {
-      //     try {
-      //       const resetSwipe = {
-      //         swipe: 20,
-      //       };
-      //       const updateCountSwipe = await axios.put(`/api/users/${userId}`, resetSwipe);
-
-      //       const resetTimerSwipe = {
-      //         timerSwipe: '',
-      //       }
-      //       const updateTimerSwipe = await axios.put(`/api/users/${userId}`, resetTimerSwipe);
-      //     } catch (error) {
-      //       console.log("Error updating user data:", error);
-      //     }
-      //   };
-      //   await countSwipe();
-      // }
-
-      // if (countSwipe) {
-      //   // Call the countSwipe function to update the user with the initial countSwipe value if user doesn't have the 'swipe' field
-      //   const countSwipe = async () => {
-      //     try {
-      //       const swipeData = {
-      //         swipe: 20,
-      //       };
-      //       const updateCountSwipe = await axios.put(`/api/users/${userId}`, swipeData);
-      //       // setCounterSwipe(updateCountSwipe)
-      //     } catch (error) {
-      //       console.log("Error updating user data:", error);
-      //     }
-      //   };
-      //   await countSwipe();
-      // }
 
       // CALL the route in /api/users/[id]/matches to create the stack for the connected user
       const response = await axios.get(`/api/users/${userId}/matches`);
@@ -119,7 +76,6 @@ useEffect(() => {
 
       // CREATION OF THE USER'S STACK
       setCharacters(userData);
-      // console.log(userData)
     } catch (error) {
       console.log("Error fetching user data:", error);
     }
@@ -127,10 +83,6 @@ useEffect(() => {
   fetchUserStack();
 }, [userId]);
 
-// CONSOLE => Counter Swipe
-useEffect(() => {
-  // console.log("CountSwipe after set => ", counterSwipe)
-})
 
 // Call put route to populate the Connected User's Matched Array
 const populateMatched = async (idToDelete: string) => {
@@ -160,49 +112,46 @@ const populateMatched = async (idToDelete: string) => {
         }
       ]
     };
-console.log('MON CUR USER',userId )
-console.log('MON OTHER USER',idToDelete )
+    console.log('MON CUR USER',userId )
+    console.log('MON OTHER USER',idToDelete )
     let roomId;
     console.log("MY SOCKET SWIPE", socket)
     if (socket === null) return;
 
-// Handle 'chat room created' event
-socket.once('chat room created', async (id) => {
-  roomId = id;
+  // Handle 'chat room created' event
+  socket.once('chat room created', async (id) => {
+    roomId = id;
 
-  // Fetch most recent user data
-  const responseUpdated = await axios.get(`/api/users/${userId}`);
-  const existingUserUpdated = responseUpdated.data.data;
-  const responseOtherUpdated = await axios.get(`/api/users/${idToDelete}`);
-  const existingOtherUserUpdated = responseOtherUpdated.data.data;
+    // Fetch most recent user data
+    const responseUpdated = await axios.get(`/api/users/${userId}`);
+    const existingUserUpdated = responseUpdated.data.data;
+    const responseOtherUpdated = await axios.get(`/api/users/${idToDelete}`);
+    const existingOtherUserUpdated = responseOtherUpdated.data.data;
 
-  // Update the rest of your data inside this callback
-  // Because roomId is available only after the socket receives the 'chat room created' event
-  const updateChatIds = {
-    chatIds: [...existingUserUpdated.chatIds, roomId]
-  };
-  const updateOtherChatIds = {
-    chatIds: [...existingOtherUserUpdated.chatIds, roomId]
-  };
+    // Update the rest of your data inside this callback
+    // Because roomId is available only after the socket receives the 'chat room created' event
+    const updateChatIds = {
+      chatIds: [...existingUserUpdated.chatIds, roomId]
+    };
+    const updateOtherChatIds = {
+      chatIds: [...existingOtherUserUpdated.chatIds, roomId]
+    };
 
- 
-  console.log("HOW DOES MY ROOM ID LOOK", roomId)
-  console.log('jajoute ma room')
-// MATCHED DATA DON'T TOUCH
-  const updateUserChatIds = await axios.put(`/api/users/${userId}`, updateChatIds);
-  const updateOtherUserChatIds = await axios.put(`/api/users/${idToDelete}`, updateOtherChatIds);
-   // Fetch chat rooms after a new chat room is created
-  socket.emit('fetch chat rooms', userId);
-  console.log(updateResponse);
-  console.log('room created', roomId)
-  console.log('room added', updateUserChatIds)
-  console.log('room added to other', updateOtherUserChatIds)
-});
+  
+    console.log("HOW DOES MY ROOM ID LOOK", roomId)
+    console.log('jajoute ma room')
+    // MATCHED DATA DON'T TOUCH
+    const updateUserChatIds = await axios.put(`/api/users/${userId}`, updateChatIds);
+    const updateOtherUserChatIds = await axios.put(`/api/users/${idToDelete}`, updateOtherChatIds);
+    // Fetch chat rooms after a new chat room is created
+    socket.emit('fetch chat rooms', userId);
+    console.log(updateResponse);
+    console.log('room created', roomId)
+    console.log('room added', updateUserChatIds)
+    console.log('room added to other', updateOtherUserChatIds)
+  });
 
     socket.emit('create-room', chatData);
-
-
-
 
   } catch (error) {
     console.log("Error updating main user data:", error);
@@ -222,7 +171,6 @@ const populateRejected = async (idToDelete: string) => {
     };
 
     const updateResponse = await axios.put(`/api/users/${userId}`, newRejectedData);
-    // console.log(updateResponse);
   } catch (error) {
     console.log("Error updating user data:", error);
   }
@@ -241,36 +189,32 @@ const populateRejected = async (idToDelete: string) => {
   );
   
 
-  
-
-  // useEffect(() => {
-  //   console.log("UNDO Data =>", undoData)
-  //   console.log("UNDO AVAILABLE =>", undoAvailable)
-  // }, [undoData, undoAvailable])
-
 
   const fetchUserData = (userId: string) => {
     // Find the user data from the db array using the ID
     const response = axios.get(`/api/users/${userId}`);
     const userData = response;
     console.log('User Data:', userData);
-    // userDb.unshift(user)
     return userData
   };
 
   
   const swipe = (dir: any) => {
     if (counterSwipe < 1) {
-      return; // Exit the function and disable swipe when counterSwipe is 0
+      // Exit the function and disable swipe when counterSwipe is 0
+      return;
     } else {
       const cardsLeft = characters.filter((person) => !rejected.includes(person._id));
   
       if (cardsLeft.length) {
-        const toBeRemoved = cardsLeft[cardsLeft.length - 1]._id; // Find the card object to be removed
-        const index = characters.map((person) => person._id).indexOf(toBeRemoved); // Find the index of which to make the reference to
+        // Find the card object to be removed
+        const toBeRemoved = cardsLeft[cardsLeft.length - 1]._id;
+        // Find the index of which to make the reference to
+        const index = characters.map((person) => person._id).indexOf(toBeRemoved);
   
         if (counterSwipe >= 1) {
-          childRefs[index].current.swipe(dir); // Swipe the card!
+          // Swipe the card!
+          childRefs[index].current.swipe(dir);
         }
       }
     }
@@ -282,26 +226,24 @@ const populateRejected = async (idToDelete: string) => {
     if (direction === 'left') {
       console.log("_id Unliked : " + idToDelete);
       setUndoData(idToDelete);
-      // userDb.pop();
+      
       const filteredDb = characters.filter((person) => {
         return person._id !== idToDelete
       });
       rejected.push(idToDelete);
-      characters.pop();
-      // console.log("REJECTED => ", rejected)
-      // console.log("CHARACTERS : ", characters);
-      
+      characters.pop();      
       
       // Call the populateRejected function to update the user
       populateRejected(idToDelete);
       
       setUndoAvailable(true);
       
+      
+      // Update the user2 rejected array on dislike
       const populateOtherRejected = async ({userId}: any) => {
         try {
           const response = await axios.get(`/api/users/${idToDelete}`);
           const otherUserId = response.data.data;
-          // console.log("OTHERUSER", otherUserId)
           
           const newRejectedArrayOtherUser = [...otherUserId.rejected, userId];
           
@@ -315,11 +257,7 @@ const populateRejected = async (idToDelete: string) => {
         }
       };
       populateOtherRejected({userId});
-      
-      // userDb.splice(0, userDb.length, ...filteredDb);
-      
-      // userDb.pop();
-      // console.log("USER DB SWIPE => ", userDb)
+
 
     } else {
       
@@ -340,10 +278,10 @@ const populateRejected = async (idToDelete: string) => {
           console.log("MATCHED : ", matched);
           console.log("CHARACTERS : ", characters);
     
-          // Call the populateMatched function to update the user
+          // Call the populateMatched function to update the user on like
           populateMatched(idToDelete);
           
-          // On right swipe, edits the user in the DB with decrement the swipe count
+          // On right swipe, edits user with decrementing the swipe count
           const editCountSwipe = async () => {
             try {
               const response = await axios.get(`/api/users/${userId}`);
@@ -359,7 +297,7 @@ const populateRejected = async (idToDelete: string) => {
               const newSwipeLeft = await axios.put(`/api/users/${userId}`, swipeLeft);
               console.log(newSwipeLeft);
     
-              // SETS A TIMESTAMP IF DOESN'T EXISTS
+              // Set a Timestamp if doesn't exists already
               if (!timerSwipe) {
                 const timer = {
                   timerSwipe: Date.now(),
@@ -374,6 +312,7 @@ const populateRejected = async (idToDelete: string) => {
           editCountSwipe();
         }
 
+        // Update the user2 matched array on like
         const populateOtherMatched = async ({userId}: any) => {
           try {
             const response = await axios.get(`/api/users/${idToDelete}`);
@@ -387,7 +326,6 @@ const populateRejected = async (idToDelete: string) => {
             };
         
             const updateOtherUser = await axios.put(`/api/users/${idToDelete}`, newMatchedDataOtherUser);
-            // console.log(updateResponse);
           } catch (error) {
             console.log("Error updating user data:", error);
           }
@@ -397,12 +335,7 @@ const populateRejected = async (idToDelete: string) => {
     }
 
 
-
-    useEffect(() => {
-      console.log("UNDODATA => ", undoData)
-    })
-
-  // UNDO FUNCTION :: BE CAREFUL : NEEDS TO FETCH THE DATA OF LAST UNLIKED PROFILE ID TO PUSH IT INTO THE ARRAY
+  // UNDO FUNCTION
   const undo = async () => {
     if (undoAvailable && undoData) {
       try {
@@ -441,12 +374,10 @@ const populateRejected = async (idToDelete: string) => {
   
   return (
     <>
-    {/* <div className="flex flex-col items-center"> */}
       <div className="cardContainer">
         {characters.map((character: Character, index: number) => (
           <TinderCard
           ref={childRefs[index]}
-          // stack={true}
           className="swipe pressable"
           key={character._id}
           onSwipe={(dir: any) => swiped(dir, character._id)}
@@ -471,7 +402,6 @@ const populateRejected = async (idToDelete: string) => {
           </TinderCard>
         ))}
         
-        {/* BUTTON TO CANCEL LAST UNLIKE */}
         <div className="swipe_buttons_div absolute flex justify-evenly mt-[430px] w-[300px]">
           <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel btn-sm self-center"
             onClick={undo} id="undo_button" disabled={!undoAvailable} >
@@ -485,7 +415,6 @@ const populateRejected = async (idToDelete: string) => {
           </button>
         </div>
       </div>
-    {/* </div> */}
   </>
   );
 }
