@@ -51,6 +51,28 @@ const Drawer: React.FC = () => {
     setShowArrow(true);
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      // Adjust the value to your desired breakpoint
+      if (screenWidth <= 768) {
+        setShowDrawer(false);
+      } else {
+        setShowDrawer(true);
+      }
+    };
+    // Check on initial render
+    handleResize();
+
+    // Add event listener for resize
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      // Clean up the event listener on unmount
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div className="h-screen">
       <div className="">
