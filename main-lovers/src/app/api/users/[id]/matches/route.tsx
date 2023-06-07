@@ -4,7 +4,10 @@ import users from "../../../../models/users";
 import calculateDistance from '../../../../utils/CalculateDistance';
 
 // GET users with multiple conditions to personnalize the Stack
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
   const userId = params.id;
 
   await connectMongo();
@@ -26,7 +29,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           {
             geoloc: {
               $geoWithin: {
-                $centerSphere: [geoloc, 30] // Radius in radians (30km)
+                $centerSphere: [geoloc, 30 / 6371] // Radius in radians (30km / Earth's radius in km)
               }
             }
           }
@@ -37,17 +40,12 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           ,
           { // The response is including all profiles where 'sex' is in common with 'attraction' array of the connected user
             sex: { $in: attraction }
-          }
-          ,
+          },
           {
             profileStatus: { $in  : profileStatus }
           }
-          ,
-          {
-            attraction: { $in : sex }
-          }
         ]
-      }).exec();
+      }).exec(); // Execute the query and retrieve the results
 
       // Calculate the distance for each matching user
       const usersWithDistance = matchingUsers.map((user) => {
@@ -62,13 +60,13 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
         return {
           ...user.toJSON(),
-          age, distance
+          age,
+          distance,
         };
       });
 
       // return NextResponse.json({ users: matchingUsers }, { status: 200 });
       return NextResponse.json({ users: usersWithDistance }, { status: 200 });
-
     } else {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
@@ -88,7 +86,10 @@ function calculateAge(dateString: string): number | null {
   let age = today.getFullYear() - birthDate.getFullYear();
   const monthDifference = today.getMonth() - birthDate.getMonth();
 
-  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+  ) {
     age--;
   }
 
