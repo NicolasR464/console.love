@@ -104,6 +104,7 @@ export const authOptions: NextAuthOptions = {
       // console.log({ account });
       if (account) {
         token.accessToken = account.access_token;
+        token.admin = session.account;
         // token.id = user.id;
       }
       return token;
