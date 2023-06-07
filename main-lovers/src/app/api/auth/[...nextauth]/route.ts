@@ -89,11 +89,11 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     session({ session, token }) {
-      // console.log("JWT SESSION");
-      // console.log({ token });
-      session.user.sub = token.sub;
-      // console.log({ session });
+      console.log("NEXT AUTH CALLBACK");
+      console.log({ token });
+      console.log({ session });
 
+      session.user.sub = token.sub;
       session.user.email = token.email;
       return session;
     },
