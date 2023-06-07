@@ -12,6 +12,8 @@ import { SocketProvider } from "./context/SocketContext";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
+  console.log("HOME 🏠");
+
   console.trace({ session });
 
   if (session?.user.sub) {
@@ -24,32 +26,6 @@ export default async function Home() {
       redirect("/complete_profile");
     }
   }
-
-  // // const email = session?.user.email;
-  // // const response = await axios.get(
-  // //   `${process.env.HOSTNAME}/api/users?query=${email}`
-  // // );
-  // // const user = response.data.data?._id;
-
-  // // if (!session || !session.user || !session.user.email) {
-  // //   console.log("coucou");
-  // // } else {
-  // //   const email = session.user.email;
-  // //   const response = await axios.get(
-  // //     `${process.env.HOSTNAME}/api/users?query=${email}`
-  // //   );
-  // //   const user = response.data.data?._id;
-
-  // //   if (user) {
-  // //     const resFirstime = await axios.get(
-  // //       `${process.env.HOSTNAME}/api/users/${user}`
-  // //     );
-  // //     const userFirstime = resFirstime.data.data.address;
-  // //     if (!userFirstime) {
-  // //       redirect("/complete_profile");
-  // //     }
-  // //   }
-  // }
 
   return (
     <main className="flex max-h-screen flex-col items-center justify-between">

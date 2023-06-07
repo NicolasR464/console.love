@@ -4,7 +4,6 @@ import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import connectMongo from "../../../utils/connectMongo";
-import { z } from "zod";
 import User from "../../../models/users";
 
 export const authOptions: NextAuthOptions = {
@@ -38,10 +37,14 @@ export const authOptions: NextAuthOptions = {
 
       // LOGIN CHECK
       async authorize(credentials, req) {
+        console.log("⭐️");
+
         const email = req?.body?.email;
+        console.trace({ email });
+        console.trace(credentials);
 
         const user = await User.findOne({ email });
-
+        console.trace({ user });
         if (!user) return null;
 
         // const isPwdValid = await bcrypt.compare(
@@ -49,6 +52,7 @@ export const authOptions: NextAuthOptions = {
         //   req?.body?.password
         // );
 
+        // return user;
         return user;
       },
     }),
@@ -61,22 +65,26 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     session({ session, token }) {
-      console.log("NEXT AUTH CALLBACK 1 (session)");
+      console.log("NEXT AUTH CALLBACK - SECOND (session)");
       // console.log({ token });
       console.log({ session });
 
       session.user.sub = token.sub;
       session.user.email = token.email;
+      session.user.premium = token.premium;
+      session.user.admin = token.admin;
       return session;
     },
-    jwt({ token, account, user }) {
-      console.log("NEXT AUTH CALLBACK 2 (twt)");
+    jwt({ token, session, user, account }) {
+      console.log("NEXT AUTH CALLBACK - FIRST (twt)");
 
+      console.trace({ account });
+      console.trace({ user });
       console.log({ token });
       if (account) {
         token.accessToken = account.access_token;
-        // token.admin = session.account;
-        // token.id = user.id;
+        token.premium = user.premium;
+        token.admin = user.lukqhdsngvkfq;
       }
       return token;
     },
