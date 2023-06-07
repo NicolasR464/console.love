@@ -38,7 +38,7 @@ const CrudAdmin = () => {
               <th>Username</th>
               <th>FirstName</th>
               <th>LastName</th>
-              <th>Age</th>
+              <th>Birthday</th>
               <th>email</th>
               <th>City</th>
               <th>Premium</th>

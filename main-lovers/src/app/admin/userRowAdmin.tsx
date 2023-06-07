@@ -12,8 +12,10 @@ export default function UserRowAdmin({user}: any) {
   
         // DELETE request using fetch with async/await
             await fetch('/api/users/' +userId , { method: 'DELETE' });
-            alert('Delete successful');
+            alert('User delete successfully');
             setIsDeleted(true)
+
+            //Mettre un toaster
             
                      
   }
@@ -25,7 +27,7 @@ export default function UserRowAdmin({user}: any) {
      <tr>
       
        <td>{user.profileStatus ? user.profileStatus : "no data" }</td>
-       <td>{user.username ? user.username : "no data" }</td>
+       <td>{user.name ? user.name : "no data" }</td>
        <td>{user.firstName ? user.firstName : "no data" }</td>
        <td>{user.lastName ? user.lastName : "no data" }</td>
        <td>{user.age ? user.age : "no data" }</td>
@@ -65,6 +67,7 @@ export default function UserRowAdmin({user}: any) {
        <button className="btn btn-error" onClick={() => handleDelete(user._id)}>
   Delete
 </button>
+
 
       </td>
      </tr>

@@ -221,6 +221,7 @@ export default function SignUpModal({userID, onClose }: SignUpModalProps) {
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
       
+        console.log(value, name, target.type)
         if (target.type === 'checkbox') {
           const isChecked = target.checked;
           const checkedValue = target.value;
@@ -236,7 +237,9 @@ export default function SignUpModal({userID, onClose }: SignUpModalProps) {
           setUserData((prevState: UserData) => ({
             ...prevState,
             [name]: value,
-          }));
+          }
+          ));
+          console.log
         }
       };
       
@@ -300,6 +303,7 @@ export default function SignUpModal({userID, onClose }: SignUpModalProps) {
           lastName: "",
           address:"",
         };
+        console.log("USERDATA =>", userData)
         // Je valide si met input sont fill
         if(!userData.name) newErrors.name = "This input is required";
         if(!userData.firstName) newErrors.firstName = "This input is required";
@@ -607,7 +611,8 @@ const submitSlide5 = (event: any) => {
                 <div id="slide4" className="carousel-item relative w-full mx-2 ">
 
                 <form className="flex flex-col mx-auto w-96">
-                        <input 
+                        <input
+    name='test-toto'
     type="file" 
     placeholder="Profile picture" 
     multiple
