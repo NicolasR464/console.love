@@ -12,9 +12,8 @@ import { SocketProvider } from "./context/SocketContext";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  console.log("HOME 🏠");
 
-  console.trace({ session });
+  // console.trace({ session });
 
   if (session?.user.sub) {
     const resFirstime = await axios.get(

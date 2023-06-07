@@ -1,4 +1,3 @@
-// "use client";
 import Image from "next/image";
 import LogoDesktop from "../../../public/logo_desktop.png";
 import { getServerSession } from "next-auth";
@@ -6,24 +5,25 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import LogOut from "./LogOut";
 import Link from "next/link";
 import React from "react";
+import { redirect } from "next/navigation";
 
-let session: object | null;
+let session: any;
+
 // type ReactElement = any;
 
 export default async function NavBar() {
   session = await getServerSession(authOptions);
+  console.trace("SESSION NAV BAR ↴");
+  console.log(session);
 
-  // console.log({ session });
-  // console.log(session?.user?.name);
-  // console.log(session?.user?.email);
+  let isAdmin = false;
+
   if (session) {
-    // Signed in
-    // console.log("SIGNED IN");
-    // console.log("Session", JSON.stringify(session, null, 2));
+    isAdmin = session.user.admin;
   } else {
     // Not Signed in
     console.log("NOT SIGNED IN");
-    // res.status(401);
+    redirect("/");
   }
 
   return (
@@ -49,6 +49,12 @@ export default async function NavBar() {
               <li>
                 <Link href="/myprofile">My Profile</Link>
               </li>
+              {isAdmin && (
+                <li>
+                  <Link href="/admin">Admin dashboard</Link>
+                </li>
+              )}
+
               <li>
                 <LogOut />
               </li>
