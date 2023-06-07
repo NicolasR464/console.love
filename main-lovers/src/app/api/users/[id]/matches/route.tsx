@@ -26,7 +26,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           {
             geoloc: {
               $geoWithin: {
-                $centerSphere: [geoloc, 30 / 6371] // Radius in radians (30km / Earth's radius in km)
+                $centerSphere: [geoloc, 30 ] // Radius in radians (30km / Earth's radius in km)
               }
             }
           },

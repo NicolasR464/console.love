@@ -175,11 +175,13 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
   };
 
   const handleSuggestionClick = (suggestion: any) => {
+    const [longitude, latitude] = suggestion.geometry.coordinates;
+
     setUserData((prevState) => ({
       ...prevState,
       address: suggestion.properties.label,
       city: suggestion.properties.city,
-      geoloc: [suggestion.properties.x, suggestion.properties.y],
+      geoloc: [latitude, longitude],
     }));
     setAddressSuggestions([]);
   };
@@ -388,14 +390,20 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
   };
   return (
     //min-h-screen
-     <div  className="hero h-[90vh] w-full"
-     style={{
-       backgroundImage: `url("https://cdn.shopify.com/s/files/1/0295/8036/1827/articles/BLOG_1_fabc8a00-f5a9-41c4-903f-69a7cc2bdeb9.jpg?v=1602242282")`,
-     }}>
-      
-    <input type="checkbox"      defaultChecked={true} id="my-modal-signup" className="modal-toggle" />
-    
-        <div className="modal">
+    <div
+      className="hero h-[90vh] w-full"
+      style={{
+        backgroundImage: `url("https://cdn.shopify.com/s/files/1/0295/8036/1827/articles/BLOG_1_fabc8a00-f5a9-41c4-903f-69a7cc2bdeb9.jpg?v=1602242282")`,
+      }}
+    >
+      <input
+        type="checkbox"
+        defaultChecked={true}
+        id="my-modal-signup"
+        className="modal-toggle"
+      />
+
+      <div className="modal">
         <div className="modal-box p-10 bg-black-lover">
           {currentPath === "/complete_profile" ? (
             <h3 className="font-bold text-lg text-center mb-4 text-pink-lover">

@@ -1,9 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { io, Socket } from "socket.io-client";
 import axios from "axios";
 import Image from "next/image";
-import Quizz from "./Quizz";
 import { getSession, useSession } from "next-auth/react";
 import ChatQuiz from "./Quiztest";
 import { useSocket } from '../../context/SocketContext';
@@ -335,6 +333,8 @@ console.log('MY COMMON LANGUAGE => ', usersCommonLanguage)
       </div>
     </div>
   </div>
+
+
   </>
 );
   

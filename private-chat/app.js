@@ -196,6 +196,61 @@ io.on("connection", (socket) => {
     }
   });
 
+  app.delete("/rooms/:userId", async (req, res) => {
+    const userId = req.params.userId;
+    try {
+      // Find the rooms to delete and store their IDs
+      const roomsToDelete = await Chat.find({ "chatters.chatId": userId });
+      const roomIdsToDelete = roomsToDelete.map((room) => room._id);
+
+      // If there are no rooms to delete, send a specific response
+      if (roomIdsToDelete.length === 0) {
+        return res.status(200).send({ message: "No rooms to delete." });
+      }
+
+      // Delete the rooms
+      await Chat.deleteMany({ "chatters.chatId": userId });
+
+      // Return the IDs of the deleted rooms
+      return res.status(200).send({
+        message: "Rooms deleted successfully.",
+        deletedRoomIds: roomIdsToDelete,
+      });
+    } catch (err) {
+      console.error(err);
+      return res
+        .status(500)
+        .send({ message: "Error occurred while deleting rooms." });
+    }
+  });
+
+  app.delete("/room/:roomId", async (req, res) => {
+    const roomId = req.params.roomId;
+    try {
+      // Check if the room exists
+      const room = await Chat.findById(roomId);
+
+      // If there's no room, send a specific response
+      if (!room) {
+        return res.status(404).send({ message: "Room not found." });
+      }
+
+      // Delete the room
+      await Chat.deleteOne({ _id: roomId });
+
+      // Return the ID of the deleted room
+      return res.status(200).send({
+        message: "Room deleted successfully.",
+        deletedRoomId: roomId,
+      });
+    } catch (err) {
+      console.error(err);
+      return res
+        .status(500)
+        .send({ message: "Error occurred while deleting the room." });
+    }
+  });
+
   // // NEW MATCH
   // socket.on("new match", async ({ roomId }) => {
   //   try {
