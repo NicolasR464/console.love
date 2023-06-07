@@ -2,21 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.swiper {
-  width: 240px;
-  height: 320px;
-}
-
-.swiper-slide {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 18px;
-  font-size: 22px;
-  font-weight: bold;
-  color: #fff;
-}
-
 .swiper-slide:nth-child(1n) {
   background-color: rgb(206, 17, 17);
 }
@@ -92,20 +77,8 @@
 
 /* END SCROLLBARS */
 
-
-
-/* START SWIPER */
-.swipe {
-  position: absolute;
-}
-
-.cardContainer {
-  width: 90vw;
-  max-width: 260px;
-  height: 300px;
-}
-
-.card {
+/* START CHAT */
+.bidon .card {
   position: relative;
   background-color: #fff;
   width: 300px;
@@ -115,12 +88,25 @@
   margin-top: -60px;
   background-position: center;
 }
+/* END CHAT */
 
-#undo_button {
-  z-index: 999;
-  position: relative;
-  margin-left: -203px;
+/* START SWIPER */
+.swipe {
+  position: absolute;
+  margin: auto;
 }
+
+
+.cardContainer, .cardContainer .card {
+  position: relative;
+  width: 300px;
+  flex-direction: row;
+  height: 500px;
+  border-radius: 10px!important;
+  background-size: cover;
+  background-position: center;
+}
+
 
 .infoText {
   width: 100%;
@@ -132,8 +118,13 @@
   animation-duration: 800ms;
 }
 
-.buttons {
-  margin: 5px;
+.buttons_inner {
+  position: absolute;
+  margin-top: 220px!important;
+  display: flex;
+  width: 270px;
+  justify-content: space-between;
+  margin-left: 15px;
 }
 
 .buttons button {
@@ -293,4 +284,24 @@ td {
   border: 1px solid #cacaca;
   display: flex;
   align-items: center;
+}
+
+/* console.love() LOGO */
+/* Styles for desktop screens */
+@media (max-width: 767px) {
+  .desktop-image {
+    display: none;
+  }
+}
+/* Styles for mobile screens */
+@media (min-width: 768px) {
+  .mobile-image {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .hide-on-mobile {
+    display: none;
+  }
 }
