@@ -401,19 +401,20 @@ const populateRejected = async (idToDelete: string) => {
             </div>
           </TinderCard>
         ))}
-        
-        <div className="swipe_buttons_div absolute flex justify-evenly mt-[430px] w-[300px]">
-          <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel btn-sm self-center"
-            onClick={undo} id="undo_button" disabled={!undoAvailable} >
-            <Image src={BackImage} style={{ width: "55px", margin: "auto" }} alt=""></Image>
-          </button>
-          <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel" onClick={() => swipe('left')}>
-            <Image src={CloseImage} style={{ width: "25px", margin: "auto" }} alt=""></Image>
-          </button>
-          <button className="btn-circle btn-outline btn-success border-solid border-2 border-swipeLike" onClick={() => swipe('right')}>
-            <Image src={HeartImage} style={{ width: "25px", margin: "auto" }} alt=""></Image>
-          </button>
-        </div>
+        {characters.length > 0 && (
+          <div className="swipe_buttons_div absolute flex justify-evenly mt-[430px] w-[300px]">
+            <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel btn-sm self-center"
+              onClick={undo} id="undo_button" disabled={!undoAvailable} >
+              <Image src={BackImage} style={{ width: "55px", margin: "auto" }} alt=""></Image>
+            </button>
+            <button className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel" onClick={() => swipe('left')}>
+              <Image src={CloseImage} style={{ width: "25px", margin: "auto" }} alt=""></Image>
+            </button>
+            <button className="btn-circle btn-outline btn-success border-solid border-2 border-swipeLike" onClick={() => swipe('right')}>
+              <Image src={HeartImage} style={{ width: "25px", margin: "auto" }} alt=""></Image>
+            </button>
+          </div>
+        )}
       </div>
   </>
   );

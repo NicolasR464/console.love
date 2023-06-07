@@ -175,11 +175,13 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
   };
 
   const handleSuggestionClick = (suggestion: any) => {
+    const [longitude, latitude] = suggestion.geometry.coordinates;
+
     setUserData((prevState) => ({
       ...prevState,
       address: suggestion.properties.label,
       city: suggestion.properties.city,
-      geoloc: [suggestion.properties.x, suggestion.properties.y],
+      geoloc: [latitude, longitude],
     }));
     setAddressSuggestions([]);
   };
