@@ -14,8 +14,14 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   // if (!session) redirect("/");
 
+  console.log(session);
+
   console.trace({ session });
-  if (!session?.user?.city) redirect("/complete_profile");
+  console.log("🚀");
+
+  console.log(session?.user?.city);
+
+  if (session && !session?.user?.city) redirect("/complete_profile");
 
   // if (session?.user.sub) {
   //   const resFirstime = await axios.get(

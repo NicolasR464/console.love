@@ -73,6 +73,7 @@ export const authOptions: NextAuthOptions = {
       session.user.email = token.email;
       session.user.premium = token.premium;
       session.user.admin = token.admin;
+      session.user.city = token.city;
       return session;
     },
     jwt({ token, session, user, account }) {

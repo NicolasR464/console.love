@@ -12,7 +12,7 @@ export default async function MyProfile() {
   session = await getServerSession(authOptions);
   if (!session) redirect("/");
 
-  if (!session?.user?.city) redirect("/complete_profile");
+  if (session && !session?.user?.city) redirect("/complete_profile");
 
   // if (!session || !session.user || !session.user.email) {
   //   console.log("coucou");
