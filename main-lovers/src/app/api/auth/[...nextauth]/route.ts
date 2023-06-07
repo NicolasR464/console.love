@@ -65,9 +65,9 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     session({ session, token }) {
-      console.log("NEXT AUTH CALLBACK - SECOND (session)");
-      // console.log({ token });
-      console.log({ session });
+      // console.log("NEXT AUTH CALLBACK - SECOND (session)");
+      // // console.log({ token });
+      // console.log({ session });
 
       session.user.sub = token.sub;
       session.user.email = token.email;
@@ -77,11 +77,11 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     jwt({ token, session, user, account }) {
-      console.log("NEXT AUTH CALLBACK - FIRST (twt)");
+      // console.log("NEXT AUTH CALLBACK - FIRST (twt)");
 
-      console.trace({ account });
-      console.trace({ user });
-      console.log({ token });
+      // console.trace({ account });
+      // console.trace({ user });
+      // console.log({ token });
       if (account) {
         token.accessToken = account.access_token;
         token.premium = user.premium;

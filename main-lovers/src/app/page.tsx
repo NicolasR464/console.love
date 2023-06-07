@@ -14,12 +14,12 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   // if (!session) redirect("/");
 
-  console.log(session);
+  // console.log(session);
 
-  console.trace({ session });
-  console.log("🚀");
+  // console.trace({ session });
+  // console.log("🚀");
 
-  console.log(session?.user?.city);
+  // console.log(session?.user?.city);
 
   if (session && !session?.user?.city) redirect("/complete_profile");
 

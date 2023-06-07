@@ -10,13 +10,13 @@ let session: any;
 export default async function AdminIndex() {
   session = await getServerSession(authOptions);
   console.trace("SESSION NAV BAR ↴");
-  console.log(session);
+  // console.log(session);
 
   let isAdmin = false;
 
   if (session) {
     isAdmin = session.user.admin;
-    console.log(isAdmin);
+    // console.log(isAdmin);
 
     if (isAdmin !== true) redirect("/");
   } else {
