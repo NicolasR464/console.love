@@ -4,12 +4,31 @@ const mongoose = require("mongoose");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const axios = require("axios");
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const Chat = require("./models/chat"); // Added import for Chat model
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 3001;
 const mongoUrl = process.env.MONGO_URL;
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: 'Chat API',
+      description: 'Chat API Information',
+      contact: {
+        name: 'lovers',
+      },
+      servers: ['http://localhost:3001'],
+    },
+  },
+  apis: ['app.js', 'routes/chatRoutes.js'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 mongoose
   .connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
