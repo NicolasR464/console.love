@@ -13,34 +13,43 @@ import { SocketProvider } from "./context/SocketContext";
 export default async function Home() {
   const session = await getServerSession(authOptions);
   console.trace({ session });
-  // console.log(session?.user?.name);
-  // console.log(session?.user?.email);
 
-  const email = session?.user.email;
-  const response = await axios.get(
-    `${process.env.HOSTNAME}/api/users?query=${email}`
-  );
-  const user = response.data.data?._id;
-
-  if (!session || !session.user || !session.user.email) {
-    console.log("coucou");
-  } else {
-    const email = session.user.email;
-    const response = await axios.get(
-      `${process.env.HOSTNAME}/api/users?query=${email}`
+  if (session?.user.sub) {
+    const resFirstime = await axios.get(
+      `${process.env.HOSTNAME}/api/users/${session?.user.sub}`
     );
-    const user = response.data.data?._id;
-
-    if (user) {
-      const resFirstime = await axios.get(
-        `${process.env.HOSTNAME}/api/users/${user}`
-      );
-      const userFirstime = resFirstime.data.data.address;
-      if (!userFirstime) {
-        redirect("/complete_profile");
-      }
+    // console.trace(resFirstime);
+    const userFirstime = resFirstime.data.data.address;
+    if (!userFirstime) {
+      redirect("/complete_profile");
     }
   }
+
+  // // const email = session?.user.email;
+  // // const response = await axios.get(
+  // //   `${process.env.HOSTNAME}/api/users?query=${email}`
+  // // );
+  // // const user = response.data.data?._id;
+
+  // // if (!session || !session.user || !session.user.email) {
+  // //   console.log("coucou");
+  // // } else {
+  // //   const email = session.user.email;
+  // //   const response = await axios.get(
+  // //     `${process.env.HOSTNAME}/api/users?query=${email}`
+  // //   );
+  // //   const user = response.data.data?._id;
+
+  // //   if (user) {
+  // //     const resFirstime = await axios.get(
+  // //       `${process.env.HOSTNAME}/api/users/${user}`
+  // //     );
+  // //     const userFirstime = resFirstime.data.data.address;
+  // //     if (!userFirstime) {
+  // //       redirect("/complete_profile");
+  // //     }
+  // //   }
+  // }
 
   return (
     <main className="flex max-h-screen flex-col items-center justify-between">
@@ -53,7 +62,7 @@ export default async function Home() {
         >
           <SocketProvider>
             <Drawer />
-            <Swiper userId={user} />
+            <Swiper userId={session?.user.sub} />
           </SocketProvider>
         </div>
       ) : (
