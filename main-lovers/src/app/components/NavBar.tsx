@@ -5,7 +5,6 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import LogOut from "./LogOut";
 import Link from "next/link";
 import React from "react";
-import { redirect } from "next/navigation";
 
 let session: any;
 
@@ -23,7 +22,6 @@ export default async function NavBar() {
   } else {
     // Not Signed in
     console.log("NOT SIGNED IN");
-    redirect("/");
   }
 
   return (

@@ -85,6 +85,7 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = account.access_token;
         token.premium = user.premium;
         token.admin = user.lukqhdsngvkfq;
+        token.city = user.city;
       }
       return token;
     },

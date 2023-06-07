@@ -10,6 +10,7 @@ declare module "next-auth" {
       name: string;
       premium: boolean;
       lukqhdsngvkfq: boolean;
+      city: string;
     } & Session["user"];
   }
   interface User {
@@ -17,6 +18,7 @@ declare module "next-auth" {
     name: string;
     premium: boolean;
     lukqhdsngvkfq: boolean;
+    city: string;
   }
 }
 
@@ -26,5 +28,6 @@ declare module "next-auth/jwt" {
     name: string;
     premium: boolean;
     lukqhdsngvkfq: boolean;
+    city: string;
   }
 }
