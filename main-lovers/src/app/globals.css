@@ -96,7 +96,6 @@ html {
   max-width: 300px;
   height: 500px;
   background-size: cover;
-  margin-top: -60px;
   background-position: center;
 }
 
@@ -155,7 +154,7 @@ html {
 
 .drawer-container {
   max-height: 765px;
-  overflow: auto;
+  overflow: hidden;
 }
 
 @keyframes popup {

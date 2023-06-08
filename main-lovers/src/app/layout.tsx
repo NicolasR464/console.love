@@ -25,9 +25,9 @@ export default async function RootLayout({
 
   return (
     <AuthProvider>
-      <html lang="en">
+      <html lang="en" className="overflow-x-hidden">
         <head>
-          <title>Console.love()</title>
+          <title>console.love()</title>
 
           {/* <meta name="description" content={metadata.description} /> */}
           <script
