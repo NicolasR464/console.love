@@ -34,6 +34,9 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  premiumId: {
+    type: String,
+  },
   geoloc: {
     type: [Number],
   },

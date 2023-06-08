@@ -55,7 +55,7 @@ export default function Subscription(params: any) {
   return (
     <main className="flex max-h-screen flex-col items-center justify-between absolute">
       <div className="flex ">
-        <div className="border-solid  w-screen h-screen translate-y-20 -mt-[80px]">
+        <div className="border-solid w-[100%] h-[100%] translate-y-20 -mt-[80px]">
           {isSubscribed == "confirmed" && (
             <div>
               <Confetti opacity={0.6} colors={["#5271FF", "#FF66C4"]} />
