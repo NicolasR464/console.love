@@ -143,31 +143,31 @@ export default function MyMatches(props: any) {
     if (socket == null) return;
 
     setCurrentRoute(newroute);
-    // console.log("unmatch : my current route", newroute);
+    console.log("unmatch : my current route", newroute);
 
     socket.on("unmatch", async ({ chatRoom, deniedUserId }) => {
-      // console.log("unmatch: starting to unmatch", chatRoom, deniedUserId);
+      console.log("unmatch: starting to unmatch", chatRoom, deniedUserId);
       const other = chatRoom.chatters.find(
         (chatter: any) => chatter.chatId !== session?.user.sub
       );
 
-      // console.log("unmatch: me =>", session?.user.sub);
-      // console.log("unmatch: other =>", other);
-      // console.log("unmatch the denier", deniedUserId);
+      console.log("unmatch: me =>", session?.user.sub);
+      console.log("unmatch: other =>", other);
+      console.log("unmatch the denier", deniedUserId);
 
       if (!other) {
-        // console.log(`No other user found in chatRoom: ${chatRoom._id}`);
+        console.log(`No other user found in chatRoom: ${chatRoom._id}`);
         return;
       }
 
-      // console.log("unmatch: current route", newroute);
+      console.log("unmatch: current route", newroute);
       // Check if the user is in the current room
       if (newroute === `/my_lobby/${chatRoom._id}`) {
-        // console.log("unmatch: i'm in the lobby", currentRoute);
+        console.log("unmatch: i'm in the lobby", currentRoute);
 
         // Make the API call only if the user's status is 'denied'
         if (session?.user.sub === deniedUserId) {
-          // console.log("unmatch: i'm the one who denied: ", deniedUserId);
+          console.log("unmatch: i'm the one who denied: ", deniedUserId);
 
           try {
             const response = await axios.get(
@@ -220,7 +220,7 @@ export default function MyMatches(props: any) {
   return (
     <>
       {loading ? (
-        <p>Loading...</p>
+        <p>No matches yet</p>
       ) : Matches.length === 0 ? (
         <p>No matches yet.</p>
       ) : (
