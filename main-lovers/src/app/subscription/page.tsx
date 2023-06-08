@@ -88,21 +88,21 @@ export default function Subscription(params: any) {
           {isSubscribed == "waiting" && (
             <>
               {" "}
-              <div className="w-screen flex justify-center mt-4  ">
-                <span className="w-8/12 max-w-md text-center p-3 bg-background-lover rounded-xl text-xl ">
+              <div className="w-screen flex justify-center mt-4 font-bold text-2xl text-pink-lover ">
+                <span className="w-8/12 max-w-md text-center p-3 bg-background-lover rounded-xl text-2xl ">
                   Subscription plan
                 </span>
               </div>
               <div className="w-full flex justify-center items-center mt-10">
-                <section className="bg-background-lover flex-col sm:flex-row rounded-xl flex justify-around max-w-4xl p-6  ">
+                <section className="bg-background-lover flex flex-col-reverse sm:flex-row rounded-xl flex justify-around max-w-4xl p-6 mx-2 ">
                   <article className="sm:border-r-2 border-blue-lover min-w-[230px]">
-                    <h3 className="text-center  border-blue-lover border-b-2 text-2xl">
+                    <h3 className="text-center border-blue-lover border-b-2 text-2xl font-bold text-pink-lover">
                       FREE
                     </h3>
-                    <ul className="p-4">
+                    <ul className="p-4 text-pink-lover text-md">
                       <li>
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span className="text-xl">Unlimited swipes/day</span>
+                        <span>Unlimited swipes/day</span>
                         <FontAwesomeIcon
                           className="ml-1"
                           icon={faCircleXmark}
@@ -112,7 +112,7 @@ export default function Subscription(params: any) {
                       <li>
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span className="text-xl">
+                        <span>
                           Can go back to the profiles you nexted
                         </span>
                         <FontAwesomeIcon
@@ -124,7 +124,7 @@ export default function Subscription(params: any) {
                       <li>
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span className="text-xl">Unlimited matches</span>
+                        <span>Unlimited matches</span>
                         <FontAwesomeIcon
                           style={{ fontSize: "20px", color: "#7400f8" }}
                           icon={faCircleCheck}
@@ -134,7 +134,7 @@ export default function Subscription(params: any) {
                       <li>
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span className="text-xl">
+                        <span>
                           Unlimited chat with your matches
                         </span>
                         <FontAwesomeIcon
@@ -145,14 +145,14 @@ export default function Subscription(params: any) {
                       </li>
                     </ul>
                   </article>
-                  <article className="min-w-[230px]">
-                    <h3 className="text-center  border-blue-lover border-b-2 text-2xl">
+                  <article className="min-w-[230px] pb-4 border-blue-lover border-b-2 sm:border-b-0">
+                    <h3 className="text-center border-blue-lover border-b-2 text-2xl font-bold text-pink-lover">
                       PREMIUM✨ <span className="text-base">8€/month</span>
                     </h3>
-                    <ul className="p-4">
+                    <ul className="p-4 text-pink-lover">
                       <li>
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span className="text-xl">Unlimited swipe</span>
+                        <span>Unlimited swipe</span>
                         <FontAwesomeIcon
                           style={{ fontSize: "20px", color: "#7400f8" }}
                           icon={faCircleCheck}
@@ -162,7 +162,7 @@ export default function Subscription(params: any) {
                       <li>
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span className="text-xl">
+                        <span>
                           Can go back to the profiles you nexted
                         </span>
                         <FontAwesomeIcon
@@ -174,7 +174,7 @@ export default function Subscription(params: any) {
                       <li>
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span className="text-xl">Unlimited matches</span>
+                        <span>Unlimited matches</span>
                         <FontAwesomeIcon
                           style={{ fontSize: "20px", color: "#7400f8" }}
                           icon={faCircleCheck}
@@ -185,7 +185,7 @@ export default function Subscription(params: any) {
                       <li>
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span className="text-xl">
+                        <span>
                           Unlimited chat with your matches
                         </span>
                         <FontAwesomeIcon
