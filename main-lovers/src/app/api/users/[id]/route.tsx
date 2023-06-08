@@ -1,7 +1,7 @@
 import connectMongo from "../../../utils/mongoose";
 import { NextResponse, NextRequest } from "next/server";
 import users from "../../../models/users";
-
+import axios from "axios"
 // get specific user with ID
 export async function GET(
   req: Request,
@@ -75,14 +75,13 @@ export async function PUT(
     return NextResponse.json({ error }, { status: 500 });
   }
 }
-
+// DELETE USER AND ITS ROOM (UPDATE ALL USER MATCH / REJECT / CHATIDS where that user was involved)
 export async function DELETE(
   req: Request,
   { params }: { params: { id: string } }
 ) {
   const userId = params.id;
   await connectMongo();
-  const data = await users.findOne({ _id: userId });
   console.log("JE DELETE USER ID => ", userId);
 
   try {
@@ -98,6 +97,32 @@ export async function DELETE(
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
+    await users.updateMany(
+      { matched: userId },
+      { $pull: { matched: userId } }
+    );
+
+    await users.updateMany(
+      { rejected: userId },
+      { $pull: { rejected: userId } }
+    );
+
+    let deletedRoomsResponse = {} as any;
+    try {
+      deletedRoomsResponse = await axios.delete(`http://localhost:3001/rooms/${userId}`);
+    } catch (err) {
+      console.error(err);
+    }
+    
+    if (deletedRoomsResponse.data && deletedRoomsResponse.data.deletedRoomIds) {
+      for (let roomId of deletedRoomsResponse.data.deletedRoomIds) {
+        await users.updateMany(
+          { chatIds: roomId },
+          { $pull: { chatIds: roomId } }
+        );
+      }
+    }
+
     const deletedUser = await users.findByIdAndDelete({ _id: userId });
     return NextResponse.json(
       { message: "User successfully deleted", data: deletedUser },
@@ -107,6 +132,9 @@ export async function DELETE(
     return NextResponse.json({ error }, { status: 500 });
   }
 }
+
+
+
 
 // export async function PATCH(
 //   req: Request,
