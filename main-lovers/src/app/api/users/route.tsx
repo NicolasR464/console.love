@@ -13,7 +13,7 @@ import users from "../../models/users";
 //     return NextResponse.json({ data: [user] }); // Wrap user object in an array
 //   } else {
 //     const data = await users.find()
-//     const modifiedData = data.filter((_, index) => index <= 44); // Filter out objects where the index is greater than 41
+//     const modifiedData = data.filter((_, index) => index < 4); // Filter out objects where the index is greater than 41
     
 //     // Delete all users from the database
 //     await users.deleteMany({});

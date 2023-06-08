@@ -88,6 +88,7 @@
   margin-top: -60px;
   background-position: center;
 }
+
 /* END CHAT */
 
 /* START SWIPER */
@@ -102,7 +103,7 @@
   width: 300px;
   flex-direction: row;
   height: 500px;
-  border-radius: 10px!important;
+  border-radius: 10px !important;
   background-size: cover;
   background-position: center;
 }
@@ -120,7 +121,7 @@
 
 .buttons_inner {
   position: absolute;
-  margin-top: 220px!important;
+  margin-top: 220px !important;
   display: flex;
   width: 270px;
   justify-content: space-between;

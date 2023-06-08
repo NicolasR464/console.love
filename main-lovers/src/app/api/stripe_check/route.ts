@@ -9,9 +9,9 @@ export async function POST(req: NextRequest) {
   console.log("STRIPE CHECK POST");
 
   const session = await getServerSession(authOptions);
-  console.log({ session });
-  console.log(session?.user?.name);
-  console.log(session?.user?.email);
+  // console.log({ session });
+  // console.log(session?.user?.name);
+  // console.log(session?.user?.email);
 
   const request = await req.json();
 
@@ -28,13 +28,19 @@ export async function POST(req: NextRequest) {
     );
 
     console.log(resStripe.data);
+    // subscription - ADD subId in DB - (user crud)
 
     if (resStripe.data.id === request.sessionId) {
       await connectMongo();
       console.log("MATCH 🍻");
+      console.log("subscription 👀");
+      console.trace(resStripe.data.subscription);
       // UPDATE DB
       const filter = { _id: session?.user?.sub };
-      const update = { premium: true };
+      const update = {
+        premium: true,
+        premiumId: resStripe.data.subscription,
+      };
 
       const updatedUserSub = await users.findByIdAndUpdate(filter, update, {
         new: true,
@@ -50,4 +56,8 @@ export async function POST(req: NextRequest) {
     console.log(err);
     return NextResponse.json({ message: "Something went wrong" });
   }
+}
+
+export async function DELETE() {
+  // https://stripe.com/docs/api/subscriptions/cancel?lang=node
 }
