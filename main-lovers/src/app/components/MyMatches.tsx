@@ -68,7 +68,7 @@ export default function MyMatches(props: any) {
       if (!chatUsers.hasOwnProperty(username)) {
         try {
           userDataResponse = await axios.get(
-            `http://localhost:3000/api/users/${username}`
+            `${process.env.HOSTNAME}/api/users/${username}`
           );
           // console.log(
           //   `User data response for user ${username}:`,

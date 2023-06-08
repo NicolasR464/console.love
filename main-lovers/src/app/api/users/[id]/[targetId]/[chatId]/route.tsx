@@ -18,7 +18,7 @@ export async function GET(req: Request, { params }: { params: { id: string, targ
         console.log('Target user chatIds before update:', targetUserBefore.chatIds);
 
         // Delete the chat room
-        const deleteResponse = await axios.delete(`http://localhost:3001/room/${chatId}`);
+        const deleteResponse = await axios.delete(`${process.env.CHAT_ROOT}/room/${chatId}`);
         console.log(deleteResponse.data);
 
         // Find the connected user and update his matched, rejected, and ChatIds arrays
