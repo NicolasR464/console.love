@@ -31,7 +31,7 @@ function RejectUserComponent({
         )
       );
 
-    router.push("/"); // Redirect to home page
+    // router.push("/"); // Redirect to home page
   };
 
   return (

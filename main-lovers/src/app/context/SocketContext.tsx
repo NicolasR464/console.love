@@ -37,6 +37,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [session]);
 
   console.log("SOCKET => ", socket);
+  console.log("socket deep=> ", socket?.connected);
   // if (socket === null) {
   //   return (
   //     <main className="flex max-h-screen flex-col items-center justify-between">
