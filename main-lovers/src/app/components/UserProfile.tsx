@@ -27,9 +27,11 @@ function InnerCarousel({ roomId }: any) {
     const fetchSession = async () => {
       const currentSession = await getSession();
       setSession(currentSession);
+      console.log("SESSION => ", currentSession)
     };
     fetchSession();
   }, []);
+  
 
   useEffect(() => {
     if (!socket) return;
@@ -38,11 +40,11 @@ function InnerCarousel({ roomId }: any) {
       for (const chatter of room.chatters) {
         if (chatter.chatId !== session?.user?.sub) {
           setOtherUserId(chatter.chatId);
-          const res = await axios.get(`http://localhost:3000/api/users/${chatter.chatId}`);
-          setUserData(res.data.data)
-          console.log(userData)
-          setPictures(res.data.data.pictures);
         }
+        const res = await axios.get(`http://localhost:3000/api/users/${chatter.chatId}`);
+        setUserData(res.data.data)
+        console.log("dsfghfj", res)
+        setPictures(res.data.data.pictures);
       }
     });
 
@@ -50,6 +52,7 @@ function InnerCarousel({ roomId }: any) {
       socket.off("room-data");
     };
   }, [socket, session, userData]);
+
 
 
   function calculateAge(dateString: string): number | null {
@@ -75,46 +78,6 @@ function InnerCarousel({ roomId }: any) {
 
   return (
     <>
-
-
-
-{/* <div className="carousel w-full">
-  <div id="slide1" className="carousel-item relative w-full">
-    <img src="https://res.cloudinary.com/dgarygsq5/image/upload/v1686061732/evalha8eztv07hwo1vip.jpg" className="w-full" />
-    <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-      <a href="#slide4" className="btn btn-circle">❮</a> 
-      <a href="#slide2" className="btn btn-circle">❯</a>
-    </div>
-  </div> 
-  <div id="slide2" className="carousel-item relative w-full">
-    <img src="https://res.cloudinary.com/dgarygsq5/image/upload/v1686061732/evalha8eztv07hwo1vip.jpg" className="w-full" />
-    <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-      <a href="#slide1" className="btn btn-circle">❮</a> 
-      <a href="#slide3" className="btn btn-circle">❯</a>
-    </div>
-  </div> 
-  <div id="slide3" className="carousel-item relative w-full">
-    <img src="https://res.cloudinary.com/dgarygsq5/image/upload/v1686061732/evalha8eztv07hwo1vip.jpg" className="w-full" />
-    <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-      <a href="#slide2" className="btn btn-circle">❮</a> 
-      <a href="#slide4" className="btn btn-circle">❯</a>
-    </div>
-  </div> 
-  <div id="slide4" className="carousel-item relative w-full">
-    <img src="https://res.cloudinary.com/dgarygsq5/image/upload/v1686061732/evalha8eztv07hwo1vip.jpg" className="w-full" />
-    <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-      <a href="#slide3" className="btn btn-circle">❮</a> 
-      <a href="#slide1" className="btn btn-circle">❯</a>
-    </div>
-  </div>
-</div> */}
-
-
-
-
-
-
-
       <div className="carousel w-full">
         {pictures.map((pic, index) => (
           <div id={`slide${index + 1}`} className="carousel-item relative w-full" key={index}>
@@ -162,7 +125,6 @@ function InnerCarousel({ roomId }: any) {
             ))}
           </div>
         </div>
-
     </>
   );
 }
