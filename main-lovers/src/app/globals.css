@@ -49,7 +49,8 @@
 #myMatches::-webkit-scrollbar,
 #myMessages::-webkit-scrollbar,
 #chatBody::-webkit-scrollbar,
-#languagesSelect::-webkit-scrollbar
+#languagesSelect::-webkit-scrollbar,
+#myProfile::-webkit-scrollbar
  {
   width: 5px;
 }
@@ -57,14 +58,16 @@
 #myMatches::-webkit-scrollbar-track,
 #myMessages::-webkit-scrollbar-track,
 #chatBody::-webkit-scrollbar-track,
-#languagesSelect::-webkit-scrollbar-track {
+#languagesSelect::-webkit-scrollbar-track,
+#myProfile::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
 #myMatches::-webkit-scrollbar-thumb,
 #myMessages::-webkit-scrollbar-thumb,
 #chatBody::-webkit-scrollbar-thumb,
-#languagesSelect::-webkit-scrollbar-thumb {
+#languagesSelect::-webkit-scrollbar-thumb,
+#myProfile::-webkit-scrollbar-thumb {
   background-color: #ff66c496;
   border-radius: 10px;
 }
@@ -72,7 +75,8 @@
 #myMatches,
 #myMessages,
 #chatBody,
-#languagesSelect {
+#languagesSelect,
+#myProfile {
   overflow-x: hidden;
   /* Hide horizontal scrollbar */
 }

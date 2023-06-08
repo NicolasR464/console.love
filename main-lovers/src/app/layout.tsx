@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import AuthProvider from "./utils/AuthProvider";
 import Drawer from "./components/Drawer";
 import { SocketProvider } from "./context/SocketContext";
-import { usePathname } from "next/navigation";
 import { NextResponse, NextRequest } from "next/server";
 
 export const metadata = {
@@ -19,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
   params: any;
 }) {
-  // console.log("PARAMS", params);
+
   return (
     <AuthProvider>
       <html lang="en">
