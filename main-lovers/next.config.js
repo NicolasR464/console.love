@@ -1,9 +1,25 @@
 /** @type {import('next').NextConfig} */
+
+
+const withHtml = require('@blunck/next-html')()
 const nextConfig = {
+  transpilePackages: [
+    'swagger-ui-react',
+    'swagger-client',
+    'react-syntax-highlighter',    
+  ],
   experimental: {
     serverActions: true,
     serverComponentsExternalPackages: ["mongoose"],
   },
+  rewrites: async () => {
+    return [
+      {
+        source: "/doc",
+        destination: "/doc.html",
+      }
+    ]
+},
   images: {
     remotePatterns: [
       {
