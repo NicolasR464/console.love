@@ -4,6 +4,7 @@ import Dashboard from "./Dashboard";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import Link from "next/link";
 
 let session: any;
 
@@ -25,6 +26,9 @@ export default async function AdminIndex() {
   return (
     <>
       <div className="mt-32 mx-40">
+        <Link href="/admin/stats">
+          <button className="btn">STATISTICS</button>
+        </Link>
         <CrudUser />
         {/* <Dashboard /> */}
       </div>

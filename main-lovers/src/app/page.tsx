@@ -14,11 +14,10 @@ import { SocketProvider } from "./context/SocketContext";
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  // console.log({ session });
+  console.log({ session });
   // IF JUST REGISTERED - REDIRECTION ↴
-  // if (session && !session?.user?.city) redirect("/complete_profile");
 
-  ///////////OLD
+  /////////// VERSION#1
   if (session?.user.sub) {
     const resFirstime = await axios.get(
       `http://localhost:3000/api/users/${session?.user.sub}`
@@ -29,6 +28,9 @@ export default async function Home() {
       redirect("/complete_profile");
     }
   }
+
+  ///////// VERSION#2
+  // if (session && !session?.user?.city) redirect("/complete_profile");
 
   return (
     <>{session ? <Swiper userId={session?.user.sub} /> : <HomeScreen />}</>

@@ -1,36 +1,61 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 interface IQuizProps {
+  language: string;
   roomId: string;
   socket: any;
   session: any;
-  language: string;
 }
 
 export default function ChatQuiz({
+  language,
   roomId,
   socket,
   session,
-  language,
 }: IQuizProps) {
   const [answer, setAnswer] = useState<string>("");
-  // console.log("ChatQuiz Component Called");
-  // console.log("language in quizTest", language);
+  const [question, setQuestion] = useState<string>("");
+  const [correctAnswer, setCorrectAnswer] = useState<string>("");
+
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      try {
+        const res = await axios.get(`/api/quizz/${language}`);
+        if (res.data.questionData) {
+          setQuestion(res.data.questionData.question);
+          setCorrectAnswer(res.data.questionData.reponse);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchQuestion();
+  }, [language]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAnswer(event.target.value);
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (!answer) return;
 
-    socket.emit(
-      "update-chat-status",
-      { roomId, status: answer === "yes" ? "accepted" : "denied" },
-      session
-    );
+    let isCorrect =
+      (correctAnswer === "VRAI" && answer === "true") ||
+      (correctAnswer === "FAUX" && answer === "false");
+
+    if (isCorrect) {
+      socket.emit(
+        "update-chat-status",
+        { roomId, status: "accepted" },
+        session
+      );
+    } else {
+      socket.emit("update-chat-status", { roomId, status: "denied" }, session);
+    }
   };
 
   return (
@@ -40,18 +65,18 @@ export default function ChatQuiz({
         className="flex flex-col justify-center items-center"
       >
         <p className="m-2">
-          <b>Do you want to chat?</b>
+          <b>{question || "Loading question..."}</b>
         </p>
         <div className="flex">
           <div className="flex items-center m-2">
             <label>
               <input
                 type="radio"
-                value="yes"
-                checked={answer === "yes"}
+                value="true"
+                checked={answer === "true"}
                 onChange={handleChange}
               />
-              Yes
+              True
             </label>
           </div>
 
@@ -59,11 +84,11 @@ export default function ChatQuiz({
             <label>
               <input
                 type="radio"
-                value="no"
-                checked={answer === "no"}
+                value="false"
+                checked={answer === "false"}
                 onChange={handleChange}
               />
-              No
+              False
             </label>
           </div>
         </div>

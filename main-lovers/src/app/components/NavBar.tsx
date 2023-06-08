@@ -29,19 +29,28 @@ export default async function NavBar() {
     <div className="navbar top-0 h-[10vh] bg-black-lover">
       <div className="navbar-start"></div>
       <div className="navbar-center">
-      <Image
-        src={LogoDesktop}
-        style={{ maxWidth: "250px" }}
-        alt=""
-        className="desktop-image"
-      />
-      <Image
-        src={LogoMobile}
-        style={{ maxWidth: "150px", position: "absolute", left: 10,  }}
-        alt=""
-        className="mobile-image"
-      />
-    </div>
+        <Link href="/">
+          <Image
+            src={LogoDesktop}
+            style={{ maxWidth: "250px" }}
+            alt=""
+            className="desktop-image"
+          />
+        </Link>
+        <Link href="/">
+          <Image
+            src={LogoMobile}
+            style={{
+              maxWidth: "150px",
+              position: "absolute",
+              left: 10,
+              marginTop: "-30px",
+            }}
+            alt=""
+            className="mobile-image"
+          />
+        </Link>
+      </div>
 
       <div className="navbar-end">
         {session && (

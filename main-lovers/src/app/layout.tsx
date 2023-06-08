@@ -5,25 +5,30 @@ import AuthProvider from "./utils/AuthProvider";
 import Drawer from "./components/Drawer";
 import { SocketProvider } from "./context/SocketContext";
 import { NextResponse, NextRequest } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
 
 export const metadata = {
   title: "Console.love()",
   description: "The meeting ground for a loving relationship between devs",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   params,
   children,
 }: {
   children: React.ReactNode;
   params: any;
 }) {
+  // console.log("PARAMS", params);
+  const session = await getServerSession(authOptions);
 
   return (
     <AuthProvider>
       <html lang="en">
         <head>
           <title>Console.love()</title>
+
           {/* <meta name="description" content={metadata.description} /> */}
           <script
             defer
@@ -41,7 +46,9 @@ export default function RootLayout({
                   backgroundImage: `url("https://cdn.shopify.com/s/files/1/0295/8036/1827/articles/BLOG_1_fabc8a00-f5a9-41c4-903f-69a7cc2bdeb9.jpg?v=1602242282")`,
                 }}
               >
-                {params !== "/admin" && <Drawer />}
+                {/* {params !== "/admin" && <Drawer />} */}
+                {session && <Drawer />}
+
                 {children}
               </div>
             </main>
