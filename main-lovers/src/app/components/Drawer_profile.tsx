@@ -48,12 +48,20 @@ export default function DrawerCarousel({ roomId }: any) {
     <div className="h-screen">
       <button
         onClick={handleDrawerToggle}
-        className={`btn ${!showDrawer ? 'btn-circle' : ''} mt-2 fixed z-${!showDrawer ? '999' : '50'} transition-all duration-500 ease-in-out ${
-          showDrawer ? 'bg-blue-lover' : 'bg-pink-lover'
+        className={`btn ${!showDrawer ? "btn-circle" : ""} mt-2 fixed z-${
+          !showDrawer ? "999" : "50"
+        } transition-all duration-500 ease-in-out ${
+          showDrawer ? "bg-blue-lover" : "bg-pink-lover"
         }`}
-        style={{ right: showDrawer ? '20.2rem' : '24.5rem' }}
+        style={{
+          right: showDrawer ? "20.2rem" : "24.5rem",
+          // Type assertion to override the type of `style` prop
+          ...(showDrawer && window.innerWidth >= 768
+            ? { right: "20.7rem" }
+            : {}) as React.CSSProperties,
+        }}
       >
-        {showArrow && (showDrawer ? '❯' : '❮')}
+        {showArrow && (showDrawer ? "❯" : "❮")}
       </button>
       <div className="">
       
