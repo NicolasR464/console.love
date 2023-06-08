@@ -53,6 +53,29 @@ function InnerCarousel({ roomId }: any) {
 
 
 
+  function calculateAge(dateString: string): number | null {
+    const today = new Date();
+    const birthDate = new Date(dateString);
+  
+    if (isNaN(birthDate.getTime())) {
+      return null;
+    }
+  
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+  
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+  
+    return age;
+  }
+  
+
+
   return (
     <>
 
@@ -130,7 +153,7 @@ function InnerCarousel({ roomId }: any) {
           </div>
           <div className="flex justify-between">
             <div className="font-bold">{userData.sex}</div>
-            <h3 className="text-xl ml-3">{userData.age}</h3>
+            <h3 className="text-xl ml-3">{calculateAge(userData.age)}</h3>
             </div>
             <div className="badge badge-ghost font-bold text-white glass">{userData.profileStatus}
           </div>
