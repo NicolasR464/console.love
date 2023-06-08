@@ -39,7 +39,7 @@ export default function DrawerCarousel({ roomId }: any) {
       
         <div
           tabIndex={0}   
-          className={`absolute right-0 -mr-2 p-2 shadow bg-black-lover w-52 h-[90vh] w-96 z-40 transition-transform duration-500 ease-in-out ${showDrawer ? 'transform translate-x-0' : 'transform translate-x-full'}`}
+          className={`absolute right-0 w-[100%] sm:w-96 shadow bg-black-lover h-[90vh] z-999 transition-transform duration-500 ease-in-out ${showDrawer ? 'transform translate-x-0' : 'transform translate-x-full'}`}
         >
        <Carousel roomId={ roomId } />
          

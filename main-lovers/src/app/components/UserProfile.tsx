@@ -12,11 +12,16 @@ interface Session {
   };
 }
 
+interface User {
+  name: string
+}
+
 function InnerCarousel({ roomId }: any) {
   const [pictures, setPictures] = useState<Array<string>>([]);
   const socket = useSocket().socket;
   const [session, setSession] = useState<Session | null>(null);
   const [otherUserId, setOtherUserId] = useState<string>("");
+  const [userData, setUserData] = useState<any>({});
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -34,6 +39,8 @@ function InnerCarousel({ roomId }: any) {
         if (chatter.chatId !== session?.user?.sub) {
           setOtherUserId(chatter.chatId);
           const res = await axios.get(`http://localhost:3000/api/users/${chatter.chatId}`);
+          setUserData(res.data.data)
+          console.log(userData)
           setPictures(res.data.data.pictures);
         }
       }
@@ -42,7 +49,9 @@ function InnerCarousel({ roomId }: any) {
     return () => {
       socket.off("room-data");
     };
-  }, [socket, session]);
+  }, [socket, session, userData]);
+
+
 
   return (
     <>
@@ -89,7 +98,22 @@ function InnerCarousel({ roomId }: any) {
       <div className="carousel w-full">
         {pictures.map((pic, index) => (
           <div id={`slide${index + 1}`} className="carousel-item relative w-full" key={index}>
-            <img src={pic} className="w-full" />
+            {/* <Image src={pic} className="w-full"></Image> */}
+            
+            <div
+              style={{
+                backgroundImage: `url(${pic})`,
+                backgroundPosition: 'center',
+                backgroundSize: 'cover', 
+            }}
+              className="w-full h-[400px] rounded-2xl flex justify-end p-3 m-[12px]"
+            >
+              <RejectUserComponent
+                currentUserId={session?.user?.sub || ""}
+                targetUserId={otherUserId}
+                roomId={roomId}
+              />
+            </div>
             <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
               <a href={`#slide${index === 0 ? pictures.length : index}`} className="btn btn-circle">❮</a>
               <a href={`#slide${index === pictures.length - 1 ? 1 : index + 2}`} className="btn btn-circle">❯</a>
@@ -97,11 +121,28 @@ function InnerCarousel({ roomId }: any) {
           </div>
         ))}
       </div>
-      <RejectUserComponent
-        currentUserId={session?.user?.sub || ""}
-        targetUserId={otherUserId}
-        roomId={roomId}
-      />
+        
+        <div className="flex-col w-[90%] h-auto m-auto rounded-br-2xl text-white mt-5">
+          <div className="flex justify-between">
+            <h3 className="text-3xl font-bold mw-[200px] overflow-hidden">{userData.name}
+            </h3>
+            <div className="font-bold self-end mb-[1px]">{userData.city}</div>
+          </div>
+          <div className="flex justify-between">
+            <div className="font-bold">{userData.sex}</div>
+            <h3 className="text-xl ml-3">{userData.age}</h3>
+            </div>
+            <div className="badge badge-ghost font-bold text-white glass">{userData.profileStatus}
+          </div>
+          <div className="flex-col mt-5">
+            {userData?.languages?.map((language: string, index: any) => (
+              <p key={index} className="text-lg -mb-1">
+                {language}
+              </p>
+            ))}
+          </div>
+        </div>
+
     </>
   );
 }
