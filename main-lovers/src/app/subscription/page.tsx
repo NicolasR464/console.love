@@ -13,11 +13,22 @@ import {
 import { log } from "console";
 import Image from "next/image";
 import Confetti from "react-confetti";
+import { getSession } from "next-auth/react";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
 export default function Subscription(params: any) {
   const [isSubscribed, setIsSubscribed] = useState("pending");
+  const [session, setSession] = useState<{} | null>();
+
+  useEffect(() => {
+    const sessionHandler = async () => {
+      const resSession = await getSession();
+      console.log(resSession);
+      setSession(resSession);
+    };
+    sessionHandler();
+  }, []);
 
   useEffect(() => {
     if (params.searchParams.session_id) {

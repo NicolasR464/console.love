@@ -14,19 +14,21 @@ import { SocketProvider } from "./context/SocketContext";
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  console.trace({ session });
-  // if (!session?.user?.city) redirect("/complete_profile");
+  // console.log({ session });
+  // IF JUST REGISTERED - REDIRECTION ↴
+  // if (session && !session?.user?.city) redirect("/complete_profile");
 
-  // if (session?.user.sub) {
-  //   const resFirstime = await axios.get(
-  //     `${process.env.HOSTNAME}/api/users/${session?.user.sub}`
-  //   );
-  //   // console.trace(resFirstime);
-  //   const userFirstime = resFirstime.data.data.address;
-  //   if (!userFirstime) {
-  //     redirect("/complete_profile");
-  //   }
-  // }
+  ///////////OLD
+  if (session?.user.sub) {
+    const resFirstime = await axios.get(
+      `${process.env.HOSTNAME}/api/users/${session?.user.sub}`
+    );
+    // console.trace(resFirstime);
+    const userFirstime = resFirstime.data.data.address;
+    if (!userFirstime) {
+      redirect("/complete_profile");
+    }
+  }
 
   return (
     <>{session ? <Swiper userId={session?.user.sub} /> : <HomeScreen />}</>
