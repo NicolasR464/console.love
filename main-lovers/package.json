@@ -11,7 +11,7 @@
     "start": "next start",
     "stripe:listen": "stripe listen --forward-to localhost:3000/api/stripe",
     "stripe:trigger": "stripe payment trigger_payment.succeeded",
-    "lint": "next lint"
+    "lint": "next lint" 
   },
   "dependencies": {
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
@@ -76,6 +76,7 @@
   "devDependencies": {
     "@playwright/test": "^1.34.3",
     "@types/bcrypt": "^5.0.0",
+    "@types/uuid": "^9.0.1",
     "use-debounce": "^9.0.4",
     "zod": "^3.21.4"
   }
