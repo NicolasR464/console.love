@@ -45,7 +45,7 @@ export default function DrawerCarousel({ roomId }: any) {
   }, []);
 
   const buttonStyle = {
-    right: showDrawer ? "20.2rem" : "24.5rem",
+    right: showDrawer ? "20.2rem" : "15px",
   };
 
   if (showDrawer && window.innerWidth >= 768) {
@@ -73,10 +73,9 @@ export default function DrawerCarousel({ roomId }: any) {
       
         <div
           tabIndex={0}   
-          className={`absolute right-0 w-[100%] sm:w-96 shadow bg-black-lover h-[90vh] z-10 transition-transform duration-500 ease-in-out ${showDrawer ? 'transform translate-x-0' : 'transform translate-x-full' }`}
+          className={`fixed right-[0px] w-[100%] sm:w-96 shadow bg-black-lover h-[90vh] z-10 transition-transform duration-500 ease-in-out ${showDrawer ? 'transform translate-x-0' : 'transform translate-x-full' }`}
         >
-       <Carousel roomId={ roomId } />
-         
+          <Carousel roomId={ roomId } />
         </div>
       </div>
 
