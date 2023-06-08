@@ -13,11 +13,12 @@ import { SocketProvider } from "./context/SocketContext";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  // if (!session) redirect("/");
 
-  // console.trace({ session });
+  // console.log({ session });
+  // IF JUST REGISTERED - REDIRECTION ↴
   // if (session && !session?.user?.city) redirect("/complete_profile");
 
+  ///////////OLD
   if (session?.user.sub) {
     const resFirstime = await axios.get(
       `${process.env.HOSTNAME}/api/users/${session?.user.sub}`

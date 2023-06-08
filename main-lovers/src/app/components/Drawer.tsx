@@ -78,8 +78,10 @@ const Drawer: React.FC = () => {
       <div className="">
         <button
           onClick={handleDrawerToggle}
-          className={`btn ${!showDrawer ? 'btn-circle' : ''} mt-2 fixed z-50 transition-all duration-500 ease-in-out ${showDrawer ? 'bg-blue-lover' : 'bg-pink-lover'}`}
-          style={{ left: showDrawer ? '20.2rem' : '1rem' }} 
+          className={`btn ${!showDrawer ? 'btn-circle' : ''} mt-2 fixed z-${!showDrawer ? '999' : '50'} transition-all duration-500 ease-in-out ${
+            showDrawer ? 'bg-blue-lover' : 'bg-pink-lover'
+          }`}
+          style={{ left: showDrawer ? '20.2rem' : '1rem' }}
         >
           {showArrow && (showDrawer ? '❮' : '❯')}
         </button>

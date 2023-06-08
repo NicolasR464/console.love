@@ -192,19 +192,19 @@ export default function SignUpModal() {
                   onChange={(e) => setEmail(e.target.value)}
                   type="text"
                   placeholder="email"
-                  className="input input-bordered input-info w-full my-2"
+                  className="input input-bordered input-info w-full my-2 text-black-lover"
                 />
                 <input
                   onChange={(e) => setPassword(e.target.value)}
                   type="password"
                   placeholder="password"
-                  className="input input-bordered input-info w-full my-2"
+                  className="input input-bordered input-info w-full my-2 text-black-lover"
                 />
                 <input
                   onChange={(e) => setConfPassword(e.target.value)}
                   type="password"
                   placeholder="password"
-                  className="input input-bordered input-info w-full my-2"
+                  className="input input-bordered input-info w-full my-2 text-black-lover"
                 />
                 <button className="btn border-[#5271FF]" onClick={handleSubmit}>
                   Sign In with your credentials
