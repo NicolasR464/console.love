@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Image from "next/image";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import ChatQuiz from "./Quiztest";
 import { useSocket } from "../../context/SocketContext";
 
@@ -35,22 +35,26 @@ export default function ChatBox({ roomId }: any) {
     { username: string; status: string }[]
   >([]);
   const socket = useSocket().socket;
+  // console.log("ALLO socket from chatbox", socket);
 
+  socket?.on("ALLO", () => {
+    // console.log("ALLO", socket);
+    // socket.emit("fetch chat rooms", session?.user.sub);
+  });
   useEffect(() => {
     const sessionHandler = async () => {
       const resSession = await getSession();
-      console.log(resSession);
+      // console.log(resSession);
       setSession(resSession);
     };
     sessionHandler();
   }, []);
 
-  // LISTEN TO 'chat error' EVENT
   useEffect(() => {
     if (socket == null) return;
 
     socket.on("chat error", (message: string) => {
-      console.log(`Received error message: ${message}`);
+      // console.log(`Received error message: ${message}`);
       // Handle the error message appropriately
       window.alert(message);
     });
@@ -79,7 +83,9 @@ export default function ChatBox({ roomId }: any) {
       let usersLanguages = new Map<string, string[]>();
 
       for (const chatter of room.chatters) {
-        const res = await axios.get(`/api/users/${chatter.chatId}`);
+        const res = await axios.get(
+          `${process.env.HOSTNAME}/api/users/${chatter.chatId}`
+        );
         usersNameMap.set(chatter.chatId, res.data.data.name);
         usersPicMap.set(chatter.chatId, res.data.data.profilePicture);
         usersLanguages.set(chatter.chatId, res.data.data.languages);
@@ -159,7 +165,7 @@ export default function ChatBox({ roomId }: any) {
     if (socket == null) return;
 
     socket.on("chat message", (message: IMessage) => {
-      console.log(`Received message: ${JSON.stringify(message)}`);
+      // console.log(`Received message: ${JSON.stringify(message)}`);
       setMessages((msgs) => [...msgs, message]);
     });
 
@@ -225,9 +231,9 @@ export default function ChatBox({ roomId }: any) {
     }
   };
 
-  console.log("MY SESSION", session?.user?.sub);
-  console.log("MY CHATTERS STATUS", chattersStatuses);
-  console.log("MY COMMON LANGUAGE => ", usersCommonLanguage);
+  // console.log("MY SESSION", session?.user?.sub);
+  // console.log("MY CHATTERS STATUS", chattersStatuses);
+  // console.log("MY COMMON LANGUAGE => ", usersCommonLanguage);
   function formatDate(dateStr: string) {
     const date = new Date(dateStr);
 

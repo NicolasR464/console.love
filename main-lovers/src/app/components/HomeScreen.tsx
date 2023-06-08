@@ -4,6 +4,7 @@ import React from "react";
 import Login from "./LoginModal";
 import SignUp from "./SignUpModal";
 import Swiper from "./Swiper";
+import Link from "next/link";
 
 export default function HomeScreen() {
   return (

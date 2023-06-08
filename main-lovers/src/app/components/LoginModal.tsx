@@ -111,17 +111,17 @@ export default function LoginModal() {
                 onChange={(e) => setEmail(e.target.value)}
                 type="text"
                 placeholder="Email"
-                className="input input-bordered input-info w-full my-2"
+                className="input input-bordered input-info w-full my-2 text-black-lover"
               />
               <input
                 onChange={(e) => setPassword(e.target.value)}
                 type="password"
                 placeholder="Password"
-                className="input input-bordered input-info w-full my-2"
+                className="input input-bordered input-info w-full my-2 text-black-lover"
               />
             </form>
           </div>
-          <Link href="/reset-pwd" className="link  mb-3 ml-8">
+          <Link href="/reset-pwd" className="link text-pink-lover mb-3 ml-8">
             Forgot your password?
           </Link>
           <div className="flex justify-evenly modal-action">

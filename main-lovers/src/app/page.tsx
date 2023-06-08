@@ -6,52 +6,30 @@ import axios from "axios";
 import { redirect } from "next/navigation";
 import Drawer from "./components/Drawer";
 import { SocketProvider } from "./context/SocketContext";
+// import DrawerLayout from "./components/drawerLayout"
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
-  const email = session?.user.email;
-  const response = await axios.get(
-    `${process.env.HOSTNAME}/api/users?query=${email}`
-  );
-  const user = response.data.data?._id;
+  console.log({ session });
+  // IF JUST REGISTERED - REDIRECTION ↴
 
-  if (!session || !session.user || !session.user.email) {
-  } else {
-    const email = session.user.email;
-    const response = await axios.get(
-      `${process.env.HOSTNAME}/api/users?query=${email}`
+  /////////// VERSION#1
+  if (session?.user.sub) {
+    const resFirstime = await axios.get(
+      `${process.env.HOSTNAME}/api/users/${session?.user.sub}`
     );
-    const user = response.data.data?._id;
-
-    if (user) {
-      const resFirstime = await axios.get(
-        `${process.env.HOSTNAME}/api/users/${user}`
-      );
-      const userFirstime = resFirstime.data.data.address;
-      if (!userFirstime) {
-        redirect("/complete_profile");
-      }
+    // console.trace(resFirstime);
+    const userFirstime = resFirstime.data.data.address;
+    if (!userFirstime) {
+      redirect("/complete_profile");
     }
   }
 
+  ///////// VERSION#2
+  // if (session && !session?.user?.city) redirect("/complete_profile");
+
   return (
-    <main className="flex max-h-screen flex-col items-center justify-between">
-      {session ? (
-        <div
-          className="hero h-[90vh] w-full"
-          style={{
-            backgroundImage: `url("https://cdn.shopify.com/s/files/1/0295/8036/1827/articles/BLOG_1_fabc8a00-f5a9-41c4-903f-69a7cc2bdeb9.jpg?v=1602242282")`,
-          }}
-        >
-          <SocketProvider>
-            <Drawer />
-            <Swiper userId={user} />
-          </SocketProvider>
-        </div>
-      ) : (
-        <HomeScreen />
-      )}
-    </main>
+    <>{session ? <Swiper userId={session?.user.sub} /> : <HomeScreen />}</>
   );
 }

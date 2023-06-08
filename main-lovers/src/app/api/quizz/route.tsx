@@ -9,7 +9,7 @@ export async function GET() {
   console.log(`Count of documents in quizzquestions: ${count}`);
 
   const data = await Quizz.find();
-  console.log(data);
+  console.log(data[0].questions);
 
   return NextResponse.json({ data });
 }

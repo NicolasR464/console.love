@@ -5,7 +5,7 @@ const authFile = 'playwright/.auth/user.json';
 setup('authenticate', async ({ page }) => {
   
 // Effectue les étapes d'authentification
-  await page.goto('http://localhost:3000/');
+  await page.goto(`${process.env.HOSTNAME}`);
   await page.getByLabel('sername or email address').fill('username');
   await page.getByLabel('Password').fill('password');
   await page.getByRole('button', { name: 'Sign in' }).click();
