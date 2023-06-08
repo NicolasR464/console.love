@@ -437,7 +437,7 @@ function ConsoleSwiper({ userId }: any) {
               userIndex={index}
             />
             <div className="flex-col w-full h-auto absolute mb-[100px] bottom-0 rounded-br-2xl rounded-bl-2xl px-4 text-white">
-              <div className="flex">
+              <div className="flex justify-between">
                 <h3 className="text-3xl font-bold mw-[200px] overflow-hidden">
                   {character.firstName}
                 </h3>
@@ -447,14 +447,16 @@ function ConsoleSwiper({ userId }: any) {
                 <div className="badge badge-ghost font-bold text-white glass">
                   {character.profileStatus}
                 </div>
-                <div className="font-bold">{character.distance} km</div>
               </div>
-              <div className="flex-col">
-                {character.languages.map((language, index) => (
-                  <p key={index} className="text-lg -mb-3">
-                    {language}
-                  </p>
-                ))}
+              <div className="flex justify-between">
+                <div className="flex-col">
+                  {character.languages.map((language, index) => (
+                    <p key={index} className="text-lg -mb-3">
+                      {language}
+                    </p>
+                  ))}
+                </div>
+                <div className="font-bold">{character.distance} km</div>
               </div>
             </div>
           </TinderCard>

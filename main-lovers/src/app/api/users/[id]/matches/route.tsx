@@ -38,7 +38,7 @@ export async function GET(
             {
               geoloc: {
                 $geoWithin: {
-                  $centerSphere: [geoloc, 30 / 6371], // 30km converted to radians (6371 is the approximate radius of the Earth in km)
+                  $centerSphere: [geoloc, 300 / 6371], // 30km converted to radians (6371 is the approximate radius of the Earth in km)
                 },
               },
             },
@@ -64,10 +64,10 @@ export async function GET(
       const usersWithDistance = matchingUsers.map((user) => {
         const distance = Math.round(
           calculateDistance(
-            geoloc[1],
             geoloc[0],
-            user.geoloc[1],
-            user.geoloc[0]
+            geoloc[1],
+            user.geoloc[0],
+            user.geoloc[1]
           )
         );
 
