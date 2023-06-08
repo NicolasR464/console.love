@@ -35,8 +35,7 @@ export async function GET(
           },
           { // The response is including all profiles where at least one language is in common with the 'languages' array of the connected user
             languages: { $in: languages }
-          }
-          ,
+          },
           { // The response is including all profiles where 'sex' is in common with 'attraction' array of the connected user
             sex: { $in: attraction }
           },

@@ -209,7 +209,7 @@ export default function MyMessages() {
 
         return (
           <Link key={chatRoom._id} href={`/my_lobby/${chatRoom._id}`}>
-            <div className="flex w-86 mx-4 my-2 border border-white rounded-2xl py-2 relative">
+            <div className="flex w-86 mx-4 my-2 border border-blue-lover/30 rounded-2xl py-2 relative">
               {newMessageCount > 0 && (
                 <span className="absolute top-0 right-0 bg-red-500 text-white h-6 w-6 rounded-full flex items-center justify-center text-sm">{newMessageCount}</span>
               )}
