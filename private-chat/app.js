@@ -47,6 +47,23 @@ io.on("connection", (socket) => {
     }, UserID = ${userId} : ${new Date()}`
   );
 
+  socket.on("disconnect", () => {
+    console.log(
+      `User Disconnected: SocketID = ${
+        socket.id
+      }, UserID = ${userId} : ${new Date()}`
+    );
+  });
+
+  // Log if the socket has reconnected.
+  socket.on("reconnect", (attemptNumber) => {
+    console.log(
+      `User Reconnected: SocketID = ${
+        socket.id
+      }, UserID = ${userId} after ${attemptNumber} attempts : ${new Date()}`
+    );
+  });
+
   socket.on("create-room", async (chatData) => {
     try {
       // Create a new chat room
@@ -65,12 +82,18 @@ io.on("connection", (socket) => {
   });
 
   // FETCH ROOM CONTROL
-
+  socket.on("UNMATCH", () => {
+    console.log("UNMACH RECEIVED"),
+      console.log("ALLO SENT", socket.emit("ALLO"));
+  });
   socket.on("fetch chat rooms", async (userId) => {
     try {
       const chatRooms = await Chat.find({ "chatters.chatId": userId });
+      console.log("chat rooms updated for socket", socket.id);
       socket.emit("chat rooms", chatRooms);
-      // console.log("room fetch", chatRooms);
+      console.log("chat rooms updated for socket", socket.id);
+      console.log("chat rooms updated", chatRooms.length);
+
       // console.log("room fetch userID", userId);
     } catch (err) {
       console.error(err);
@@ -163,7 +186,6 @@ io.on("connection", (socket) => {
         return;
       }
 
-      // Find the chatter whose chatId matches the current user's session ID
       const currentUserChatter = chatRoom.chatters.find(
         (chatter) => chatter.chatId.toString() === session
       );
@@ -176,15 +198,40 @@ io.on("connection", (socket) => {
       currentUserChatter.status = status;
       await chatRoom.save();
 
-      // After saving the status update, check if both chatters have accepted the match
+      // Check if both chatters have accepted the match
       if (chatRoom.chatters.every((chatter) => chatter.status === "accepted")) {
         console.log("Both users accepted the match!");
 
-        // For each chatter involved in the match, get their socket ID and emit the "new match" event to them
         chatRoom.chatters.forEach((chatter) => {
           let targetSocketId = userIdToSocketId[chatter.chatId];
           if (targetSocketId) {
             io.to(targetSocketId).emit("new match", chatRoom);
+          }
+        });
+      } else if (
+        chatRoom.chatters.some((chatter) => chatter.status === "denied")
+      ) {
+        // check if any chatter denied the match
+        console.log("A user denied the match!");
+
+        let deniedUserId = null;
+
+        chatRoom.chatters.forEach((chatter) => {
+          if (chatter.status === "denied") {
+            console.log("chatter that denied", chatter);
+            deniedUserId = chatter.chatId;
+          }
+        });
+
+        chatRoom.chatters.forEach((chatter) => {
+          let targetSocketId = userIdToSocketId[chatter.chatId];
+
+          if (targetSocketId) {
+            console.log("i m going to unmatch");
+            io.to(targetSocketId).emit("unmatch", {
+              chatRoom,
+              deniedUserId,
+            });
           }
         });
       }

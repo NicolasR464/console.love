@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 function InnerCarousel({ pictures, userId, userIndex }: any) {
   const [picturesLength, setPicturesLength] = useState(Number);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = React.useState(0);
 
   useEffect(() => {
     setPicturesLength(pictures.length);
@@ -21,8 +21,8 @@ function InnerCarousel({ pictures, userId, userIndex }: any) {
     );
   };
 
+
   return (
-    // <div className="carousel-container">
       <div id={userId} className="carousel w-[300px] card h-full">
         {pictures.map((picture: any, index: number) => (
           <div
@@ -36,13 +36,12 @@ function InnerCarousel({ pictures, userId, userIndex }: any) {
               className="card"
             />
             <div className="buttons_inner">
-              <a onClick={() => { goToPreviousSlide(userId) }} href={`#slide${userId+(index-1)}`} className="btn btn-circle">❮</a>
-              <a onClick={() => goToNextSlide(userId)} href={`#slide${userId+(index+1)}`} className="btn btn-circle">❯</a>
+              <a onClick={() => { goToPreviousSlide(userId) }} href={`#slide${userId+(index-1)}`} className="btn btn-circle hide-on-mobile">❮</a>
+              <a onClick={() => goToNextSlide(userId)} href={`#slide${userId+(index+1)}`} className="btn btn-circle hide-on-mobile">❯</a>
             </div>
           </div>
         ))}
       </div>
-    // </div>
   );
 }
 

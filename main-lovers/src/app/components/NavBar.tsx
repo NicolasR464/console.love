@@ -1,6 +1,7 @@
 // "use client";
 import Image from "next/image";
 import LogoDesktop from "../../../public/logo_desktop.png";
+import LogoMobile from "../../../public/logo_mobile.png";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import LogOut from "./LogOut";
@@ -31,8 +32,19 @@ export default async function NavBar() {
     <div className="navbar top-0 h-[10vh] bg-black-lover">
       <div className="navbar-start"></div>
       <div className="navbar-center">
-        <Image src={LogoDesktop} style={{ maxWidth: "250px" }} alt=""></Image>
-      </div>
+      <Image
+        src={LogoDesktop}
+        style={{ maxWidth: "250px" }}
+        alt=""
+        className="desktop-image"
+      />
+      <Image
+        src={LogoMobile}
+        style={{ maxWidth: "150px" }}
+        alt=""
+        className="mobile-image"
+      />
+    </div>
 
       <div className="navbar-end">
         {session && (
@@ -47,6 +59,9 @@ export default async function NavBar() {
               tabIndex={0}
               className="translate-y-7 dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
             >
+              <li>
+                <Link href="/">Swiper</Link>
+              </li>
               <li>
                 <Link href="/myprofile">My Profile</Link>
               </li>

@@ -501,6 +501,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                   {errors2.age && (
                     <div className="text-red-600">{errors2.age}</div>
                   )}
+                  <label className="label-text text-white font-bold text-md">Date of Birth :</label>
                   <input
                     type="date"
                     value={userData.age}
@@ -543,7 +544,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                       </div>
                     ))}
                   </div>
-                  <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 mt-60">
+                  <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 mt-[260px]">
                     <button
                       type="submit"
                       onClick={prevSlide}
@@ -566,7 +567,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
 
             {currentSlide === 3 && (
               <div id="slide3" className="carousel-item relative w-full mx-2">
-                <form className="flex flex-col mx-auto w-96">
+                <form className="flex flex-col mx-auto">
                   {errors3.sex && (
                     <div className="text-red-600">{errors3.sex}</div>
                   )}
@@ -574,37 +575,43 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                     <label className="label-text text-white font-bold text-xl">
                       Sex:
                     </label>
-                    <label className="label-text text-white m-1">Male</label>
-                    <input
-                      type="radio"
-                      name="sex"
-                      value="Male"
-                      checked={userData.sex === "Male"}
-                      onChange={handleInputChange}
-                      className="radio radio-secondary"
-                    />
-                    <label className="label-text text-white m-1 ml-2.5	">
-                      Female
-                    </label>
-                    <input
-                      type="radio"
-                      name="sex"
-                      value="Female"
-                      checked={userData.sex === "Female"}
-                      onChange={handleInputChange}
-                      className="radio radio-secondary"
-                    />
-                    <label className="label-text text-white m-1 ml-2.5	">
-                      Other
-                    </label>
-                    <input
-                      type="radio"
-                      name="sex"
-                      value="Other"
-                      checked={userData.sex === "Other"}
-                      onChange={handleInputChange}
-                      className="radio radio-secondary"
-                    />
+                    <div className="flex flex-col">
+                      <div className="flex">
+                        <input
+                          type="radio"
+                          name="sex"
+                          value="Male"
+                          checked={userData.sex === "Male"}
+                          onChange={handleInputChange}
+                          className="radio radio-secondary"
+                        />
+                        <label className="label-text text-white m-1 ml-2.5">Male</label>
+                      </div>
+                      <div className="flex">
+                        <input
+                          type="radio"
+                          name="sex"
+                          value="Female"
+                          checked={userData.sex === "Female"}
+                          onChange={handleInputChange}
+                          className="radio radio-secondary"
+                        />
+                        <label className="label-text text-white m-1 ml-2.5">Female
+                        </label>
+                      </div>
+                      <div className="flex">
+                        <input
+                          type="radio"
+                          name="sex"
+                          value="Other"
+                          checked={userData.sex === "Other"}
+                          onChange={handleInputChange}
+                          className="radio radio-secondary"
+                        />
+                        <label className="label-text text-white m-1 ml-2.5">Other
+                        </label>
+                      </div>
+                    </div>
                   </div>
                   {errors3.attraction && (
                     <div className="text-red-600">{errors3.attraction}</div>
@@ -613,37 +620,41 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                     <label className="label-text text-white font-bold text-xl">
                       Attraction:
                     </label>
-                    <label className="label-text text-white m-1">Male</label>
-                    <input
-                      type="checkbox"
-                      name="attraction"
-                      value="Male"
-                      checked={userData.attraction.includes("Male")}
-                      onChange={handleInputChange}
-                      className="checkbox checkbox-secondary"
-                    />
-                    <label className="label-text text-white m-1 ml-2.5">
-                      Female
-                    </label>
-                    <input
-                      type="checkbox"
-                      name="attraction"
-                      value="Female"
-                      checked={userData.attraction.includes("Female")}
-                      onChange={handleInputChange}
-                      className="checkbox checkbox-secondary"
-                    />
-                    <label className="label-text text-white m-1 ml-2.5">
-                      Other
-                    </label>
-                    <input
-                      type="checkbox"
-                      name="attraction"
-                      value="Other"
-                      checked={userData.attraction.includes("Other")}
-                      onChange={handleInputChange}
-                      className="checkbox checkbox-secondary"
-                    />
+                    <div className="flex-col">
+                      <div className="flex">
+                        <label className="label-text text-white m-1">Male</label>
+                        <input
+                          type="checkbox"
+                          name="attraction"
+                          value="Male"
+                          checked={userData.attraction.includes("Male")}
+                          onChange={handleInputChange}
+                          className="checkbox checkbox-secondary"
+                        />
+                      </div>
+                      <label className="label-text text-white m-1 ml-2.5">
+                        Female
+                      </label>
+                      <input
+                        type="checkbox"
+                        name="attraction"
+                        value="Female"
+                        checked={userData.attraction.includes("Female")}
+                        onChange={handleInputChange}
+                        className="checkbox checkbox-secondary"
+                      />
+                      <label className="label-text text-white m-1 ml-2.5">
+                        Other
+                      </label>
+                      <input
+                        type="checkbox"
+                        name="attraction"
+                        value="Other"
+                        checked={userData.attraction.includes("Other")}
+                        onChange={handleInputChange}
+                        className="checkbox checkbox-secondary"
+                      />
+                    </div>
                   </div>
                   <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 mt-60">
                     <button

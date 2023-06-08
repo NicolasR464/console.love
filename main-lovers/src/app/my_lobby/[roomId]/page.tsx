@@ -22,11 +22,11 @@ export default function page({ params }: any) {
   console.log("MY ROOM ID", roomId);
 
   return (
-    <SocketProvider>
+    <>
       {/* <Drawer /> */}
       {/* <DrawerLayout> */}
       <ChangeRoom roomId={roomId} />
       {/* </DrawerLayout> */}
-    </SocketProvider>
+    </>
   );
 }
