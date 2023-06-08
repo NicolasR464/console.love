@@ -62,30 +62,41 @@ export default function MyMatches(props: any) {
   const socket = useSocket().socket;
   const [currentRoute, setCurrentRoute] = useState<string>("");
 
-  const fetchUserData = useCallback(async (username: any) => {
-    let userDataResponse: any = null;
-    if (!chatUsers.hasOwnProperty(username)) {
-      try {
-        userDataResponse = await axios.get(`http://localhost:3000/api/users/${username}`);
-        console.log(`User data response for user ${username}:`, userDataResponse.data);
-        setChatUsers((prevUsers) => ({
-          ...prevUsers,
-          [username]: userDataResponse.data,
-        }));
-      } catch (error) {
-        console.error(`Error fetching user data for user ${username}:`, error);
+  const fetchUserData = useCallback(
+    async (username: any) => {
+      let userDataResponse: any = null;
+      if (!chatUsers.hasOwnProperty(username)) {
+        try {
+          userDataResponse = await axios.get(
+            `http://localhost:3000/api/users/${username}`
+          );
+          console.log(
+            `User data response for user ${username}:`,
+            userDataResponse.data
+          );
+          setChatUsers((prevUsers) => ({
+            ...prevUsers,
+            [username]: userDataResponse.data,
+          }));
+        } catch (error) {
+          console.error(
+            `Error fetching user data for user ${username}:`,
+            error
+          );
+        }
+      } else {
+        userDataResponse = { data: chatUsers[username] };
       }
-    } else {
-      userDataResponse = {data: chatUsers[username]}
-    }
-    return userDataResponse.data;
-}, [chatUsers]);
+      return userDataResponse.data;
+    },
+    [chatUsers]
+  );
 
   useEffect(() => {
     if (socket === null || !session) return;
 
-    socket.on('connect', () => {
-      socket.emit('fetch match', session?.user.sub);
+    socket.on("connect", () => {
+      socket.emit("fetch match", session?.user.sub);
     });
 
     socket.on("matches", async (resmatches) => {
@@ -116,8 +127,8 @@ export default function MyMatches(props: any) {
       );
 
       const chatUser = await fetchUserData(otherChatter?.chatId);
-      console.log('Sending username to modal:', chatUser?.data?.name || '');
-      props.handleModalOpen(chatUser?.data?.name || '');
+      console.log("Sending username to modal:", chatUser?.data?.name || "");
+      props.handleModalOpen(chatUser?.data?.name || "");
     });
     return () => {
       socket.off("connect");
@@ -203,7 +214,7 @@ export default function MyMatches(props: any) {
     return () => {
       socket.off("unmatch");
     };
-  }, [socket, session, router, newroute]);
+  }, [socket, session, router, newroute, currentRoute]);
 
   return (
     <>
