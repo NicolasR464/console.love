@@ -21,7 +21,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     if (!session) return;
 
-    const newSocket = io(`${process.env.CHAT_ROOT}`, {
+    const newSocket = io(`http://localhost:3001`, {
       auth: { session: session.user.sub },
     });
 
