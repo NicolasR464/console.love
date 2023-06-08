@@ -63,10 +63,10 @@ export default function MyMessages() {
   const [chatUsers, setChatUsers] = useState<{ [key: string]: User }>({});
   const [currentRoomId, setCurrentRoomId] = useState<string | null>(null);
   const socket = useSocket().socket;
-  // console.log("ALLO socket from drawer", socket);
-  // socket?.on("ALLO", () => console.log("ALLO FROM DRAWER", socket));
+  // // console.log("ALLO socket from drawer", socket);
+  // socket?.on("ALLO", () => // console.log("ALLO FROM DRAWER", socket));
 
-  //console.log('DRAWER MOUNTING')
+  //// console.log('DRAWER MOUNTING')
   const fetchUserData = useCallback(
     async (username: any) => {
       if (!chatUsers.hasOwnProperty(username)) {
@@ -90,7 +90,7 @@ export default function MyMessages() {
   );
 
   // useEffect(() => {
-  //   console.log('useEffect executed2', socket);
+  //   // console.log('useEffect executed2', socket);
   //   if(!session || socket === null) return;
   //   const newSocket = io("http://localhost:3001");
   //   // setSocket(newSocket);
@@ -101,20 +101,20 @@ export default function MyMessages() {
   // }, [session]);
 
   useEffect(() => {
-    //console.log("socket",socket)
-    //console.log("session",session)
-    // console.log("useEffect executed");
+    //// console.log("socket",socket)
+    //// console.log("session",session)
+    // // console.log("useEffect executed");
     if (socket === null || !session) return;
 
     // socket?.on("connect", () => {
-    console.log("drawer connected on socket", socket);
+    // console.log("drawer connected on socket", socket);
     socket.emit("fetch chat rooms", session?.user.sub);
     // });
 
     socket?.on("chat rooms", async (rooms) => {
-      // console.log("COUCOU");
+      // // console.log("COUCOU");
       setChatRooms(rooms);
-      // console.log("LOOKING CHAT ROOM", rooms);
+      // // console.log("LOOKING CHAT ROOM", rooms);
       const otherChatters = new Set<string>();
       rooms.forEach((room: any) => {
         room.chatters.forEach((chatter: any) => {
@@ -133,7 +133,7 @@ export default function MyMessages() {
     });
 
     socket?.on("new chat room", (newChatRoom: any) => {
-      //console.log('LOOKING NEW CHAT ROOM', newChatRoom)
+      //// console.log('LOOKING NEW CHAT ROOM', newChatRoom)
       setChatRooms((prevChatRooms) => [newChatRoom, ...prevChatRooms]);
       newChatRoom.chatters.forEach((chatter: any) => {
         if (chatter.chatId !== session?.user.sub) {
@@ -158,7 +158,7 @@ export default function MyMessages() {
             ).getTime() -
             new Date(a.discussion[a.discussion.length - 1]?.timestamp).getTime()
         );
-        //console.log('Updated chat room list:', updatedRooms); // Added //console.log
+        //// console.log('Updated chat room list:', updatedRooms); // Added //console.log
 
         return updatedRooms;
       });
@@ -180,7 +180,7 @@ export default function MyMessages() {
     };
   }, [socket, session, fetchUserData]);
 
-  // console.log("Chat rooms:", chatRooms);
+  // // console.log("Chat rooms:", chatRooms);
 
   if (loading || !session) {
     return (
@@ -205,13 +205,13 @@ export default function MyMessages() {
     const comparison =
       new Date(lastMessageB.timestamp).getTime() -
       new Date(lastMessageA.timestamp).getTime();
-    // console.log(
+    // // console.log(
     //   `Comparing last message in ${a._id} (${lastMessageA.timestamp}) vs last message in ${b._id} (${lastMessageB.timestamp}): comparison = ${comparison}`
     // );
     return comparison;
   });
 
-  // console.log("Sorted chat rooms:", sortedChatRooms);
+  // // console.log("Sorted chat rooms:", sortedChatRooms);
   return (
     <>
       {sortedChatRooms.map((chatRoom, index) => {
@@ -243,10 +243,10 @@ export default function MyMessages() {
             new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         );
         const newMessageCount = newMessageCounts[chatRoom._id] || 0;
-        // console.log("PROFILE PIC URL", chatUser);
+        // // console.log("PROFILE PIC URL", chatUser);
         return (
-          <Link key={chatRoom._id} href={`/my_lobby/${chatRoom._id}`} passHref>
-            <div className="flex w-86 mx-4 my-2 border border-white rounded-2xl py-2 relative">
+          <Link key={chatRoom._id} href={`/my_lobby/${chatRoom._id}`}>
+            <div className="flex w-86 mx-4 my-2 border border-blue-lover/30 rounded-2xl py-2 relative">
               {newMessageCount > 0 && (
                 <span className="absolute top-0 right-0 bg-red-500 text-white h-6 w-6 rounded-full flex items-center justify-center text-sm">
                   {newMessageCount}

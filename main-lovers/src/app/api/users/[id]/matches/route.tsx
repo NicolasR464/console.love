@@ -34,11 +34,11 @@ export async function GET(
             {
               _id: { $ne: userId, $nin: [...matched, ...rejected] }, // Exclude the user with the specified '_id', matched, and rejected users
             },
-            // The response is including all profiles where geoloc data is contained in a 30km radius around the connected user position
+            // Include all profiles within a 30km radius from the specified geolocation
             {
               geoloc: {
                 $geoWithin: {
-                  $centerSphere: [geoloc, 30], // Radius in radians (30km / Earth's radius in km)
+                  $centerSphere: [geoloc, 30 / 6371], // 30km converted to radians (6371 is the approximate radius of the Earth in km)
                 },
               },
             },
@@ -58,17 +58,17 @@ export async function GET(
             },
           ],
         })
-        .exec();
+        .exec(); // Execute the query and retrieve the results
 
       // Calculate the distance for each matching user
       const usersWithDistance = matchingUsers.map((user) => {
         const distance = Math.round(
           calculateDistance(
-            geoloc[0],
             geoloc[1],
-            user.geoloc[0],
-            user.geoloc[1]
-          ) / 1000
+            geoloc[0],
+            user.geoloc[1],
+            user.geoloc[0]
+          )
         );
 
         const age = calculateAge(user.age);

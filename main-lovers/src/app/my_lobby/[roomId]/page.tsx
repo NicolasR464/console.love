@@ -19,7 +19,7 @@ export default function page({ params }: any) {
   const urlRoomId = params;
 
   const { roomId }: any = urlRoomId;
-  console.log("MY ROOM ID", roomId);
+  // console.log("MY ROOM ID", roomId);
 
   return (
     <>

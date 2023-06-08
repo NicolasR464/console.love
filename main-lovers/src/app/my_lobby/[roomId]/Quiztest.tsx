@@ -15,8 +15,8 @@ export default function ChatQuiz({
   language,
 }: IQuizProps) {
   const [answer, setAnswer] = useState<string>("");
-  console.log("ChatQuiz Component Called");
-  console.log("language in quizTest", language);
+  // console.log("ChatQuiz Component Called");
+  // console.log("language in quizTest", language);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAnswer(event.target.value);
   };

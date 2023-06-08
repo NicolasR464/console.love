@@ -70,10 +70,10 @@ export default function MyMatches(props: any) {
           userDataResponse = await axios.get(
             `http://localhost:3000/api/users/${username}`
           );
-          console.log(
-            `User data response for user ${username}:`,
-            userDataResponse.data
-          );
+          // console.log(
+          //   `User data response for user ${username}:`,
+          //   userDataResponse.data
+          // );
           setChatUsers((prevUsers) => ({
             ...prevUsers,
             [username]: userDataResponse.data,
@@ -128,7 +128,7 @@ export default function MyMatches(props: any) {
       );
 
       const chatUser = await fetchUserData(otherChatter?.chatId);
-      console.log("Sending username to modal:", chatUser?.data?.name || "");
+      // console.log("Sending username to modal:", chatUser?.data?.name || "");
       props.handleModalOpen(chatUser?.data?.name || "");
     });
     return () => {
@@ -143,31 +143,31 @@ export default function MyMatches(props: any) {
     if (socket == null) return;
 
     setCurrentRoute(newroute);
-    console.log("unmatch : my current route", newroute);
+    // console.log("unmatch : my current route", newroute);
 
     socket.on("unmatch", async ({ chatRoom, deniedUserId }) => {
-      console.log("unmatch: starting to unmatch", chatRoom, deniedUserId);
+      // console.log("unmatch: starting to unmatch", chatRoom, deniedUserId);
       const other = chatRoom.chatters.find(
         (chatter: any) => chatter.chatId !== session?.user.sub
       );
 
-      console.log("unmatch: me =>", session?.user.sub);
-      console.log("unmatch: other =>", other);
-      console.log("unmatch the denier", deniedUserId);
+      // console.log("unmatch: me =>", session?.user.sub);
+      // console.log("unmatch: other =>", other);
+      // console.log("unmatch the denier", deniedUserId);
 
       if (!other) {
-        console.log(`No other user found in chatRoom: ${chatRoom._id}`);
+        // console.log(`No other user found in chatRoom: ${chatRoom._id}`);
         return;
       }
 
-      console.log("unmatch: current route", newroute);
+      // console.log("unmatch: current route", newroute);
       // Check if the user is in the current room
       if (newroute === `/my_lobby/${chatRoom._id}`) {
-        console.log("unmatch: i'm in the lobby", currentRoute);
+        // console.log("unmatch: i'm in the lobby", currentRoute);
 
         // Make the API call only if the user's status is 'denied'
         if (session?.user.sub === deniedUserId) {
-          console.log("unmatch: i'm the one who denied: ", deniedUserId);
+          // console.log("unmatch: i'm the one who denied: ", deniedUserId);
 
           try {
             const response = await axios.get(
@@ -178,11 +178,7 @@ export default function MyMatches(props: any) {
                 position: toast.POSITION.TOP_CENTER,
               });
 
-              if (socket)
-                console.log(
-                  "JE UPDATE MA LIST",
-                  socket.emit("fetch chat rooms", session?.user.sub)
-                );
+              if (socket) socket.emit("fetch chat rooms", session?.user.sub);
             } else {
               toast.error("There was an error processing the request", {
                 position: toast.POSITION.TOP_CENTER,
@@ -202,13 +198,13 @@ export default function MyMatches(props: any) {
       console.log("unmatch: je go update les rooms");
       // Emit fetch chat rooms event for the non-denied user regardless of their current room after a small delay
       if (session?.user.sub !== deniedUserId) {
-        console.log(
-          "unmatch i am fechting my data (not the denied user)",
-          session?.user.sub
-        );
+        // console.log(
+        //   "unmatch i am fechting my data (not the denied user)",
+        //   session?.user.sub
+        // );
         setTimeout(() => {
           socket.emit("fetch chat rooms", session?.user.sub);
-        }, 5000); // delay of 500ms
+        }, 15000); // delay of 500ms
       }
 
       setMatches((prevMatches) =>

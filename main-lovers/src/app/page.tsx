@@ -13,35 +13,23 @@ import { SocketProvider } from "./context/SocketContext";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  // console.log({ session });
-  // console.log(session?.user?.name);
-  // console.log(session?.user?.email);
+  if (!session) redirect("/");
 
-  const email = session?.user.email;
-  const response = await axios.get(
-    `${process.env.HOSTNAME}/api/users?query=${email}`
-  );
-  const user = response.data.data?._id;
+  // console.trace({ session });
+  if (session && !session?.user?.city) redirect("/complete_profile");
 
-  if (!session || !session.user || !session.user.email) {
-    console.log("coucou");
-  } else {
-    const email = session.user.email;
-    const response = await axios.get(
-      `${process.env.HOSTNAME}/api/users?query=${email}`
+  if (session?.user.sub) {
+    const resFirstime = await axios.get(
+      `${process.env.HOSTNAME}/api/users/${session?.user.sub}`
     );
-    const user = response.data.data?._id;
-
-    if (user) {
-      const resFirstime = await axios.get(
-        `${process.env.HOSTNAME}/api/users/${user}`
-      );
-      const userFirstime = resFirstime.data.data.address;
-      if (!userFirstime) {
-        redirect("/complete_profile");
-      }
+    // console.trace(resFirstime);
+    const userFirstime = resFirstime.data.data.address;
+    if (!userFirstime) {
+      redirect("/complete_profile");
     }
   }
 
-  return <>{session ? <Swiper userId={user} /> : <HomeScreen />}</>;
+  return (
+    <>{session ? <Swiper userId={session?.user.sub} /> : <HomeScreen />}</>
+  );
 }

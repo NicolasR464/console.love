@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
   params: any;
 }) {
-  console.log("PARAMS", params);
+  // console.log("PARAMS", params);
   return (
     <AuthProvider>
       <html lang="en">

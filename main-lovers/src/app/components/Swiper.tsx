@@ -14,6 +14,7 @@ import CloseImage from "../../../public/close.png";
 import BackImage from "../../../public/retour.png";
 
 import TinderCard from "./react-tinder-card/";
+import { loadStripe } from "@stripe/stripe-js";
 import { withCoalescedInvoke } from "next/dist/lib/coalesced-function";
 import connectMongo from "../utils/mongoose";
 import axios from "axios";
@@ -45,7 +46,8 @@ function ConsoleSwiper({ userId }: any) {
   const [undoAvailable, setUndoAvailable] = useState(false);
   const [undoData, setUndoData] = useState("");
   const [timerSwipe, setTimerSwipe] = useState(null);
-  const [counterSwipe, setCounterSwipe] = useState(Number);
+  const [counterSwipe, setCounterSwipe] = useState(1);
+  const [isPremium, setIsPremium] = useState(false);
   const socket = useSocket().socket;
 
   // useEffect(() => {
@@ -69,10 +71,11 @@ function ConsoleSwiper({ userId }: any) {
         const userRejectedData = userDataForStack?.data.data.rejected;
         const countSwipe = userDataForStack?.data.data.swipe;
         const checkTimerSwipe = userDataForStack?.data.data.timerSwipe;
+        const isPremium = userDataForStack?.data.data.premium;
 
         // Sets countSwipe from the swipe field in the Connected User Data
         setCounterSwipe(countSwipe);
-
+        setIsPremium(isPremium);
         // CALL the route in /api/users/[id]/matches to create the stack for the connected user
         const response = await axios.get(`/api/users/${userId}/matches`);
         const userData = response.data.users;
@@ -122,6 +125,7 @@ function ConsoleSwiper({ userId }: any) {
       let roomId;
       console.log("MY SOCKET SWIPE", socket);
       if (socket === null) return;
+      const userDataForStack = await axios.get(`/api/users/${userId}`);
 
       // Handle 'chat room created' event
       socket.once("chat room created", async (id) => {
@@ -356,7 +360,7 @@ function ConsoleSwiper({ userId }: any) {
 
   // UNDO FUNCTION
   const undo = async () => {
-    if (undoAvailable && undoData) {
+    if (undoAvailable && undoData && isPremium === true) {
       try {
         // Fetch profile to undo
         const profileToUndo = await axios.get(`/api/users/${undoData}`);
@@ -391,9 +395,24 @@ function ConsoleSwiper({ userId }: any) {
     console.log("Already unliked: ", rejected);
   };
 
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
+
+  const createCheckOutSession = async () => {
+    const stripe: any = await stripePromise;
+    const checkoutSession = await axios.post("/api/checkout_sessions");
+    console.log(checkoutSession.data);
+
+    const result = await stripe.redirectToCheckout({
+      sessionId: checkoutSession.data.id,
+    });
+    if (result.error) {
+      alert(result.error.message);
+    }
+  };
+
   return (
     <>
-      <div className="cardContainer">
+      <div className="cardContainer -mt-[50px]">
         {characters.map((character: Character, index: number) => (
           <TinderCard
             ref={childRefs[index]}
@@ -433,40 +452,102 @@ function ConsoleSwiper({ userId }: any) {
           </TinderCard>
         ))}
 
-        <div className="swipe_buttons_div absolute flex justify-evenly mt-[430px] w-[300px]">
-          <button
-            className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel btn-sm self-center"
-            onClick={undo}
-            id="undo_button"
-            disabled={!undoAvailable}
-          >
-            <Image
-              src={BackImage}
-              style={{ width: "55px", margin: "auto" }}
-              alt=""
-            ></Image>
-          </button>
-          <button
-            className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel"
-            onClick={() => swipe("left")}
-          >
-            <Image
-              src={CloseImage}
-              style={{ width: "25px", margin: "auto" }}
-              alt=""
-            ></Image>
-          </button>
-          <button
-            className="btn-circle btn-outline btn-success border-solid border-2 border-swipeLike"
-            onClick={() => swipe("right")}
-          >
-            <Image
-              src={HeartImage}
-              style={{ width: "25px", margin: "auto" }}
-              alt=""
-            ></Image>
-          </button>
-        </div>
+        {characters.length > 0 && (
+          <div className="swipe_buttons_div absolute flex justify-evenly mt-[430px] w-[300px]">
+            {isPremium === false && (
+              <>
+                <label
+                  id="undo_button"
+                  htmlFor="my_modal_6"
+                  className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel btn-sm self-center"
+                >
+                  <Image
+                    src={BackImage}
+                    style={{ width: "55px", margin: "auto" }}
+                    alt=""
+                  />
+                </label>
+
+                {/* Put this part before </body> tag */}
+                <input
+                  type="checkbox"
+                  id="my_modal_6"
+                  className="modal-toggle"
+                />
+                <div className="modal  bg-black-lover w-[300px] h-[50vh] m-auto rounded-2xl">
+                  <div className="flex flex-col justify-center">
+                    <h2 className="text-xl text-center font-bold text-pink-lover mb-10">
+                      Change your choice with a premium account
+                    </h2>
+                    <button
+                      onClick={createCheckOutSession}
+                      className="btn btn-outline btn-secondary shadow shadow-secondary w-[70%] m-auto"
+                    >
+                      GO PREMIUM 🤩
+                    </button>
+                    <label
+                      htmlFor="my_modal_6"
+                      className="btn mt-10 bg-blue-lover w-[70%] m-auto"
+                    >
+                      Close!
+                    </label>
+                  </div>
+                </div>
+              </>
+            )}
+            {isPremium !== false && (
+              <button
+                className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel btn-sm self-center"
+                onClick={undo}
+                id="undo_button"
+                disabled={!undoAvailable}
+              >
+                <Image
+                  src={BackImage}
+                  style={{ width: "55px", margin: "auto" }}
+                  alt=""
+                />
+              </button>
+            )}
+
+            <button
+              className="btn-circle btn-outline btn-error border-solid border-2 border-swipeCancel"
+              onClick={() => swipe("left")}
+            >
+              <Image
+                src={CloseImage}
+                style={{ width: "25px", margin: "auto" }}
+                alt=""
+              ></Image>
+            </button>
+            <button
+              className="btn-circle btn-outline btn-success border-solid border-2 border-swipeLike"
+              onClick={() => swipe("right")}
+            >
+              <Image
+                src={HeartImage}
+                style={{ width: "25px", margin: "auto" }}
+                alt=""
+              ></Image>
+            </button>
+          </div>
+        )}
+
+        {counterSwipe === 0 && (
+          <div className="flex justify-evenly items-center rounded-2xl h-full glass">
+            <div className="flex flex-col justify-center">
+              <h2 className="text-2xl text-center font-bold text-black-lover">
+                No more Swipes...
+              </h2>
+              <button
+                onClick={createCheckOutSession}
+                className="btn btn-outline btn-secondary shadow shadow-secondary"
+              >
+                GO PREMIUM 🤩
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

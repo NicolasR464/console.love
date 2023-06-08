@@ -33,47 +33,51 @@ type UserData = {
   chatIds: string[];
 };
 export default async function MyProfile() {
-  const session = await getServerSession(authOptions);
+  let session: any;
+  session = await getServerSession(authOptions);
+  if (!session) redirect("/");
 
-  if (!session || !session.user || !session.user.email) {
-    console.log("coucou");
-    redirect("/");
-  } else {
-    const email = session.user.email;
-    const response = await axios.get(
-      `${process.env.HOSTNAME}/api/users?query=${email}`
-    );
-    const user = response.data.data?._id;
+  if (!session?.user?.city) redirect("/complete_profile");
 
-    if (user) {
-      const resFirstime = await axios.get(
-        `${process.env.HOSTNAME}/api/users/${user}`
-      );
-      const userFirstime = resFirstime.data.data.address;
-      if (!userFirstime) {
-        redirect("/complete_profile");
-      }
-    }
-  }
+  // if (!session || !session.user || !session.user.email) {
+  //   console.log("coucou");
+  //   redirect("/");
+  // } else {
+  //   const email = session.user.email;
+  //   const response = await axios.get(
+  //     `${process.env.HOSTNAME}/api/users?query=${email}`
+  //   );
+  //   const user = response.data.data?._id;
 
-  const email = session?.user.email;
-  let user = null;
+  //   if (user) {
+  //     const resFirstime = await axios.get(
+  //       `${process.env.HOSTNAME}/api/users/${user}`
+  //     );
+  //     const userFirstime = resFirstime.data.data.address;
+  //     if (!userFirstime) {
+  //       redirect("/complete_profile");
+  //     }
+  //   }
+  // }
 
-  try {
-    const response = await axios.get(
-      `${process.env.HOSTNAME}/api/users?query=${email}`
-    );
-    user = response.data.data._id.toString();
-  } catch (error) {
-    console.error("Error fetching user ID:", error);
-    return;
-  }
+  // const email = session?.user.email;
+  // let user = null;
+
+  // try {
+  //   const response = await axios.get(
+  //     `${process.env.HOSTNAME}/api/users?query=${email}`
+  //   );
+  //   user = response.data.data._id.toString();
+  // } catch (error) {
+  //   console.error("Error fetching user ID:", error);
+  //   return;
+  // }
 
   let userData: UserData | null = null;
 
   try {
     const response = await axios.get(
-      `${process.env.HOSTNAME}/api/users/${user}`
+      `${process.env.HOSTNAME}/api/users/${session?.user.sub}`
     );
     userData = response.data.data;
   } catch (error) {
@@ -178,7 +182,7 @@ export default async function MyProfile() {
           </div>
         </div>
         <div className="flex justify-end">
-          <EditProfile userID={user} />
+          <EditProfile userID={session?.user.sub} />
         </div>
         <UserPictures arrayPicturesUser={userData?.pictures || []} />
       </div>

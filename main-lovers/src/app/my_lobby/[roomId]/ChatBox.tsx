@@ -35,16 +35,16 @@ export default function ChatBox({ roomId }: any) {
     { username: string; status: string }[]
   >([]);
   const socket = useSocket().socket;
-  console.log("ALLO socket from chatbox", socket);
+  // console.log("ALLO socket from chatbox", socket);
 
   socket?.on("ALLO", () => {
-    console.log("ALLO", socket);
+    // console.log("ALLO", socket);
     // socket.emit("fetch chat rooms", session?.user.sub);
   });
   useEffect(() => {
     const sessionHandler = async () => {
       const resSession = await getSession();
-      console.log(resSession);
+      // console.log(resSession);
       setSession(resSession);
     };
     sessionHandler();
@@ -54,7 +54,7 @@ export default function ChatBox({ roomId }: any) {
     if (socket == null) return;
 
     socket.on("chat error", (message: string) => {
-      console.log(`Received error message: ${message}`);
+      // console.log(`Received error message: ${message}`);
       // Handle the error message appropriately
       window.alert(message);
     });
@@ -165,7 +165,7 @@ export default function ChatBox({ roomId }: any) {
     if (socket == null) return;
 
     socket.on("chat message", (message: IMessage) => {
-      console.log(`Received message: ${JSON.stringify(message)}`);
+      // console.log(`Received message: ${JSON.stringify(message)}`);
       setMessages((msgs) => [...msgs, message]);
     });
 
