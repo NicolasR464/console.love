@@ -8,7 +8,7 @@
 //   await page.goto('http://localhost:3000/');
 //   await page.click('text=Sign Up');
 
-//   await page.fill('input[placeholder="email"]', 'fotesdefraps@msn.com');
+//   await page.fill('input[placeholder="email"]', 'Matthieulegigabg@hotmail.fr');
 //   await page.fill('input[placeholder="password"]', 'azertyu');
 // await page.getByPlaceholder('password').nth(2).fill('azertyu');
 
@@ -22,7 +22,7 @@
 //   await page.getByPlaceholder('Username').fill("j'ai pas 18 ans");
 //   await page.waitForTimeout(500);
 //   await page.getByPlaceholder('First Name').click();
-//   await page.getByPlaceholder('First Name').fill('Matthieu');
+//   await page.getByPlaceholder('First Name').fill('Matthiew');
 //   await page.waitForTimeout(500);
 //   await page.getByPlaceholder('Last Name').click();
 //   await page.getByPlaceholder('Last Name').fill('Perry');
@@ -39,7 +39,6 @@
 //   await page.waitForTimeout(500);
 //   await page.getByRole('textbox').fill('2010-01-01');
 //   await page.getByRole('button', { name: '❯' }).click();
-//   await page.pause()
 //   await expect(page.getByText("You must be over 18 to create a profile", { exact: true }).first()).toBeVisible();
 
 // });

@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react"
 
-
 export default function UserRowAdmin({user}: any) { 
   const [isDeleted, setIsDeleted] = useState(false)
   
@@ -10,13 +9,14 @@ export default function UserRowAdmin({user}: any) {
      
 
   
-        // DELETE request using fetch with async/await
-            await fetch('/api/users/' +userId , { method: 'DELETE' });
-            alert('User delete successfully');
-            setIsDeleted(true)
+     // DELETE request using fetch with async/await
+     await fetch('/api/users/' +userId , { method: 'DELETE' });
+     setIsDeleted(true)
+      alert("user deleted succesfully !")
+    
+         
 
             //Mettre un toaster
-            
                      
   }
  
