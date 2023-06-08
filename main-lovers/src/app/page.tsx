@@ -21,7 +21,7 @@ export default async function Home() {
   ///////////OLD
   if (session?.user.sub) {
     const resFirstime = await axios.get(
-      `${process.env.HOSTNAME}/api/users/${session?.user.sub}`
+      `http://localhost:3000/api/users/${session?.user.sub}`
     );
     // console.trace(resFirstime);
     const userFirstime = resFirstime.data.data.address;

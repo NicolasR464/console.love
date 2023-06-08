@@ -44,6 +44,18 @@ export default function DrawerCarousel({ roomId }: any) {
     };
   }, []);
 
+  const buttonStyle = {
+    right: showDrawer ? "20.2rem" : "24.5rem",
+  };
+
+  if (showDrawer && window.innerWidth >= 768) {
+    buttonStyle.right = "20.7rem";
+  }
+
+  if (!showDrawer && window.innerWidth >= 768) {
+    buttonStyle.right = "1rem";
+  }
+
   return (
     <div className="h-screen">
       <button
@@ -53,13 +65,7 @@ export default function DrawerCarousel({ roomId }: any) {
         } transition-all duration-500 ease-in-out ${
           showDrawer ? "bg-blue-lover" : "bg-pink-lover"
         }`}
-        style={{
-          right: showDrawer ? "20.2rem" : "24.5rem",
-          // Type assertion to override the type of `style` prop
-          ...(showDrawer && window.innerWidth >= 768
-            ? { right: "20.7rem" }
-            : {}) as React.CSSProperties,
-        }}
+        style={buttonStyle}
       >
         {showArrow && (showDrawer ? "❯" : "❮")}
       </button>
@@ -67,7 +73,7 @@ export default function DrawerCarousel({ roomId }: any) {
       
         <div
           tabIndex={0}   
-          className={`absolute right-0 w-[100%] sm:w-96 shadow bg-black-lover h-[90vh] z-999 transition-transform duration-500 ease-in-out ${showDrawer ? 'transform translate-x-0' : 'transform translate-x-full' }`}
+          className={`absolute right-0 w-[100%] sm:w-96 shadow bg-black-lover h-[90vh] z-10 transition-transform duration-500 ease-in-out ${showDrawer ? 'transform translate-x-0' : 'transform translate-x-full' }`}
         >
        <Carousel roomId={ roomId } />
          

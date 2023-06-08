@@ -72,7 +72,7 @@ export default function MyMessages() {
       if (!chatUsers.hasOwnProperty(username)) {
         try {
           const userDataResponse = await axios.get(
-            `${process.env.HOSTNAME}/api/users/${username}`
+            `http://localhost:3000/api/users/${username}`
           );
           setChatUsers((prevUsers) => ({
             ...prevUsers,

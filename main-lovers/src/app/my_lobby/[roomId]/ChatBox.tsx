@@ -84,7 +84,7 @@ export default function ChatBox({ roomId }: any) {
 
       for (const chatter of room.chatters) {
         const res = await axios.get(
-          `${process.env.HOSTNAME}/api/users/${chatter.chatId}`
+          `http://localhost:3000/api/users/${chatter.chatId}`
         );
         usersNameMap.set(chatter.chatId, res.data.data.name);
         usersPicMap.set(chatter.chatId, res.data.data.profilePicture);
