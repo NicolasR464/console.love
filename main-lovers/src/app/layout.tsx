@@ -28,6 +28,7 @@ export default async function RootLayout({
       <html lang="en">
         <head>
           <title>Console.love()</title>
+
           {/* <meta name="description" content={metadata.description} /> */}
           <script
             defer
@@ -47,8 +48,7 @@ export default async function RootLayout({
               >
                 {/* {params !== "/admin" && <Drawer />} */}
                 {session && <Drawer />}
-                {!session && <p>NOT SESSION</p>}
-                {session && <p> SESSION</p>}
+
                 {children}
               </div>
             </main>

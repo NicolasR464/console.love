@@ -16,7 +16,6 @@ export default async function Home() {
 
   console.log({ session });
   // IF JUST REGISTERED - REDIRECTION ↴
-  if (session && !session?.user?.city) redirect("/complete_profile");
 
   /////////// VERSION#1
   if (session?.user.sub) {

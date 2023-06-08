@@ -37,28 +37,28 @@ export default async function MyProfile() {
   session = await getServerSession(authOptions);
   if (!session) redirect("/");
 
-  if (session && !session?.user?.city) redirect("/complete_profile");
+  // if (session && !session?.user?.city) redirect("/complete_profile");
 
-  // if (!session || !session.user || !session.user.email) {
-  //   console.log("coucou");
-  //   redirect("/");
-  // } else {
-  //   const email = session.user.email;
-  //   const response = await axios.get(
-  //     `${process.env.HOSTNAME}/api/users?query=${email}`
-  //   );
-  //   const user = response.data.data?._id;
+  if (!session || !session.user || !session.user.email) {
+    console.log("coucou");
+    redirect("/");
+  } else {
+    const email = session.user.email;
+    const response = await axios.get(
+      `${process.env.HOSTNAME}/api/users?query=${email}`
+    );
+    const user = response.data.data?._id;
 
-  //   if (user) {
-  //     const resFirstime = await axios.get(
-  //       `${process.env.HOSTNAME}/api/users/${user}`
-  //     );
-  //     const userFirstime = resFirstime.data.data.address;
-  //     if (!userFirstime) {
-  //       redirect("/complete_profile");
-  //     }
-  //   }
-  // }
+    if (user) {
+      const resFirstime = await axios.get(
+        `${process.env.HOSTNAME}/api/users/${user}`
+      );
+      const userFirstime = resFirstime.data.data.address;
+      if (!userFirstime) {
+        redirect("/complete_profile");
+      }
+    }
+  }
 
   // const email = session?.user.email;
   // let user = null;
@@ -86,25 +86,33 @@ export default async function MyProfile() {
 
   console.log(userData);
   return (
-    <main className="absolute flex flex-col items-center justify-between bg-white overflow-scroll h-[90vh] w-[100vw]" id="myProfile">
+    <main
+      className="absolute flex flex-col items-center justify-between bg-white overflow-scroll h-[90vh] w-[100vw]"
+      id="myProfile"
+    >
       <div className="flex-col mt-10">
         <div className="hero rounded-3xl">
           <div className="hero-content flex-col lg:flex-row">
-          <Image
-                alt="pictureprofile"
-                src={
-                  userData?.profilePicture?.replace(
-                    "/upload/",
-                    "/upload/w_300,h_400,c_fill,g_auto/"
-                  ) || '/path/to/default/image.jpg'
-                }
-                width={300}
-                height={400}
-                className="max-w-sm rounded-lg shadow-2xl"
-              />
+            <Image
+              alt="pictureprofile"
+              src={
+                userData?.profilePicture?.replace(
+                  "/upload/",
+                  "/upload/w_300,h_400,c_fill,g_auto/"
+                ) || "/path/to/default/image.jpg"
+              }
+              width={300}
+              height={400}
+              className="max-w-sm rounded-lg shadow-2xl"
+            />
             <div>
               <h1 className="text-4xl font-bold text-pink-lover">My Profile</h1>
 
+              {userData?.premium ? (
+                <h4>You are Premium ⭐️</h4>
+              ) : (
+                <h4>Free tear</h4>
+              )}
               <div className="flex flex-col sm:flex">
                 <div className="flex-col">
                   <input
@@ -165,7 +173,9 @@ export default async function MyProfile() {
                     type="text"
                     placeholder="City"
                     value={
-                      userData?.attraction ? userData?.attraction.join(", ") : ""
+                      userData?.attraction
+                        ? userData?.attraction.join(", ")
+                        : ""
                     }
                     className="input input-bordered input-info w-full my-2"
                   />
