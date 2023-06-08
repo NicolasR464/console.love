@@ -37,7 +37,7 @@ export default async function NavBar() {
       />
       <Image
         src={LogoMobile}
-        style={{ maxWidth: "150px" }}
+        style={{ maxWidth: "150px", position: "absolute", left: 10,  }}
         alt=""
         className="mobile-image"
       />

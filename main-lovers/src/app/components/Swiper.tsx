@@ -74,8 +74,12 @@ function ConsoleSwiper({ userId }: any) {
         const isPremium = userDataForStack?.data.data.premium;
 
         // Sets countSwipe from the swipe field in the Connected User Data
-        setCounterSwipe(countSwipe);
         setIsPremium(isPremium);
+        if (isPremium === false) {
+          setCounterSwipe(countSwipe);
+        } else {
+          setCounterSwipe(1000)
+        }
         // CALL the route in /api/users/[id]/matches to create the stack for the connected user
         const response = await axios.get(`/api/users/${userId}/matches`);
         const userData = response.data.users;
@@ -89,6 +93,10 @@ function ConsoleSwiper({ userId }: any) {
     };
     fetchUserStack();
   }, [userId]);
+
+  useEffect(() => {
+    console.log("COUNTERSWIPE => ", counterSwipe)
+  })
 
   // Call put route to populate the Connected User's Matched Array
   const populateMatched = async (idToDelete: string) => {

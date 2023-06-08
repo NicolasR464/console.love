@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import AuthProvider from "./utils/AuthProvider";
 import Drawer from "./components/Drawer";
 import { SocketProvider } from "./context/SocketContext";
-import { usePathname } from "next/navigation";
 import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
