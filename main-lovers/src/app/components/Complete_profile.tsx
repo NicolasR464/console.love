@@ -398,7 +398,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
     <input type="checkbox"      defaultChecked={true} id="my-modal-signup" className="modal-toggle" />
     
         <div className="modal">
-        <div className="modal-box p-10 bg-black-lover">
+        <div className="modal-box p-10 bg-black-lover h-[580px] flex flex-col justify-between">
           {currentPath === "/complete_profile" ? (
             <h3 className="font-bold text-lg text-center mb-4 text-pink-lover">
               Welcome to console.love dear friend! {userIDprop}
@@ -409,10 +409,10 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
               Edit your profile
             </h3>
           ) : null}{" "}
-          <div className="carousel w-full h-72">
+          <div className="carousel w-full h-full">
             {currentSlide === 1 && (
               <div id="slide1" className="carousel-item relative w-full mx-2">
-                <form className="flex flex-col mx-auto w-96">
+                <form className="flex flex-col mx-auto w-full absolute">
                   <input
                     type="text"
                     placeholder="Username"
@@ -461,14 +461,14 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
 
                     {/* Display clickable address suggestions */}
                     {addressSuggestions && addressSuggestions.length > 0 && (
-                      <div className="bg-white">
+                      <div className="absolute w-full">
                         {addressSuggestions
                           .slice(0, 5)
                           .map((suggestion, index) => (
                             <p
                               key={index}
                               onClick={() => handleSuggestionClick(suggestion)}
-                              className="suggestion-item"
+                              className="suggestion-item bg-white py-1 px-2 text-sm hover:bg-pink-lover"
                             >
                               {suggestion.properties.label}
                             </p>
@@ -561,7 +561,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
 
             {currentSlide === 3 && (
               <div id="slide3" className="carousel-item relative w-full mx-2">
-                <form className="flex flex-col mx-auto">
+                <form className="flex flex-col">
                   {errors3.sex && (
                     <div className="text-red-600">{errors3.sex}</div>
                   )}
@@ -611,43 +611,45 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                     <div className="text-red-600">{errors3.attraction}</div>
                   )}
                   <div className="flex m-2.5">
-                    <label className="label-text text-white font-bold text-xl">
-                      Attraction:
-                    </label>
-                    <div className="flex-col">
+                    <div className="flex flex-col">
+                      <label className="label-text text-white font-bold text-xl">
+                        Attraction:
+                      </label>
                       <div className="flex">
-                        <label className="label-text text-white m-1">Male</label>
+                        <div className="flex">
+                          <label className="label-text text-white m-1">Male</label>
+                          <input
+                            type="checkbox"
+                            name="attraction"
+                            value="Male"
+                            checked={userData.attraction.includes("Male")}
+                            onChange={handleInputChange}
+                            className="checkbox checkbox-secondary"
+                          />
+                        </div>
+                        <label className="label-text text-white m-1 ml-2.5">
+                          Female
+                        </label>
                         <input
                           type="checkbox"
                           name="attraction"
-                          value="Male"
-                          checked={userData.attraction.includes("Male")}
+                          value="Female"
+                          checked={userData.attraction.includes("Female")}
+                          onChange={handleInputChange}
+                          className="checkbox checkbox-secondary"
+                        />
+                        <label className="label-text text-white m-1 ml-2.5">
+                          Other
+                        </label>
+                        <input
+                          type="checkbox"
+                          name="attraction"
+                          value="Other"
+                          checked={userData.attraction.includes("Other")}
                           onChange={handleInputChange}
                           className="checkbox checkbox-secondary"
                         />
                       </div>
-                      <label className="label-text text-white m-1 ml-2.5">
-                        Female
-                      </label>
-                      <input
-                        type="checkbox"
-                        name="attraction"
-                        value="Female"
-                        checked={userData.attraction.includes("Female")}
-                        onChange={handleInputChange}
-                        className="checkbox checkbox-secondary"
-                      />
-                      <label className="label-text text-white m-1 ml-2.5">
-                        Other
-                      </label>
-                      <input
-                        type="checkbox"
-                        name="attraction"
-                        value="Other"
-                        checked={userData.attraction.includes("Other")}
-                        onChange={handleInputChange}
-                        className="checkbox checkbox-secondary"
-                      />
                     </div>
                   </div>
                   <div className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 mt-60">
@@ -671,7 +673,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
             )}
             {currentSlide === 4 && (
               <div id="slide4" className="carousel-item relative w-full mx-2 ">
-                <form className="flex flex-col mx-auto w-96">
+                <form className="flex flex-col w-96">
                   <input
                     type="file"
                     placeholder="Profile picture"

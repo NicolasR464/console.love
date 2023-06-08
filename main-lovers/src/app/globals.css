@@ -48,7 +48,9 @@
 /* SCROLLBARS */
 #myMatches::-webkit-scrollbar,
 #myMessages::-webkit-scrollbar,
-#chatBody::-webkit-scrollbar {
+#chatBody::-webkit-scrollbar,
+#languagesSelect::-webkit-scrollbar
+ {
   width: 5px;
 }
 
