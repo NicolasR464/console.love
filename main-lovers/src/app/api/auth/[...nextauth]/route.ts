@@ -76,12 +76,22 @@ export const authOptions: NextAuthOptions = {
       session.user.city = token.city;
       return session;
     },
-    jwt({ token, session, user, account }) {
-      // console.log("NEXT AUTH CALLBACK - FIRST (twt)");
+    jwt({ token, trigger, session, user, account }) {
+      console.log("NEXT AUTH CALLBACK - FIRST (twt)");
 
       // console.trace({ account });
       // console.trace({ user });
+
       // console.log({ token });
+      console.log(trigger);
+
+      console.log(session);
+
+      if (trigger === "update" && session?.premium) {
+        // Note, that `session` can be any arbitrary object, remember to validate it!
+        token.premium = session?.premium;
+      }
+
       if (account) {
         token.accessToken = account.access_token;
         token.premium = user.premium;

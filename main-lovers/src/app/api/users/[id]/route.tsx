@@ -1,7 +1,9 @@
 import connectMongo from "../../../utils/mongoose";
 import { NextResponse, NextRequest } from "next/server";
 import users from "../../../models/users";
-import axios from "axios"
+import axios from "axios";
+import { useSession } from "next-auth/react";
+
 // get specific user with ID
 export async function GET(
   req: Request,
@@ -25,17 +27,19 @@ export async function PUT(
 ) {
   const userId = params.id;
   await connectMongo();
+  const { update } = useSession();
 
   //// ADMIN RIGHTS UPDATE
   const param = req.nextUrl.searchParams;
   if (param.has("mod")) {
     console.log(param);
     const filter = { _id: params.id };
-    const update = { lukqhdsngvkfq: param.get("mod") };
+    const updateU = { lukqhdsngvkfq: param.get("mod") };
 
     try {
-      const res = await users.findOneAndUpdate(filter, update, { new: true });
+      const res = await users.findOneAndUpdate(filter, updateU, { new: true });
       console.log(res);
+      update();
       return NextResponse.json(
         { message: "User admin status updated" },
         { status: 200 }
@@ -66,6 +70,7 @@ export async function PUT(
     }
 
     const updatedUser = await users.updateOne({ _id: userId }, { $set: body });
+    update();
     return NextResponse.json(
       { message: "User successfully updated", data: updatedUser },
       { status: 200 }
@@ -97,10 +102,7 @@ export async function DELETE(
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    await users.updateMany(
-      { matched: userId },
-      { $pull: { matched: userId } }
-    );
+    await users.updateMany({ matched: userId }, { $pull: { matched: userId } });
 
     await users.updateMany(
       { rejected: userId },
@@ -109,11 +111,13 @@ export async function DELETE(
 
     let deletedRoomsResponse = {} as any;
     try {
-      deletedRoomsResponse = await axios.delete(`http://localhost:3001/rooms/${userId}`);
+      deletedRoomsResponse = await axios.delete(
+        `http://localhost:3001/rooms/${userId}`
+      );
     } catch (err) {
       console.error(err);
     }
-    
+
     if (deletedRoomsResponse.data && deletedRoomsResponse.data.deletedRoomIds) {
       for (let roomId of deletedRoomsResponse.data.deletedRoomIds) {
         await users.updateMany(
@@ -132,9 +136,6 @@ export async function DELETE(
     return NextResponse.json({ error }, { status: 500 });
   }
 }
-
-
-
 
 // export async function PATCH(
 //   req: Request,

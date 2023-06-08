@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 
 export default async function CompleteProfile() {
   const session = await getServerSession(authOptions);
-  if (!session) redirect("/");
+  // if (!session) redirect("/");
   // if (session && !session?.user?.city) redirect("/complete_profile");
   /////////////////////////
 

@@ -1,34 +1,30 @@
 "use client";
-// import Stripe from "../components/Stripe";
 import stripeLoad from "../utils/StripeCheckout";
 import { loadStripe } from "@stripe/stripe-js";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import {
   faCircleCheck,
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { log } from "console";
 import Image from "next/image";
 import Confetti from "react-confetti";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
 export default function Subscription(params: any) {
   const [isSubscribed, setIsSubscribed] = useState("pending");
-  const [session, setSession] = useState<{} | null>();
+  const [isCookieSub, setCookieSub] = useState<boolean>();
+  const { data: session, update } = useSession();
 
   useEffect(() => {
-    const sessionHandler = async () => {
-      const resSession = await getSession();
-      console.log(resSession);
-      setSession(resSession);
-    };
-    sessionHandler();
-  }, []);
+    if (!session) return;
+    console.log(session);
+    console.log(session.user.premium);
+    setCookieSub(session.user.premium);
+  }, [session]);
 
   useEffect(() => {
     if (params.searchParams.session_id) {
@@ -42,6 +38,13 @@ export default function Subscription(params: any) {
           console.log(res.data);
           if (res.data.status == 204) {
             setIsSubscribed("confirmed");
+            //UPDATE COOKIE -> https://next-auth.js.org/getting-started/client#updating-the-session
+            update({ premium: true });
+            const updated = update();
+            console.log("😇");
+
+            console.log(updated);
+            fetch(`/api/auth/session?premium=true`);
           }
         })
         .catch((err) => console.log(err));
@@ -69,8 +72,8 @@ export default function Subscription(params: any) {
         <div className="border-solid  w-screen h-screen translate-y-20">
           {isSubscribed == "confirmed" && (
             <div>
-              <Confetti opacity={0.6} colors={["#5271FF", "#FF66C4"]} />
-              <h1 className="text-2xl text-center mt-10 font-bold text-6xl flex items-center justify-center animate-text bg-gradient-to-r from-pink-lover via-blue-lover to-pink-lover bg-clip-text text-transparent text-5xl font-black">
+              <Confetti opacity={0.6} colors={["#00198a", "#690041"]} />
+              <h1 className="text-2xl text-center mt-10 font-bold text-6xl flex items-center justify-center animate-text bg-gradient-to-r from-[#00198a] via-[#00198a] to-[#690041] bg-clip-text text-transparent text-5xl font-black">
                 Congratulation, <br /> you are now a premium member!🔥
               </h1>
 
@@ -209,9 +212,10 @@ export default function Subscription(params: any) {
                     <div className="flex w-full justify-center">
                       <button
                         onClick={createCheckOutSession}
-                        className="btn btn-outline btn-secondary shadow  shadow-secondary"
+                        className="btn disabled:opacity-100 btn-outline btn-secondary shadow  shadow-secondary"
+                        disabled={isCookieSub}
                       >
-                        GO PREMIUM 🤩
+                        {isCookieSub ? "You are subbed ⭐️" : "GO PREMIUM 🤩"}
                       </button>
                     </div>
                   </article>
