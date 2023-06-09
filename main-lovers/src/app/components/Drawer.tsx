@@ -73,6 +73,10 @@ const Drawer: React.FC = () => {
     };
   }, []);
 
+  const handleDrawerClose = () => {
+    setShowDrawer(false);
+  };
+
   return (
     <div className="h-screen">
       <div className="">
@@ -99,7 +103,7 @@ const Drawer: React.FC = () => {
             <MyMatches handleModalOpen={handleModalOpen} />
           </div>
           <div id='myMessages' style={{ display: showMessages ? "block" : "none" }} className="flex-col overflow-scroll h-[90%] mx text-white w-full">
-            <MyMessages />
+            <MyMessages onCloseDrawer={handleDrawerClose}/>
           </div>
         </div>
       </div>

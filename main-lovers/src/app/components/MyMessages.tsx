@@ -52,7 +52,7 @@ interface User {
   };
 }
 
-export default function MyMessages() {
+export default function MyMessages({ onCloseDrawer }: any) {
   const { data: session } = useSession();
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,8 +63,10 @@ export default function MyMessages() {
   const [chatUsers, setChatUsers] = useState<{ [key: string]: User }>({});
   const [currentRoomId, setCurrentRoomId] = useState<string | null>(null);
   const socket = useSocket().socket;
+  const [showDrawer, setShowDrawer] = useState(true);
   // // console.log("ALLO socket from drawer", socket);
   // socket?.on("ALLO", () => // console.log("ALLO FROM DRAWER", socket));
+
 
   //// console.log('DRAWER MOUNTING')
   const fetchUserData = useCallback(
@@ -211,6 +213,15 @@ export default function MyMessages() {
     return comparison;
   });
 
+  
+  const handleLinkClick = () => {
+    onCloseDrawer(false);
+  };
+
+  const handleDrawerClose = () => {
+    setShowDrawer(false);
+  };
+
   // // console.log("Sorted chat rooms:", sortedChatRooms);
   return (
     <>
@@ -245,7 +256,8 @@ export default function MyMessages() {
         const newMessageCount = newMessageCounts[chatRoom._id] || 0;
         // // console.log("PROFILE PIC URL", chatUser);
         return (
-          <Link key={chatRoom._id} href={`/my_lobby/${chatRoom._id}`}>
+          <Link key={chatRoom._id} href={`/my_lobby/${chatRoom._id}`}
+          onClick={handleLinkClick}>
             <div className="flex w-86 mx-4 my-2 border border-blue-lover/30 rounded-2xl py-2 relative">
               {newMessageCount > 0 && (
                 <span className="absolute top-0 right-0 bg-red-500 text-white h-6 w-6 rounded-full flex items-center justify-center text-sm">
