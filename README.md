@@ -19,8 +19,11 @@ Merci de votre attention et n'hésitez pas à rejoindre CONSOLE.LOVE() pour trou
 
 # Getting Started
 - Prequisites
-    
-    
+in /main-lovers/
+    - npm i
+
+in /main-lovers/
+    - npm i
     
 - Installation
 
