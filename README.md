@@ -18,11 +18,11 @@ Merci de votre attention et n'hésitez pas à rejoindre CONSOLE.LOVE() pour trou
 - React Tinder Card (https://www.npmjs.com/package/react-tinder-card)
 
 # Getting Started
-    # Prequisites
+- Prequisites
     
     
     
-    - Installation
+- Installation
 
 # Usage
 
