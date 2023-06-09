@@ -10,10 +10,18 @@ Le principe est simple : vous choisissez un langage de programmation dans un men
 
 Merci de votre attention et n'hésitez pas à rejoindre CONSOLE.LOVE() pour trouver votre âme sœur développeuse ou développeur !
 
-    - Built with
+# Built with
+- NextJS 13.4
+- Express
+- MongoDB
+- socket.io
+- React Tinder Card (https://www.npmjs.com/package/react-tinder-card)
 
 # Getting Started
-    - Prequisites
+    # Prequisites
+    
+    
+    
     - Installation
 
 # Usage
