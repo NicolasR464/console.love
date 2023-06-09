@@ -18,14 +18,19 @@ Merci de votre attention et n'hésitez pas à rejoindre CONSOLE.LOVE() pour trou
 - React Tinder Card (https://www.npmjs.com/package/react-tinder-card)
 
 # Getting Started
-- Prequisites
+- Installation
 in /main-lovers/
     - npm i
 
-in /main-lovers/
+in /private-chat/
     - npm i
     
-- Installation
+- Running
+in /main-lovers/
+    - npm run dev
+
+in /private-chat/
+    - node app.js
 
 # Usage
 
