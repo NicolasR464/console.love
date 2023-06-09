@@ -19,18 +19,16 @@ Merci de votre attention et n'hésitez pas à rejoindre CONSOLE.LOVE() pour trou
 
 # Getting Started
 - Installation
-in /main-lovers/
-    - npm i
-
-in /private-chat/
-    - npm i
+    - in /main-lovers/
+        - npm i
+    - in /private-chat/
+        - npm i
     
 - Running
-in /main-lovers/
-    - npm run dev
-
-in /private-chat/
-    - node app.js
+    - in /main-lovers/
+        - npm run dev
+    - in /private-chat/
+        - node app.js
 
 # Usage
 
