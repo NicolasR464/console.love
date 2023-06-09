@@ -38,7 +38,7 @@ export async function GET(
             {
               geoloc: {
                 $geoWithin: {
-                  $centerSphere: [geoloc, 300 / 6371], // 30km converted to radians (6371 is the approximate radius of the Earth in km)
+                  $centerSphere: [geoloc, 30 / 6371], // 30km converted to radians (6371 is the approximate radius of the Earth in km)
                 },
               },
             },

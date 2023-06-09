@@ -23,9 +23,10 @@ export default async function RootLayout({
   // console.log("PARAMS", params);
   const session = await getServerSession(authOptions);
 
+
   return (
     <AuthProvider>
-      <html lang="en" className="overflow-x-hidden">
+      <html lang="en">
         <head>
           <title>console.love()</title>
 
@@ -46,7 +47,8 @@ export default async function RootLayout({
                   backgroundImage: `url("https://cdn.shopify.com/s/files/1/0295/8036/1827/articles/BLOG_1_fabc8a00-f5a9-41c4-903f-69a7cc2bdeb9.jpg?v=1602242282")`,
                 }}
               >
-                {/* {params !== "/admin" && <Drawer />} */}
+                {/* {params === "/admin" && <Drawer />} */}
+
                 {session && <Drawer />}
 
                 {children}

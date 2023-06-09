@@ -109,7 +109,7 @@ function InnerCarousel({ roomId }: any) {
           <div className="flex justify-between">
             <h3 className="text-3xl font-bold mw-[200px] overflow-hidden">{userData.name}
             </h3>
-            <div className="font-bold self-end mb-[1px]">{userData.city}</div>
+            <div className="font-bold self-end mb-[1px] max-w-[150px] overflow-hidden h-[20px] self-center">{userData.city}</div>
           </div>
           <div className="flex justify-between">
             <div className="font-bold">{userData.sex}</div>
