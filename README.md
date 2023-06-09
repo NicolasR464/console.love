@@ -49,3 +49,16 @@ If you have a suggestion that would make this better, please fork the repo and c
 # Project Link
 
 Project Link: https://github.com//NicolasR464/console.love
+
+# Acknowledgments
+
+- ChartJS
+- Adress autocompletion : api-adress.gouv
+- HD Images in profiles : API Unsplash (API Key needed)
+- Authentication : NextAuth & Git OAuth2
+- DaisyUi
+- Tailwind
+- Stripe
+- Geolocation : Nominatim -> Geopy
+- Python : Script to generate users
+- Mailing : nodemailer
