@@ -75,6 +75,7 @@ export default function ChatBox({ roomId }: any) {
 
     setIsLoading(true);
     socket.on("room-data", async (room: any) => {
+      console.log("coucou", room);
       setMessages(room.discussion);
       setroomDataId(room._id);
 
@@ -125,7 +126,7 @@ export default function ChatBox({ roomId }: any) {
     return () => {
       socket.off("room-data");
     };
-  }, [socket]);
+  }, [socket, roomId]);
 
   // END DISPLAY----------------
 

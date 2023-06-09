@@ -10,7 +10,7 @@ const ChangeRoom = ({ roomId }: any) => {
   return (
     <>
       <ChatBox roomId={roomId} />
-      <DrawerProfile roomId={roomId} />
+      {/* <DrawerProfile roomId={roomId} /> */}
     </>
   );
 };
