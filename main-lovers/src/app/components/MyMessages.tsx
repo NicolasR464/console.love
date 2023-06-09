@@ -215,12 +215,12 @@ export default function MyMessages({ onCloseDrawer }: any) {
 
   
   const handleLinkClick = () => {
-    onCloseDrawer(false);
+    const isMobileScreen = window.matchMedia("(max-width: 768px)").matches;
+    if (isMobileScreen) {
+      onCloseDrawer(false); // Invoke the callback function from the parent component
+    }
   };
 
-  const handleDrawerClose = () => {
-    setShowDrawer(false);
-  };
 
   // // console.log("Sorted chat rooms:", sortedChatRooms);
   return (
