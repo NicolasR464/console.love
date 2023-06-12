@@ -35,7 +35,7 @@ function InnerCarousel({ roomId }: any) {
   useEffect(() => {
     if (!socket) return;
 
-    socket.on("room-data", async (room: any) => {
+    socket.on("room-profile", async (room: any) => {
       for (const chatter of room.chatters) {
         if (chatter.chatId !== session?.user?.sub) {
           setOtherUserId(chatter.chatId);
@@ -49,7 +49,7 @@ function InnerCarousel({ roomId }: any) {
     });
 
     return () => {
-      socket.off("room-data");
+      socket.off("room-profile");
     };
   }, [socket, session, userData]);
 

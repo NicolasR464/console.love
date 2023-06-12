@@ -104,6 +104,7 @@ io.on("connection", (socket) => {
     try {
       const room = await Chat.findById(roomId);
       socket.emit("room-data", room);
+      socket.emit("room-profile", room);
     } catch (err) {
       console.error(err);
     }

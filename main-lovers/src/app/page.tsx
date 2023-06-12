@@ -19,11 +19,20 @@ export default async function Home() {
 
   /////////// VERSION#1
   if (session?.user.sub) {
-    const resFirstime = await axios.get(
-      `http://localhost:3000/api/users/${session?.user.sub}`
+    const data = await fetch(
+      `http://localhost:3000/api/users/${session?.user.sub}`,
+      { cache: "no-store" }
     );
     // console.trace(resFirstime);
-    const userFirstime = resFirstime.data.data.address;
+    // const userFirstime = resFirstime.data.data.address;
+    // if (!userFirstime) {
+    //   redirect("/complete_profile");
+    // }
+    const resFirstime = await data.json();
+    const userFirstime = resFirstime.data.address;
+
+    console.trace(userFirstime);
+
     if (!userFirstime) {
       redirect("/complete_profile");
     }
