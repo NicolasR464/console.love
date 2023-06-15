@@ -132,7 +132,7 @@ export default function SignUpModal() {
       });
       return;
     }
-    signIn("github", { callbackUrl: "/" });
+    signIn("github");
   };
 
   /////////////////////////////

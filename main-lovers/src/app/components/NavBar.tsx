@@ -66,14 +66,20 @@ export default async function NavBar() {
               className="translate-y-7 dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <Link href="/">Swiper</Link>
+                <Link className="text-black" href="/">
+                  Swiper
+                </Link>
               </li>
               <li>
-                <Link href="/myprofile">My Profile</Link>
+                <Link className="text-black" href="/myprofile">
+                  My Profile
+                </Link>
               </li>
               {isAdmin && (
                 <li>
-                  <Link href="/admin">Admin dashboard</Link>
+                  <Link className="text-black" href="/admin">
+                    Admin dashboard
+                  </Link>
                 </li>
               )}
 

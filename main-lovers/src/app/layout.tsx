@@ -23,10 +23,9 @@ export default async function RootLayout({
   // console.log("PARAMS", params);
   const session = await getServerSession(authOptions);
 
-
   return (
     <AuthProvider>
-      <html lang="en">
+      <html data-theme="light" lang="en">
         <head>
           <title>console.love()</title>
 
