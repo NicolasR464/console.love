@@ -64,10 +64,10 @@ export async function GET(
       const usersWithDistance = matchingUsers.map((user) => {
         const distance = Math.round(
           calculateDistance(
-            geoloc[1],
             geoloc[0],
-            user.geoloc[1],
-            user.geoloc[0]
+            geoloc[1],
+            user.geoloc[0],
+            user.geoloc[1]
           )
         );
 

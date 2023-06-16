@@ -25,11 +25,11 @@ export default async function RootLayout({
 
   return (
     <AuthProvider>
-      <html lang="en">
+      <html data-theme="light" lang="en">
         <head>
-          <title>Console.love()</title>
+          <title>console.love()</title>
 
-          {/* <meta name="description" content={metadata.description} /> */}
+          <meta name="description" content={metadata.description} />
           <script
             defer
             src="https://kit.fontawesome.com/766e633129.js"
@@ -46,7 +46,8 @@ export default async function RootLayout({
                   backgroundImage: `url("https://cdn.shopify.com/s/files/1/0295/8036/1827/articles/BLOG_1_fabc8a00-f5a9-41c4-903f-69a7cc2bdeb9.jpg?v=1602242282")`,
                 }}
               >
-                {/* {params !== "/admin" && <Drawer />} */}
+                {/* {params === "/admin" && <Drawer />} */}
+
                 {session && <Drawer />}
 
                 {children}

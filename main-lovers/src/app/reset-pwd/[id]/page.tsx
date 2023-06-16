@@ -67,13 +67,13 @@ export default async function ResetForm(params: any) {
       {userCheck && (
         <div className=" absolute top-40 w-full">
           {" "}
-          <h1 className="text-center">
+          <h1 className="text-start">
             {!doPwdMatch
               ? "Passwords don't match! Try again"
               : "Reset your password"}
           </h1>
           <form
-            className=" items-center  w-full flex flex-col  justify-center"
+            className=" items-start  w-full flex flex-col  justify-center"
             action={newPwdHandle}
           >
             <input

@@ -73,6 +73,10 @@ const Drawer: React.FC = () => {
     };
   }, []);
 
+  const handleDrawerClose = () => {
+    setShowDrawer(false);
+  };
+
   return (
     <div className="h-screen">
       <div className="">
@@ -87,8 +91,8 @@ const Drawer: React.FC = () => {
         </button>
       
         <div
-          tabIndex={0}   
-          className={`absolute left-0 -ml-2 p-2 shadow bg-black-lover w-52 h-[90vh] w-96 z-40 transition-transform duration-500 ease-in-out ${showDrawer ? 'transform translate-x-0' : 'transform -translate-x-full'}`}
+          // tabIndex={0}   
+          className={`absolute left-0 -ml-2 p-2 shadow bg-black-lover h-[90vh] w-96 z-40 transition-transform duration-500 ease-in-out ${showDrawer ? 'transform translate-x-0' : 'transform -translate-x-full'}`}
         >
           <div className="flex text-pink-lover w-[90%] justify-evenly mb-4">
             <button className="btn" onClick={handleMatchesClick}>My Matches</button>
@@ -99,7 +103,7 @@ const Drawer: React.FC = () => {
             <MyMatches handleModalOpen={handleModalOpen} />
           </div>
           <div id='myMessages' style={{ display: showMessages ? "block" : "none" }} className="flex-col overflow-scroll h-[90%] mx text-white w-full">
-            <MyMessages />
+            <MyMessages onCloseDrawer={handleDrawerClose}/>
           </div>
         </div>
       </div>

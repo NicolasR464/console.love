@@ -7,6 +7,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import axios from "axios";
 import { redirect } from "next/navigation";
 import React from "react";
+import SubActions from "../components/SubActions";
 
 type UserData = {
   name: string;
@@ -107,7 +108,7 @@ export default async function MyProfile() {
               {userData?.premium ? (
                 <h4>You are Premium ⭐️</h4>
               ) : (
-                <h4>Free tear</h4>
+                <SubActions />
               )}
               <div className="flex flex-col sm:flex">
                 <div className="flex-col">

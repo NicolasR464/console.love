@@ -219,9 +219,13 @@ export default function MyMatches(props: any) {
   return (
     <>
       {loading ? (
-        <p>No matches yet</p>
+        <div className="flex items-center justify-center ">
+          <p className="text-white">No matches yet</p>
+        </div>
       ) : Matches.length === 0 ? (
-        <p>No matches yet.</p>
+        <div className="flex items-center justify-center ">
+          <p className="text-white">No matches yet</p>
+        </div>
       ) : (
         Matches.map((match) => {
           const otherChatter = match.chatters.find(

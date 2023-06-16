@@ -62,12 +62,12 @@ export default function Subscription(params: any) {
 
   return (
     <main className="flex max-h-screen flex-col items-center justify-between absolute">
+      <Confetti opacity={0.6} colors={["#001a82", "#9e0061"]} />
       <div className="flex ">
-        <div className="border-solid w-[100%] h-[100%] translate-y-20 -mt-[80px]">
+        <div className="border-solid w-[100%] h-[100%]  ">
           {isSubscribed == "confirmed" && (
             <div>
-              <Confetti opacity={0.6} colors={["#5271FF", "#FF66C4"]} />
-              <h1 className="text-2xl text-center mt-10 font-bold text-6xl flex items-center justify-center animate-text bg-gradient-to-r from-pink-lover via-blue-lover to-pink-lover bg-clip-text text-transparent text-5xl font-black">
+              <h1 className="text-2xl text-center mt-10 font-bold text-6xl flex items-center justify-center animate-text bg-gradient-to-r from-[#9e0061] via-[#001368] to-[#9e0061] bg-clip-text text-transparent text-5xl font-black">
                 Congratulation, <br /> you are now a premium member!🔥
               </h1>
 
@@ -120,9 +120,7 @@ export default function Subscription(params: any) {
                       <li>
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span>
-                          Can go back to the profiles you nexted
-                        </span>
+                        <span>Can go back to the profiles you nexted</span>
                         <FontAwesomeIcon
                           className="ml-1"
                           icon={faCircleXmark}
@@ -142,9 +140,7 @@ export default function Subscription(params: any) {
                       <li>
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span>
-                          Unlimited chat with your matches
-                        </span>
+                        <span>Unlimited chat with your matches</span>
                         <FontAwesomeIcon
                           style={{ fontSize: "20px", color: "#7400f8" }}
                           icon={faCircleCheck}
@@ -170,9 +166,7 @@ export default function Subscription(params: any) {
                       <li>
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span>
-                          Can go back to the profiles you nexted
-                        </span>
+                        <span>Can go back to the profiles you nexted</span>
                         <FontAwesomeIcon
                           style={{ fontSize: "20px", color: "#7400f8" }}
                           icon={faCircleCheck}
@@ -193,9 +187,7 @@ export default function Subscription(params: any) {
                       <li>
                         {" "}
                         <i className="fa-solid fa-circle fa-2xs mr-2"></i>
-                        <span>
-                          Unlimited chat with your matches
-                        </span>
+                        <span>Unlimited chat with your matches</span>
                         <FontAwesomeIcon
                           style={{ fontSize: "20px", color: "#7400f8" }}
                           icon={faCircleCheck}

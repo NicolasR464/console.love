@@ -104,6 +104,7 @@ io.on("connection", (socket) => {
     try {
       const room = await Chat.findById(roomId);
       socket.emit("room-data", room);
+      socket.emit("room-profile", room);
     } catch (err) {
       console.error(err);
     }
@@ -237,8 +238,16 @@ io.on("connection", (socket) => {
       }
 
       // Emit the updated chat room data to the current user
-      console.log("sending roomdata");
-      io.to(roomId).emit("room-data", chatRoom);
+
+      chatRoom.chatters.forEach((chatter) => {
+        let targetSocketId = userIdToSocketId[chatter.chatId];
+
+        if (targetSocketId) {
+          console.log("sending roomdata", targetSocketId, chatRoom);
+
+          io.to(targetSocketId).emit("room-data", chatRoom);
+        }
+      });
     } catch (err) {
       console.error(err);
     }

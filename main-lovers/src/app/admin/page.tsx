@@ -25,13 +25,15 @@ export default async function AdminIndex() {
   }
   return (
     <>
+        <div className="h-[100vh] overflow-scroll bg-white/90 -mt-40">
       <div className="mt-32 mx-40">
         <Link href="/admin/stats">
           <button className="btn">STATISTICS</button>
         </Link>
-        <CrudUser />
+          <CrudUser />
         {/* <Dashboard /> */}
       </div>
+        </div>
     </>
   );
 }
