@@ -13,11 +13,6 @@ export const authOptions: NextAuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID!,
       clientSecret: process.env.GITHUB_SECRET!,
-      authorization: {
-        params: {
-          scope: "user:email%20read:user",
-        },
-      },
     }),
     CredentialsProvider({
       name: "Sign In With Credentials",
@@ -35,24 +30,13 @@ export const authOptions: NextAuthOptions = {
         },
       },
 
-      // LOGIN CHECK
       async authorize(credentials, req) {
-        console.log("⭐️");
-
         const email = req?.body?.email;
-        console.trace({ email });
-        console.trace(credentials);
 
         const user = await User.findOne({ email });
-        console.trace({ user });
+
         if (!user) return null;
 
-        // const isPwdValid = await bcrypt.compare(
-        //   user.password,
-        //   req?.body?.password
-        // );
-
-        // return user;
         return user;
       },
     }),
@@ -65,10 +49,6 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     session({ session, token }) {
-      // console.log("NEXT AUTH CALLBACK - SECOND (session)");
-      // // console.log({ token });
-      // console.log({ session });
-
       session.user.sub = token.sub;
       session.user.email = token.email;
       session.user.premium = token.premium;
@@ -77,11 +57,6 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     jwt({ token, session, user, account }) {
-      // console.log("NEXT AUTH CALLBACK - FIRST (twt)");
-
-      // console.trace({ account });
-      // console.trace({ user });
-      // console.log({ token });
       if (account) {
         token.accessToken = account.access_token;
         token.premium = user.premium;

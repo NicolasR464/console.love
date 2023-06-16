@@ -23,14 +23,13 @@ export default async function RootLayout({
   // console.log("PARAMS", params);
   const session = await getServerSession(authOptions);
 
-
   return (
     <AuthProvider>
-      <html lang="en">
+      <html data-theme="light" lang="en">
         <head>
           <title>console.love()</title>
 
-          {/* <meta name="description" content={metadata.description} /> */}
+          <meta name="description" content={metadata.description} />
           <script
             defer
             src="https://kit.fontawesome.com/766e633129.js"

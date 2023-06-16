@@ -390,18 +390,24 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
   };
   return (
     //min-h-screen
-     <div  className="hero h-[90vh] w-full"
-     style={{
-       backgroundImage: `url("https://cdn.shopify.com/s/files/1/0295/8036/1827/articles/BLOG_1_fabc8a00-f5a9-41c4-903f-69a7cc2bdeb9.jpg?v=1602242282")`,
-     }}>
-      
-    <input type="checkbox"      defaultChecked={true} id="my-modal-signup" className="modal-toggle" />
-    
-        <div className="modal">
+    <div
+      className="hero h-[90vh] w-full"
+      style={{
+        backgroundImage: `url("https://cdn.shopify.com/s/files/1/0295/8036/1827/articles/BLOG_1_fabc8a00-f5a9-41c4-903f-69a7cc2bdeb9.jpg?v=1602242282")`,
+      }}
+    >
+      <input
+        type="checkbox"
+        defaultChecked={true}
+        id="my-modal-signup"
+        className="modal-toggle"
+      />
+
+      <div className="modal">
         <div className="modal-box p-10 bg-black-lover h-[580px] flex flex-col justify-between">
           {currentPath === "/complete_profile" ? (
             <h3 className="font-bold text-lg text-center mb-4 text-pink-lover">
-              Welcome to console.love dear friend! {userIDprop}
+              Welcome to console.love dear friend!
             </h3>
           ) : null}
           {currentPath === "/myprofile" ? (
@@ -416,7 +422,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                   <input
                     type="text"
                     placeholder="Username"
-                    className="input input-bordered input-info w-full my-2"
+                    className="input input-bordered text-black input-info w-full my-2"
                     name="name"
                     value={userData.name}
                     onChange={handleInputChange}
@@ -427,7 +433,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                   <input
                     type="text"
                     placeholder="First Name"
-                    className="input input-bordered input-info w-full my-2"
+                    className="input input-bordered input-info w-full my-2 text-black "
                     name="firstName"
                     value={userData.firstName}
                     onChange={handleInputChange}
@@ -438,7 +444,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                   <input
                     type="text"
                     placeholder="Last Name"
-                    className="input input-bordered input-info w-full my-2"
+                    className="input text-black  input-bordered input-info w-full my-2"
                     name="lastName"
                     value={userData.lastName}
                     onChange={handleInputChange}
@@ -450,7 +456,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                     <input
                       type="text"
                       placeholder="Address"
-                      className="input input-bordered input-info w-full my-2"
+                      className="input text-black  input-bordered input-info w-full my-2"
                       name="address"
                       value={userData.address}
                       onChange={handleAddressChange}
@@ -468,7 +474,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                             <p
                               key={index}
                               onClick={() => handleSuggestionClick(suggestion)}
-                              className="suggestion-item bg-white py-1 px-2 text-sm hover:bg-pink-lover"
+                              className="suggestion-item text-black bg-white py-1 px-2 text-sm hover:bg-pink-lover"
                             >
                               {suggestion.properties.label}
                             </p>
@@ -495,13 +501,15 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                   {errors2.age && (
                     <div className="text-red-600">{errors2.age}</div>
                   )}
-                  <label className="label-text text-white font-bold text-md">Date of Birth :</label>
+                  <label className="label-text text-white font-bold text-md">
+                    Date of Birth :
+                  </label>
                   <input
                     type="date"
                     value={userData.age}
                     onChange={handleInputChange}
                     name="age"
-                    className="input input-bordered input-info w-full my-2"
+                    className="input text-black  input-bordered input-info w-full my-2"
                   />
                   {errors2.languages && (
                     <div className="text-red-600">{errors2.languages}</div>
@@ -579,7 +587,9 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                           onChange={handleInputChange}
                           className="radio radio-secondary"
                         />
-                        <label className="label-text text-white m-1 ml-2.5">Male</label>
+                        <label className="label-text text-white m-1 ml-2.5">
+                          Male
+                        </label>
                       </div>
                       <div className="flex">
                         <input
@@ -590,7 +600,8 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                           onChange={handleInputChange}
                           className="radio radio-secondary"
                         />
-                        <label className="label-text text-white m-1 ml-2.5">Female
+                        <label className="label-text text-white m-1 ml-2.5">
+                          Female
                         </label>
                       </div>
                       <div className="flex">
@@ -602,7 +613,8 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                           onChange={handleInputChange}
                           className="radio radio-secondary"
                         />
-                        <label className="label-text text-white m-1 ml-2.5">Other
+                        <label className="label-text text-white m-1 ml-2.5">
+                          Other
                         </label>
                       </div>
                     </div>
@@ -617,7 +629,9 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
                       </label>
                       <div className="flex">
                         <div className="flex">
-                          <label className="label-text text-white m-1">Male</label>
+                          <label className="label-text text-white m-1">
+                            Male
+                          </label>
                           <input
                             type="checkbox"
                             name="attraction"

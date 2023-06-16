@@ -47,16 +47,12 @@ html {
   background-color: rgb(54, 94, 77);
 }
 
-
-
-
 /* SCROLLBARS */
 #myMatches::-webkit-scrollbar,
 #myMessages::-webkit-scrollbar,
 #chatBody::-webkit-scrollbar,
 #languagesSelect::-webkit-scrollbar,
-#myProfile::-webkit-scrollbar
- {
+#myProfile::-webkit-scrollbar {
   width: 5px;
 }
 
@@ -107,8 +103,8 @@ html {
   margin: auto;
 }
 
-
-.cardContainer, .cardContainer .card {
+.cardContainer,
+.cardContainer .card {
   position: relative;
   width: 300px;
   flex-direction: row;
@@ -117,7 +113,6 @@ html {
   background-size: cover;
   background-position: center;
 }
-
 
 .infoText {
   width: 100%;
@@ -189,11 +184,10 @@ html {
 
 /* END SWIPER */
 
-
 /* CALENDAR */
 
 input[type="date"] {
-  background-color: #FF66C4;
+  background-color: #ff66c4;
   padding: 15px;
 
   font-family: "Roboto Mono", monospace;
@@ -205,7 +199,7 @@ input[type="date"] {
 }
 
 ::-webkit-calendar-picker-indicator {
-  background-color: #BD93F9;
+  background-color: #bd93f9;
   padding: 5px;
   cursor: pointer;
   border-radius: 3px;
@@ -229,9 +223,12 @@ input[type="date"] {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
+  background: linear-gradient(
+      to bottom,
       transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
   font-family: "Courier New", Courier, monospace !important;
 }
 
@@ -252,19 +249,16 @@ svg {
   margin-top: -49px !important;
 }
 
-
 @media only screen and (min-width: 500px) {
   #drawer {
     z-index: 999 !important;
   }
 }
 
-
 th,
 td {
   background-color: unset !important;
 }
-
 
 /* RESPONSIVE MOBILE */
 @media only screen and (max-width: 500px) {

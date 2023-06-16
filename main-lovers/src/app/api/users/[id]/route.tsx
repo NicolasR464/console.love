@@ -1,7 +1,7 @@
 import connectMongo from "../../../utils/mongoose";
 import { NextResponse, NextRequest } from "next/server";
 import users from "../../../models/users";
-import axios from "axios"
+import axios from "axios";
 // get specific user with ID
 export async function GET(
   req: Request,
@@ -97,10 +97,7 @@ export async function DELETE(
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    await users.updateMany(
-      { matched: userId },
-      { $pull: { matched: userId } }
-    );
+    await users.updateMany({ matched: userId }, { $pull: { matched: userId } });
 
     await users.updateMany(
       { rejected: userId },
@@ -109,11 +106,13 @@ export async function DELETE(
 
     let deletedRoomsResponse = {} as any;
     try {
-      deletedRoomsResponse = await axios.delete(`${process.env.CHAT_ROOT}/rooms/${userId}`);
+      deletedRoomsResponse = await axios.delete(
+        `http://localhost:3001/rooms/${userId}`
+      );
     } catch (err) {
       console.error(err);
     }
-    
+
     if (deletedRoomsResponse.data && deletedRoomsResponse.data.deletedRoomIds) {
       for (let roomId of deletedRoomsResponse.data.deletedRoomIds) {
         await users.updateMany(
@@ -132,9 +131,6 @@ export async function DELETE(
     return NextResponse.json({ error }, { status: 500 });
   }
 }
-
-
-
 
 // export async function PATCH(
 //   req: Request,
