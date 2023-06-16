@@ -41,7 +41,7 @@ function InnerCarousel({ roomId }: any) {
           setOtherUserId(chatter.chatId);
         }
         const res = await axios.get(
-          `http://localhost:3000/api/users/${chatter.chatId}`
+          `${process.env.HOSTNAME}/api/users/${chatter.chatId}`
         );
         setUserData(res.data.data);
         setPictures(res.data.data.pictures);

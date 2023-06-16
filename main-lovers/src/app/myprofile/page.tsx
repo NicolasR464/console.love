@@ -78,7 +78,7 @@ export default async function MyProfile() {
 
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/users/${session?.user.sub}`
+      `${process.env.HOSTNAME}/api/users/${session?.user.sub}`
     );
     userData = response.data.data;
   } catch (error) {

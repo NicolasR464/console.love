@@ -18,8 +18,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         quantity: 1,
       },
     ],
-    success_url: `http://localhost:3000/subscription?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `http://localhost:3000/subscription?status=cancel`,
+    success_url: `${process.env.HOSTNAME}/subscription?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.HOSTNAME}/subscription?status=cancel`,
   });
   return NextResponse.json({ id: session.id, session: session });
 }

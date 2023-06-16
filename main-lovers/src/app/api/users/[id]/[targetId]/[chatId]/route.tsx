@@ -25,7 +25,7 @@ export async function GET(
 
     // Delete the chat room
     const deleteResponse = await axios.delete(
-      `http://localhost:3001/room/${chatId}`
+      `${process.env.CHAT_ROOT}/room/${chatId}`
     );
     console.log(deleteResponse.data);
 

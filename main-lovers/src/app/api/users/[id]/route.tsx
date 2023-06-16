@@ -107,7 +107,7 @@ export async function DELETE(
     let deletedRoomsResponse = {} as any;
     try {
       deletedRoomsResponse = await axios.delete(
-        `http://localhost:3001/rooms/${userId}`
+        `${process.env.CHAT_ROOT}/rooms/${userId}`
       );
     } catch (err) {
       console.error(err);

@@ -20,7 +20,7 @@ export default async function Home() {
   /////////// VERSION#1
   if (session?.user.sub) {
     const data = await fetch(
-      `http://localhost:3000/api/users/${session?.user.sub}`,
+      `${process.env.HOSTNAME}/api/users/${session?.user.sub}`,
       { cache: "no-store" }
     );
     // console.trace(resFirstime);
