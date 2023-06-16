@@ -420,10 +420,10 @@ function ConsoleSwiper({ userId }: any) {
 
   return (
     <>
-      <div className="cardContainer -mt-[50px]">
+      <div className="cardContainer -mt-[50px] cursor-grab">
         {characters.length === 0 ? (
           <div className="flex items-center justify-center h-screen text-center px-4">
-            <p className="text-white">
+            <p className="text-white text-2xl">
               Sorry, we could not find anybody that matches with you. Try a
               different location.
             </p>
