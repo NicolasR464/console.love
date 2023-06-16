@@ -29,7 +29,7 @@ export default async function RootLayout({
         <head>
           <title>console.love()</title>
 
-          {/* <meta name="description" content={metadata.description} /> */}
+          <meta name="description" content={metadata.description} />
           <script
             defer
             src="https://kit.fontawesome.com/766e633129.js"
