@@ -67,7 +67,6 @@ export default function MyMessages({ onCloseDrawer }: any) {
   // // console.log("ALLO socket from drawer", socket);
   // socket?.on("ALLO", () => // console.log("ALLO FROM DRAWER", socket));
 
-
   //// console.log('DRAWER MOUNTING')
   const fetchUserData = useCallback(
     async (username: any) => {
@@ -186,9 +185,16 @@ export default function MyMessages({ onCloseDrawer }: any) {
 
   if (loading || !session) {
     return (
-      <p>
-        <span className="loading loading-spinner text-secondary"></span>
-      </p>
+      <div className="flex items-center justify-center">
+        <div
+          className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] text-pink-lover motion-reduce:animate-[spin_1.5s_linear_infinite]"
+          role="status"
+        >
+          <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+            Loading...
+          </span>
+        </div>
+      </div>
     );
   }
 
@@ -213,7 +219,6 @@ export default function MyMessages({ onCloseDrawer }: any) {
     return comparison;
   });
 
-  
   const handleLinkClick = () => {
     const isMobileScreen = window.matchMedia("(max-width: 768px)").matches;
     if (isMobileScreen) {
@@ -221,79 +226,78 @@ export default function MyMessages({ onCloseDrawer }: any) {
     }
   };
 
-
   // // console.log("Sorted chat rooms:", sortedChatRooms);
   return (
     <>
-      {sortedChatRooms.map((chatRoom, index) => {
-        const otherChatter = chatRoom.chatters.find(
-          (chatter) => session && chatter.chatId !== session.user.sub
-        );
-
-        if (!otherChatter) {
-          return (
-            <div key={index}>
-              {" "}
-              <span className="loading loading-spinner text-secondary"></span>
-            </div>
+      {sortedChatRooms.length === 0 ? (
+        <div className="flex items-center justify-center ">
+          <p className="text-white">No contacts yet</p>
+        </div>
+      ) : (
+        sortedChatRooms.map((chatRoom, index) => {
+          const otherChatter = chatRoom.chatters.find(
+            (chatter) => session && chatter.chatId !== session.user.sub
           );
-        }
 
-        const chatUser = chatUsers[otherChatter.chatId];
+          if (!otherChatter) {
+            return null;
+          }
 
-        if (!chatUser) {
-          return (
-            <div key={index}>
-              <span className="loading loading-spinner text-secondary"></span>
-            </div>
+          const chatUser = chatUsers[otherChatter.chatId];
+
+          if (!chatUser) {
+            return null;
+          }
+
+          const sortedDiscussion = [...chatRoom.discussion].sort(
+            (a, b) =>
+              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
           );
-        }
+          const newMessageCount = newMessageCounts[chatRoom._id] || 0;
 
-        const sortedDiscussion = [...chatRoom.discussion].sort(
-          (a, b) =>
-            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-        );
-        const newMessageCount = newMessageCounts[chatRoom._id] || 0;
-        // // console.log("PROFILE PIC URL", chatUser);
-        return (
-          <Link key={chatRoom._id} href={`/my_lobby/${chatRoom._id}`}
-          onClick={handleLinkClick}>
-            <div className="flex w-86 mx-4 my-2 border border-blue-lover/30 rounded-2xl py-2 relative">
-              {newMessageCount > 0 && (
-                <span className="absolute top-0 right-0 bg-red-500 text-white h-6 w-6 rounded-full flex items-center justify-center text-sm">
-                  {newMessageCount}
-                </span>
-              )}
-              <div className="avatar p-2">
-                <div className="w-14 h-14 rounded-full">
-                  <Image
-                    width={25}
-                    height={25}
-                    alt="users"
-                    src={chatUser.data?.profilePicture}
-                    className={`rounded-full border-2 ${
-                      chatUser?.data?.sex === "Male"
-                        ? "border-blue-lover"
-                        : chatUser?.data?.sex === "Female"
-                        ? "border-pink-lover"
-                        : "border-purple-lover"
-                    }`}
-                  />
+          return (
+            <Link
+              key={chatRoom._id}
+              href={`/my_lobby/${chatRoom._id}`}
+              onClick={handleLinkClick}
+            >
+              <div className="flex w-86 mx-4 my-2 border border-blue-lover/30 rounded-2xl py-2 relative">
+                {newMessageCount > 0 && (
+                  <span className="absolute top-0 right-0 bg-red-500 text-white h-6 w-6 rounded-full flex items-center justify-center text-sm">
+                    {newMessageCount}
+                  </span>
+                )}
+                <div className="avatar p-2">
+                  <div className="w-14 h-14 rounded-full">
+                    <Image
+                      width={25}
+                      height={25}
+                      alt="users"
+                      src={chatUser.data?.profilePicture}
+                      className={`rounded-full border-2 ${
+                        chatUser?.data?.sex === "Male"
+                          ? "border-blue-lover"
+                          : chatUser?.data?.sex === "Female"
+                          ? "border-pink-lover"
+                          : "border-purple-lover"
+                      }`}
+                    />
+                  </div>
+                </div>
+                <div className="ml-2">
+                  <h2 className="font-bold text-lg">{chatUser?.data?.name}</h2>
+
+                  {sortedDiscussion.length > 0 ? (
+                    <p className="text-gray-500">{sortedDiscussion[0]?.body}</p>
+                  ) : (
+                    <p className="text-gray-500">No message yet</p>
+                  )}
                 </div>
               </div>
-              <div className="ml-2">
-                <h2 className="font-bold text-lg">{chatUser?.data?.name}</h2>
-
-                {sortedDiscussion.length > 0 ? (
-                  <p className="text-gray-500">{sortedDiscussion[0]?.body}</p>
-                ) : (
-                  <p className="text-gray-500">No message yet</p>
-                )}
-              </div>
-            </div>
-          </Link>
-        );
-      })}
+            </Link>
+          );
+        })
+      )}
     </>
   );
 }

@@ -78,7 +78,7 @@ function ConsoleSwiper({ userId }: any) {
         if (isPremium === false) {
           setCounterSwipe(countSwipe);
         } else {
-          setCounterSwipe(1000)
+          setCounterSwipe(1000);
         }
         // CALL the route in /api/users/[id]/matches to create the stack for the connected user
         const response = await axios.get(`/api/users/${userId}/matches`);
@@ -95,8 +95,8 @@ function ConsoleSwiper({ userId }: any) {
   }, [userId]);
 
   useEffect(() => {
-    console.log("COUNTERSWIPE => ", counterSwipe)
-  })
+    console.log("COUNTERSWIPE => ", counterSwipe);
+  });
 
   // Call put route to populate the Connected User's Matched Array
   const populateMatched = async (idToDelete: string) => {
@@ -114,7 +114,7 @@ function ConsoleSwiper({ userId }: any) {
         `/api/users/${userId}`,
         newMatchedData
       );
-      console.log("je vais créer ma room");
+      //   console.log("je vais créer ma room");
       // ROOM CREATION WHEN MATCH -------------------------------------------
       const chatData = {
         chatters: [
@@ -128,10 +128,10 @@ function ConsoleSwiper({ userId }: any) {
           },
         ],
       };
-      console.log("MON CUR USER", userId);
-      console.log("MON OTHER USER", idToDelete);
+      //  console.log("MON CUR USER", userId);
+      // console.log("MON OTHER USER", idToDelete);
       let roomId;
-      console.log("MY SOCKET SWIPE", socket);
+      //  console.log("MY SOCKET SWIPE", socket);
       if (socket === null) return;
       const userDataForStack = await axios.get(`/api/users/${userId}`);
 
@@ -156,8 +156,8 @@ function ConsoleSwiper({ userId }: any) {
           chatIds: [...existingOtherUserUpdated.chatIds, roomId],
         };
 
-        console.log("HOW DOES MY ROOM ID LOOK", roomId);
-        console.log("jajoute ma room");
+        //   console.log("HOW DOES MY ROOM ID LOOK", roomId);
+        //  console.log("jajoute ma room");
         // MATCHED DATA DON'T TOUCH
         const updateUserChatIds = await axios.put(
           `/api/users/${userId}`,
@@ -169,13 +169,13 @@ function ConsoleSwiper({ userId }: any) {
         );
         // Fetch chat rooms after a new chat room is created
         socket.emit("fetch chat rooms", userId);
-        console.log(updateResponse);
-        console.log("room created", roomId);
-        console.log("room added", updateUserChatIds);
-        console.log("room added to other", updateOtherUserChatIds);
+        // console.log(updateResponse);
+        // console.log("room created", roomId);
+        // console.log("room added", updateUserChatIds);
+        // console.log("room added to other", updateOtherUserChatIds);
       });
 
-      console.log("JE CREE LA ROOM", socket.emit("create-room", chatData));
+      socket.emit("create-room", chatData);
     } catch (error) {
       console.log("Error updating main user data:", error);
     }
@@ -218,7 +218,7 @@ function ConsoleSwiper({ userId }: any) {
     // Find the user data from the db array using the ID
     const response = axios.get(`/api/users/${userId}`);
     const userData = response;
-    console.log("User Data:", userData);
+    // console.log("User Data:", userData);
     return userData;
   };
 
@@ -251,7 +251,7 @@ function ConsoleSwiper({ userId }: any) {
     setLastDirection(direction);
 
     if (direction === "left") {
-      console.log("_id Unliked : " + idToDelete);
+      // console.log("_id Unliked : " + idToDelete);
       setUndoData(idToDelete);
 
       const filteredDb = characters.filter((person) => {
@@ -290,7 +290,7 @@ function ConsoleSwiper({ userId }: any) {
       if (counterSwipe < 1) {
         return; // Exit the function and disable swipe when counterSwipe is 0
       } else {
-        console.log("_id Liked : " + idToDelete);
+        // console.log("_id Liked : " + idToDelete);
 
         // Sets the undoData (Swiped profileId) to empty on right swipe
         setUndoData("");
@@ -301,8 +301,8 @@ function ConsoleSwiper({ userId }: any) {
         matched.push(idToDelete);
         characters.pop();
 
-        console.log("MATCHED : ", matched);
-        console.log("CHARACTERS : ", characters);
+        // console.log("MATCHED : ", matched);
+        // console.log("CHARACTERS : ", characters);
 
         // Call the populateMatched function to update the user on like
         populateMatched(idToDelete);
@@ -313,8 +313,8 @@ function ConsoleSwiper({ userId }: any) {
             const response = await axios.get(`/api/users/${userId}`);
             const userDataForSwipe = response.data.data.swipe;
             const timerSwipe = response.data.data?.timerSwipe;
-            console.log("LEFT SWIPE =>", userDataForSwipe);
-            console.log("TIMER =>", timerSwipe);
+            // console.log("LEFT SWIPE =>", userDataForSwipe);
+            // console.log("TIMER =>", timerSwipe);
 
             const swipeLeft = {
               swipe: userDataForSwipe - 1,
@@ -324,7 +324,7 @@ function ConsoleSwiper({ userId }: any) {
               `/api/users/${userId}`,
               swipeLeft
             );
-            console.log(newSwipeLeft);
+            // console.log(newSwipeLeft);
 
             // Set a Timestamp if doesn't exists already
             if (!timerSwipe) {
@@ -332,7 +332,7 @@ function ConsoleSwiper({ userId }: any) {
                 timerSwipe: Date.now(),
               };
               const newTimer = await axios.put(`/api/users/${userId}`, timer);
-              console.log(newTimer);
+              // console.log(newTimer);
             }
           } catch (error) {
             console.log("Error updating user data:", error);
@@ -346,7 +346,7 @@ function ConsoleSwiper({ userId }: any) {
         try {
           const response = await axios.get(`/api/users/${idToDelete}`);
           const otherUserId = response.data.data;
-          console.log("OTHERUSER", otherUserId);
+          // console.log("OTHERUSER", otherUserId);
 
           const newMatchedArrayOtherUser = [...otherUserId.matched, userId];
 
@@ -374,7 +374,7 @@ function ConsoleSwiper({ userId }: any) {
         const profileToUndo = await axios.get(`/api/users/${undoData}`);
         const undoReady = profileToUndo.data.data;
 
-        console.log("Profile to undo => ", undoReady);
+        // console.log("Profile to undo => ", undoReady);
 
         // Add the response at the end of the characters array
         setCharacters([...characters, undoReady]);
@@ -408,7 +408,7 @@ function ConsoleSwiper({ userId }: any) {
   const createCheckOutSession = async () => {
     const stripe: any = await stripePromise;
     const checkoutSession = await axios.post("/api/checkout_sessions");
-    console.log(checkoutSession.data);
+    // console.log(checkoutSession.data);
 
     const result = await stripe.redirectToCheckout({
       sessionId: checkoutSession.data.id,
@@ -421,46 +421,55 @@ function ConsoleSwiper({ userId }: any) {
   return (
     <>
       <div className="cardContainer -mt-[50px]">
-        {characters.map((character: Character, index: number) => (
-          <TinderCard
-            ref={childRefs[index]}
-            className="swipe pressable"
-            key={character._id}
-            onSwipe={(dir: any) => swiped(dir, character._id)}
-            preventSwipe={
-              counterSwipe < 1 ? ["up", "down", "right"] : ["up", "down"]
-            }
-          >
-            <InnerCarousel
-              pictures={character.pictures}
-              userId={character._id}
-              userIndex={index}
-            />
-            <div className="flex-col w-full h-auto absolute mb-[100px] bottom-0 rounded-br-2xl rounded-bl-2xl px-4 text-white">
-              <div className="flex justify-between">
-                <h3 className="text-3xl font-bold mw-[200px] overflow-hidden">
-                  {character.firstName}
-                </h3>
-                <h3 className="text-3xl ml-3">{character.age}</h3>
-              </div>
-              <div className="flex justify-between">
-                <div className="badge badge-ghost font-bold text-white glass">
-                  {character.profileStatus}
+        {characters.length === 0 ? (
+          <div className="flex items-center justify-center h-screen text-center px-4">
+            <p className="text-white">
+              Sorry, we could not find anybody that matches with you. Try a
+              different location.
+            </p>
+          </div>
+        ) : (
+          characters.map((character: Character, index: number) => (
+            <TinderCard
+              ref={childRefs[index]}
+              className="swipe pressable"
+              key={character._id}
+              onSwipe={(dir: any) => swiped(dir, character._id)}
+              preventSwipe={
+                counterSwipe < 1 ? ["up", "down", "right"] : ["up", "down"]
+              }
+            >
+              <InnerCarousel
+                pictures={character.pictures}
+                userId={character._id}
+                userIndex={index}
+              />
+              <div className="flex-col w-full h-auto absolute mb-[100px] bottom-0 rounded-br-2xl rounded-bl-2xl px-4 text-white">
+                <div className="flex justify-between">
+                  <h3 className="text-3xl font-bold mw-[200px] overflow-hidden">
+                    {character.firstName}
+                  </h3>
+                  <h3 className="text-3xl ml-3">{character.age}</h3>
+                </div>
+                <div className="flex justify-between">
+                  <div className="badge badge-ghost font-bold text-white glass">
+                    {character.profileStatus}
+                  </div>
+                </div>
+                <div className="flex justify-between">
+                  <div className="flex-col">
+                    {character.languages.map((language, index) => (
+                      <p key={index} className="text-lg -mb-3">
+                        {language}
+                      </p>
+                    ))}
+                  </div>
+                  <div className="font-bold">{character.distance} km</div>
                 </div>
               </div>
-              <div className="flex justify-between">
-                <div className="flex-col">
-                  {character.languages.map((language, index) => (
-                    <p key={index} className="text-lg -mb-3">
-                      {language}
-                    </p>
-                  ))}
-                </div>
-                <div className="font-bold">{character.distance} km</div>
-              </div>
-            </div>
-          </TinderCard>
-        ))}
+            </TinderCard>
+          ))
+        )}
 
         {characters.length > 0 && (
           <div className="swipe_buttons_div absolute flex justify-evenly mt-[430px] w-[300px]">
@@ -478,7 +487,6 @@ function ConsoleSwiper({ userId }: any) {
                   />
                 </label>
 
-                {/* Put this part before </body> tag */}
                 <input
                   type="checkbox"
                   id="my_modal_6"
