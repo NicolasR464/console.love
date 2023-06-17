@@ -68,12 +68,12 @@ export default function MyMatches(props: any) {
       if (!chatUsers.hasOwnProperty(username)) {
         try {
           userDataResponse = await axios.get(
-            `http://localhost:3000/api/users/${username}`
+            `${process.env.HOSTNAME}/api/users/${username}`
           );
-          console.log(
-            `User data response for user ${username}:`,
-            userDataResponse.data
-          );
+          // console.log(
+          //   `User data response for user ${username}:`,
+          //   userDataResponse.data
+          // );
           setChatUsers((prevUsers) => ({
             ...prevUsers,
             [username]: userDataResponse.data,
@@ -91,13 +91,14 @@ export default function MyMatches(props: any) {
     },
     [chatUsers]
   );
+  const newroute = usePathname();
 
   useEffect(() => {
     if (socket === null || !session) return;
 
-    socket.on("connect", () => {
-      socket.emit("fetch match", session?.user.sub);
-    });
+    // socket.on('connect', () => {
+    socket.emit("fetch match", session?.user.sub);
+    // });
 
     socket.on("matches", async (resmatches) => {
       setMatches(resmatches);
@@ -127,7 +128,7 @@ export default function MyMatches(props: any) {
       );
 
       const chatUser = await fetchUserData(otherChatter?.chatId);
-      console.log("Sending username to modal:", chatUser?.data?.name || "");
+      // console.log("Sending username to modal:", chatUser?.data?.name || "");
       props.handleModalOpen(chatUser?.data?.name || "");
     });
     return () => {
@@ -214,7 +215,7 @@ export default function MyMatches(props: any) {
     return () => {
       socket.off("unmatch");
     };
-  }, [socket, session, router, newroute, currentRoute]);
+  }, [socket, session, router, newroute]);
 
   return (
     <>
