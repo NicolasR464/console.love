@@ -38,7 +38,7 @@ export default async function ResetPwd(params: any) {
 
       try {
         const postRes = await axios.post(
-          `/api/mail`,
+          `${process.env.HOSTNAME}/api/mail`,
           {
             body: sendBody,
           },

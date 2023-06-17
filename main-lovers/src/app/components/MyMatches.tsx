@@ -171,7 +171,7 @@ export default function MyMatches(props: any) {
 
           try {
             const response = await axios.get(
-              `/api/users/${session?.user.sub}/${other.chatId}/${chatRoom._id}`
+              `${process.env.HOSTNAME}/api/users/${session?.user.sub}/${other.chatId}/${chatRoom._id}`
             );
             if (response.status === 200) {
               toast.success("User successfully rejected and room deleted!", {
