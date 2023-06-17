@@ -84,9 +84,7 @@ export default function ChatBox({ roomId }: any) {
       let usersLanguages = new Map<string, string[]>();
 
       for (const chatter of room.chatters) {
-        const res = await axios.get(
-          `${process.env.HOSTNAME}/api/users/${chatter.chatId}`
-        );
+        const res = await axios.get(`/api/users/${chatter.chatId}`);
         usersNameMap.set(chatter.chatId, res.data.data.name);
         usersPicMap.set(chatter.chatId, res.data.data.profilePicture);
         usersLanguages.set(chatter.chatId, res.data.data.languages);

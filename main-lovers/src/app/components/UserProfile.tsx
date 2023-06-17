@@ -40,9 +40,7 @@ function InnerCarousel({ roomId }: any) {
         if (chatter.chatId !== session?.user?.sub) {
           setOtherUserId(chatter.chatId);
         }
-        const res = await axios.get(
-          `${process.env.HOSTNAME}/api/users/${chatter.chatId}`
-        );
+        const res = await axios.get(`/api/users/${chatter.chatId}`);
         setUserData(res.data.data);
         setPictures(res.data.data.pictures);
       }
