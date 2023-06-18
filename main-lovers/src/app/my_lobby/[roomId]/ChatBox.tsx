@@ -326,7 +326,7 @@ export default function ChatBox({ roomId }: any) {
                 type="text"
                 value={newMessage}
                 onChange={(event) => setNewMessage(event.target.value)}
-                className="self-center input input-bordered input-info w-[80%] rounded-tl-none rounded-r-none"
+                className="self-center input input-bordered input-info w-[80%] rounded-tl-none rounded-r-none text-black"
               />
               <button
                 type="submit"

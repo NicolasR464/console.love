@@ -121,14 +121,14 @@ export default async function MyProfile() {
                     type="text"
                     placeholder="Username"
                     value={userData?.name}
-                    className="input input-bordered input-info w-full my-2"
+                    className="input input-bordered input-info w-full my-2 text-black"
                   />
                   <input
                     readOnly
                     type="text"
                     placeholder="First Name"
                     value={userData?.firstName}
-                    className="input input-bordered input-info w-full my-2"
+                    className="input input-bordered input-info  w-full my-2 text-black"
                   />
                 </div>
                 <div className="flex-col">
@@ -137,14 +137,14 @@ export default async function MyProfile() {
                     type="text"
                     placeholder="Email"
                     value={userData?.email}
-                    className="input input-bordered input-info w-full my-2"
+                    className="input input-bordered input-info w-full my-2 text-black"
                   />
                   <input
                     readOnly
                     type="text"
                     placeholder="Last Name"
                     value={userData?.lastName}
-                    className="input input-bordered input-info w-full my-2"
+                    className="input input-bordered input-info  w-full my-2 text-black"
                   />
                 </div>
               </div>
@@ -157,7 +157,7 @@ export default async function MyProfile() {
                     value={
                       userData?.languages ? userData?.languages.join(", ") : ""
                     }
-                    className="input input-bordered input-info w-full my-2"
+                    className="input input-bordered input-info w-full my-2 text-black"
                   />
 
                   <input
@@ -165,7 +165,7 @@ export default async function MyProfile() {
                     type="text"
                     placeholder="Adress"
                     value={userData?.address}
-                    className="input input-bordered input-info w-full my-2"
+                    className="input input-bordered input-info w-full my-2 text-black"
                   />
                 </div>
                 <div className="flex-col">
@@ -178,14 +178,14 @@ export default async function MyProfile() {
                         ? userData?.attraction.join(", ")
                         : ""
                     }
-                    className="input input-bordered input-info w-full my-2"
+                    className="input input-bordered input-info w-full my-2 text-black"
                   />
                   <input
                     readOnly
                     type="text"
                     placeholder="City"
                     value={userData?.city}
-                    className="input input-bordered input-info w-full my-2"
+                    className="input input-bordered input-info w-full my-2 text-black"
                   />
                 </div>
               </div>
