@@ -9,9 +9,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "stripe:listen": "stripe listen --forward-to localhost:3000/api/stripe",
+    "stripe:listen": "stripe listen --forward-to https://console-love.vercel.app/api/stripe",
     "stripe:trigger": "stripe payment trigger_payment.succeeded",
-    "lint": "next lint" 
+    "lint": "next lint"
   },
   "dependencies": {
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
