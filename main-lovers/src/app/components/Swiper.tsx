@@ -111,7 +111,7 @@ function ConsoleSwiper({ userId }: any) {
         matched: newMatchedArray,
       };
       const updateResponse = await axios.put(
-        `${process.env.HOSTNAME}/api/users/${userId}`,
+        `/api/users/${userId}`,
         newMatchedData
       );
       //   console.log("je vais créer ma room");
@@ -143,7 +143,7 @@ function ConsoleSwiper({ userId }: any) {
         const responseUpdated = await axios.get(`/api/users/${userId}`);
         const existingUserUpdated = responseUpdated.data.data;
         const responseOtherUpdated = await axios.get(
-          `${process.env.HOSTNAME}/api/users/${idToDelete}`
+          `/api/users/${idToDelete}`
         );
         const existingOtherUserUpdated = responseOtherUpdated.data.data;
 
@@ -160,11 +160,11 @@ function ConsoleSwiper({ userId }: any) {
         //  console.log("jajoute ma room");
         // MATCHED DATA DON'T TOUCH
         const updateUserChatIds = await axios.put(
-          `${process.env.HOSTNAME}/api/users/${userId}`,
+          `/api/users/${userId}`,
           updateChatIds
         );
         const updateOtherUserChatIds = await axios.put(
-          `${process.env.HOSTNAME}/api/users/${idToDelete}`,
+          `/api/users/${idToDelete}`,
           updateOtherChatIds
         );
         // Fetch chat rooms after a new chat room is created
@@ -194,7 +194,7 @@ function ConsoleSwiper({ userId }: any) {
       };
 
       const updateResponse = await axios.put(
-        `${process.env.HOSTNAME}/api/users/${userId}`,
+        `/api/users/${userId}`,
         newRejectedData
       );
     } catch (error) {
@@ -278,7 +278,7 @@ function ConsoleSwiper({ userId }: any) {
           };
 
           const updateOtherUser = await axios.put(
-            `${process.env.HOSTNAME}/api/users/${idToDelete}`,
+            `/api/users/${idToDelete}`,
             newRejectedDataOtherUser
           );
         } catch (error) {
@@ -321,7 +321,7 @@ function ConsoleSwiper({ userId }: any) {
             };
 
             const newSwipeLeft = await axios.put(
-              `${process.env.HOSTNAME}/api/users/${userId}`,
+              `/api/users/${userId}`,
               swipeLeft
             );
             // console.log(newSwipeLeft);
@@ -331,10 +331,7 @@ function ConsoleSwiper({ userId }: any) {
               const timer = {
                 timerSwipe: Date.now(),
               };
-              const newTimer = await axios.put(
-                `${process.env.HOSTNAME}/api/users/${userId}`,
-                timer
-              );
+              const newTimer = await axios.put(`/api/users/${userId}`, timer);
               // console.log(newTimer);
             }
           } catch (error) {
@@ -358,7 +355,7 @@ function ConsoleSwiper({ userId }: any) {
           };
 
           const updateOtherUser = await axios.put(
-            `${process.env.HOSTNAME}/api/users/${idToDelete}`,
+            `/api/users/${idToDelete}`,
             newMatchedDataOtherUser
           );
         } catch (error) {
@@ -383,12 +380,12 @@ function ConsoleSwiper({ userId }: any) {
         setCharacters([...characters, undoReady]);
 
         // Remove undoData from the rejected array using a PUT request
-        await axios.put(`${process.env.HOSTNAME}/api/users/${userId}`, {
+        await axios.put(`/api/users/${userId}`, {
           rejected: rejected.filter((userId) => userId !== undoData),
         });
 
         // Remove userId from the rejected array of undoData using a PUT request
-        await axios.put(`${process.env.HOSTNAME}/api/users/${undoData}`, {
+        await axios.put(`/api/users/${undoData}`, {
           rejected: undoReady.rejected.filter(
             (userId: any) => userId !== userId
           ),

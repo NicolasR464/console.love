@@ -84,9 +84,7 @@ export default function ChatBox({ roomId }: any) {
       let usersLanguages = new Map<string, string[]>();
 
       for (const chatter of room.chatters) {
-        const res = await axios.get(
-          `${process.env.HOSTNAME}/api/users/${chatter.chatId}`
-        );
+        const res = await axios.get(`/api/users/${chatter.chatId}`);
         usersNameMap.set(chatter.chatId, res.data.data.name);
         usersPicMap.set(chatter.chatId, res.data.data.profilePicture);
         usersLanguages.set(chatter.chatId, res.data.data.languages);
@@ -328,7 +326,7 @@ export default function ChatBox({ roomId }: any) {
                 type="text"
                 value={newMessage}
                 onChange={(event) => setNewMessage(event.target.value)}
-                className="self-center input input-bordered input-info w-[80%] rounded-tl-none rounded-r-none"
+                className="self-center input input-bordered input-info w-[80%] rounded-tl-none rounded-r-none text-black"
               />
               <button
                 type="submit"

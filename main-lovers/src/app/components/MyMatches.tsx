@@ -67,9 +67,7 @@ export default function MyMatches(props: any) {
       let userDataResponse: any = null;
       if (!chatUsers.hasOwnProperty(username)) {
         try {
-          userDataResponse = await axios.get(
-            `${process.env.HOSTNAME}/api/users/${username}`
-          );
+          userDataResponse = await axios.get(`/api/users/${username}`);
           // console.log(
           //   `User data response for user ${username}:`,
           //   userDataResponse.data
@@ -171,7 +169,7 @@ export default function MyMatches(props: any) {
 
           try {
             const response = await axios.get(
-              `${process.env.HOSTNAME}/api/users/${session?.user.sub}/${other.chatId}/${chatRoom._id}`
+              `/api/users/${session?.user.sub}/${other.chatId}/${chatRoom._id}`
             );
             if (response.status === 200) {
               toast.success("User successfully rejected and room deleted!", {
