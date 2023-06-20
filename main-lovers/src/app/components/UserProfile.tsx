@@ -31,25 +31,25 @@ function InnerCarousel({ roomId }: any) {
     };
     fetchSession();
   }, []);
-
   useEffect(() => {
     if (!socket) return;
 
     socket.on("room-profile", async (room: any) => {
       for (const chatter of room.chatters) {
         if (chatter.chatId !== session?.user?.sub) {
+          const res = await axios.get(`/api/users/${chatter.chatId}`);
+          setUserData(res.data.data);
+          setPictures(res.data.data.pictures);
           setOtherUserId(chatter.chatId);
+          break;
         }
-        const res = await axios.get(`/api/users/${chatter.chatId}`);
-        setUserData(res.data.data);
-        setPictures(res.data.data.pictures);
       }
     });
 
     return () => {
       socket.off("room-profile");
     };
-  }, [socket, session, userData]);
+  }, [socket, session]);
 
   function calculateAge(dateString: string): number | null {
     const today = new Date();
