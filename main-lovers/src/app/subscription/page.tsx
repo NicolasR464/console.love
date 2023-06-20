@@ -33,7 +33,7 @@ export default function Subscription(params: any) {
       setIsSubscribed("pending");
 
       axios
-        .post("/api/stripe_check", {
+        .post(`${process.env.HOSTNAME}/api/stripe_check`, {
           sessionId: params.searchParams.session_id,
         })
         .then((res) => {
