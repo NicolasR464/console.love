@@ -62,11 +62,15 @@ export default function Subscription(params: any) {
 
   return (
     <main className="flex max-h-screen flex-col items-center justify-between absolute">
-      <Confetti opacity={0.6} colors={["#001a82", "#9e0061"]} />
       <div className="flex ">
         <div className="border-solid w-[100%] h-[100%]  ">
           {isSubscribed == "confirmed" && (
             <div>
+              <Confetti
+                className="-translate-y-80"
+                opacity={0.6}
+                colors={["#001a82", "#9e0061"]}
+              />
               <h1 className="text-2xl text-center mt-10 font-bold text-6xl flex items-center justify-center animate-text bg-gradient-to-r from-[#9e0061] via-[#001368] to-[#9e0061] bg-clip-text text-transparent text-5xl font-black">
                 Congratulation, <br /> you are now a premium member!🔥
               </h1>
