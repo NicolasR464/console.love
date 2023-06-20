@@ -12,6 +12,7 @@ import Image from "next/image";
 import Confetti from "react-confetti";
 import { getSession } from "next-auth/react";
 
+// check if key is right
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY!);
 
 export default function Subscription(params: any) {
