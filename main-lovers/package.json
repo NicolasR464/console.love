@@ -9,7 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "stripe:listen": "stripe listen --forward-to https://console-love.vercel.app/api/stripe",
+    "stripe:listen": "stripe listen --forward-to https://console-love-nicolasr464.vercel.app/api/stripe",
     "stripe:trigger": "stripe payment trigger_payment.succeeded",
     "lint": "next lint"
   },
