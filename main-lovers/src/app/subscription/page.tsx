@@ -50,7 +50,9 @@ export default function Subscription(params: any) {
 
   const createCheckOutSession = async () => {
     const stripe: any = await stripePromise;
-    const checkoutSession = await axios.post("/api/checkout_sessions");
+    const checkoutSession = await axios.post(
+      `${process.env.HOSTNAME}/api/checkout_sessions`
+    );
     console.log(checkoutSession.data);
 
     const result = await stripe.redirectToCheckout({
