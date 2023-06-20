@@ -28,6 +28,8 @@ export default async function Home() {
     const resFirstime = await data.json();
     const userFirstime = resFirstime.data.address;
 
+    console.log("USER INFO");
+
     console.trace(userFirstime);
 
     if (!userFirstime) {
