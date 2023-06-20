@@ -113,6 +113,7 @@ export default function SignUpModal({ userID, onClose }: SignUpModalProps) {
       console.log(userData);
       console.log(response.data);
       // need a router push to index + toaster
+      router.push("/?updated=true");
     } catch (error) {
       console.error(error);
     }
